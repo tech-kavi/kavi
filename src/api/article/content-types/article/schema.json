@@ -1,0 +1,56 @@
+{
+  "kind": "collectionType",
+  "collectionName": "articles",
+  "info": {
+    "singularName": "article",
+    "pluralName": "articles",
+    "displayName": "Article"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "article_id": {
+      "type": "uid"
+    },
+    "title": {
+      "type": "string"
+    },
+    "brief": {
+      "type": "text"
+    },
+    "content": {
+      "type": "text"
+    },
+    "interviewee": {
+      "type": "string"
+    },
+    "published_date": {
+      "type": "date"
+    },
+    "primary_company": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::company.company",
+      "inversedBy": "articles"
+    },
+    "secondary_companies": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::company.company"
+    },
+    "bookmarks": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::bookmark.bookmark",
+      "mappedBy": "articles"
+    },
+    "tags": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::tag.tag",
+      "mappedBy": "articles"
+    }
+  }
+}
