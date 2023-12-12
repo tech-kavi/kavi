@@ -4,7 +4,8 @@
   "info": {
     "singularName": "article",
     "pluralName": "articles",
-    "displayName": "Article"
+    "displayName": "Article",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -51,6 +52,12 @@
       "relation": "manyToMany",
       "target": "api::tag.tag",
       "mappedBy": "articles"
+    },
+    "industries": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::industry.industry",
+      "inversedBy": "articles"
     }
   }
 }

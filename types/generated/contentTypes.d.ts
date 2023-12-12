@@ -695,6 +695,7 @@ export interface ApiArticleArticle extends Schema.CollectionType {
     singularName: 'article';
     pluralName: 'articles';
     displayName: 'Article';
+    description: '';
   };
   options: {
     draftAndPublish: true;
@@ -725,6 +726,11 @@ export interface ApiArticleArticle extends Schema.CollectionType {
       'api::article.article',
       'manyToMany',
       'api::tag.tag'
+    >;
+    industries: Attribute.Relation<
+      'api::article.article',
+      'manyToMany',
+      'api::industry.industry'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -851,6 +857,11 @@ export interface ApiIndustryIndustry extends Schema.CollectionType {
       'api::company.company'
     >;
     name: Attribute.String;
+    articles: Attribute.Relation<
+      'api::industry.industry',
+      'manyToMany',
+      'api::article.article'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
