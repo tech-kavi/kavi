@@ -10,7 +10,7 @@ module.exports = ({ env }) => ({
         apiKey: env('ALGOLIA_PROVIDER_ADMIN_API_KEY'),
         applicationId: env('ALGOLIA_PROVIDER_APPLICATION_ID'),
       },
-      contentTypes: [{ name: 'api::post.post' }],
+      contentTypes: [{ name: 'api::article.article' }],
     },
   },
 });
