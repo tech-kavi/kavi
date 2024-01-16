@@ -1,0 +1,12 @@
+{
+  "collectionName": "components_brief_briefs",
+  "info": {
+    "displayName": "Briefs"
+  },
+  "options": {},
+  "attributes": {
+    "point": {
+      "type": "text"
+    }
+  }
+}

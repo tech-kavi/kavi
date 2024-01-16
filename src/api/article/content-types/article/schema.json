@@ -18,12 +18,6 @@
     "title": {
       "type": "string"
     },
-    "brief": {
-      "type": "text"
-    },
-    "content": {
-      "type": "text"
-    },
     "interviewee": {
       "type": "string"
     },
@@ -58,6 +52,16 @@
       "relation": "manyToMany",
       "target": "api::industry.industry",
       "inversedBy": "articles"
+    },
+    "brief": {
+      "type": "component",
+      "repeatable": true,
+      "component": "brief.briefs"
+    },
+    "table_with_content": {
+      "type": "component",
+      "repeatable": true,
+      "component": "table-of-content.index"
     }
   }
 }

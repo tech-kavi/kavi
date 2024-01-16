@@ -703,8 +703,6 @@ export interface ApiArticleArticle extends Schema.CollectionType {
   attributes: {
     article_id: Attribute.UID;
     title: Attribute.String;
-    brief: Attribute.Text;
-    content: Attribute.Text;
     interviewee: Attribute.String;
     published_date: Attribute.Date;
     primary_company: Attribute.Relation<
@@ -732,6 +730,8 @@ export interface ApiArticleArticle extends Schema.CollectionType {
       'manyToMany',
       'api::industry.industry'
     >;
+    brief: Attribute.Component<'brief.briefs', true>;
+    table_with_content: Attribute.Component<'table-of-content.index', true>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
