@@ -796,6 +796,7 @@ export interface ApiCompanyCompany extends Schema.CollectionType {
     singularName: 'company';
     pluralName: 'companies';
     displayName: 'Company';
+    description: '';
   };
   options: {
     draftAndPublish: true;
@@ -805,7 +806,6 @@ export interface ApiCompanyCompany extends Schema.CollectionType {
     name: Attribute.String;
     logo: Attribute.Media;
     description: Attribute.Text;
-    related_companies: Attribute.String;
     articles: Attribute.Relation<
       'api::company.company',
       'manyToMany',
