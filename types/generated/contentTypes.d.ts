@@ -736,8 +736,8 @@ export interface ApiArticleArticle extends Schema.CollectionType {
       'manyToMany',
       'api::sub-industry.sub-industry'
     >;
-    related_companies: Attribute.Component<'company.related-companies', true>;
     articletags: Attribute.Component<'articletags.local-tags', true>;
+    related_articles: Attribute.Component<'articles.related-articles', true>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

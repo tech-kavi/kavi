@@ -66,17 +66,17 @@
       "target": "api::sub-industry.sub-industry",
       "inversedBy": "articles"
     },
-    "related_companies": {
-      "displayName": "related_companies",
-      "type": "component",
-      "repeatable": true,
-      "component": "company.related-companies"
-    },
     "articletags": {
       "displayName": "localTags",
       "type": "component",
       "repeatable": true,
       "component": "articletags.local-tags"
+    },
+    "related_articles": {
+      "displayName": "related_articles",
+      "type": "component",
+      "repeatable": true,
+      "component": "articles.related-articles"
     }
   }
 }

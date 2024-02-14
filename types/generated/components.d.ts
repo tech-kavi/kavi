@@ -1,5 +1,19 @@
 import type { Schema, Attribute } from '@strapi/strapi';
 
+export interface ArticlesRelatedArticles extends Schema.Component {
+  collectionName: 'components_articles_related_articles';
+  info: {
+    displayName: 'related_articles';
+  };
+  attributes: {
+    articles: Attribute.Relation<
+      'articles.related-articles',
+      'oneToMany',
+      'api::article.article'
+    >;
+  };
+}
+
 export interface ArticletagsLocalTags extends Schema.Component {
   collectionName: 'components_articletags_local_tags';
   info: {
@@ -59,6 +73,7 @@ export interface TableOfContentIndex extends Schema.Component {
 declare module '@strapi/types' {
   export module Shared {
     export interface Components {
+      'articles.related-articles': ArticlesRelatedArticles;
       'articletags.local-tags': ArticletagsLocalTags;
       'brief.briefs': BriefBriefs;
       'company.related-companies': CompanyRelatedCompanies;
