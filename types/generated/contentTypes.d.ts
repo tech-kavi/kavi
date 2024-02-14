@@ -703,7 +703,6 @@ export interface ApiArticleArticle extends Schema.CollectionType {
   attributes: {
     article_id: Attribute.UID;
     title: Attribute.String;
-    interviewee: Attribute.String;
     published_date: Attribute.Date;
     primary_company: Attribute.Relation<
       'api::article.article',
@@ -725,13 +724,20 @@ export interface ApiArticleArticle extends Schema.CollectionType {
       'manyToMany',
       'api::tag.tag'
     >;
-    industries: Attribute.Relation<
+    industry: Attribute.Relation<
       'api::article.article',
-      'manyToMany',
+      'manyToOne',
       'api::industry.industry'
     >;
     brief: Attribute.Component<'brief.briefs', true>;
     table_with_content: Attribute.Component<'table-of-content.index', true>;
+    sub_industries: Attribute.Relation<
+      'api::article.article',
+      'manyToMany',
+      'api::sub-industry.sub-industry'
+    >;
+    related_companies: Attribute.Component<'company.related-companies', true>;
+    articletags: Attribute.Component<'articletags.local-tags', true>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -821,6 +827,12 @@ export interface ApiCompanyCompany extends Schema.CollectionType {
       'manyToMany',
       'api::watchlist.watchlist'
     >;
+    sub_industries: Attribute.Relation<
+      'api::company.company',
+      'manyToMany',
+      'api::sub-industry.sub-industry'
+    >;
+    related_companies: Attribute.Component<'company.related-companies', true>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -845,6 +857,7 @@ export interface ApiIndustryIndustry extends Schema.CollectionType {
     singularName: 'industry';
     pluralName: 'industries';
     displayName: 'Industry';
+    description: '';
   };
   options: {
     draftAndPublish: true;
@@ -857,9 +870,14 @@ export interface ApiIndustryIndustry extends Schema.CollectionType {
       'api::company.company'
     >;
     name: Attribute.String;
-    articles: Attribute.Relation<
+    sub_industries: Attribute.Relation<
       'api::industry.industry',
       'manyToMany',
+      'api::sub-industry.sub-industry'
+    >;
+    articles: Attribute.Relation<
+      'api::industry.industry',
+      'oneToMany',
       'api::article.article'
     >;
     createdAt: Attribute.DateTime;
@@ -873,6 +891,52 @@ export interface ApiIndustryIndustry extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::industry.industry',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiSubIndustrySubIndustry extends Schema.CollectionType {
+  collectionName: 'sub_industries';
+  info: {
+    singularName: 'sub-industry';
+    pluralName: 'sub-industries';
+    displayName: 'SubIndustry';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String & Attribute.Required & Attribute.Unique;
+    articles: Attribute.Relation<
+      'api::sub-industry.sub-industry',
+      'manyToMany',
+      'api::article.article'
+    >;
+    companies: Attribute.Relation<
+      'api::sub-industry.sub-industry',
+      'manyToMany',
+      'api::company.company'
+    >;
+    industries: Attribute.Relation<
+      'api::sub-industry.sub-industry',
+      'manyToMany',
+      'api::industry.industry'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::sub-industry.sub-industry',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::sub-industry.sub-industry',
       'oneToOne',
       'admin::user'
     > &
@@ -968,6 +1032,7 @@ declare module '@strapi/types' {
       'api::bookmark.bookmark': ApiBookmarkBookmark;
       'api::company.company': ApiCompanyCompany;
       'api::industry.industry': ApiIndustryIndustry;
+      'api::sub-industry.sub-industry': ApiSubIndustrySubIndustry;
       'api::tag.tag': ApiTagTag;
       'api::watchlist.watchlist': ApiWatchlistWatchlist;
     }

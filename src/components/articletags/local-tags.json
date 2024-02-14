@@ -1,0 +1,13 @@
+{
+  "collectionName": "components_articletags_local_tags",
+  "info": {
+    "displayName": "localTags"
+  },
+  "options": {},
+  "attributes": {
+    "tag": {
+      "type": "string",
+      "unique": true
+    }
+  }
+}

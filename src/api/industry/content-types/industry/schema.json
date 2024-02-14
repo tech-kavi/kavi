@@ -4,7 +4,8 @@
   "info": {
     "singularName": "industry",
     "pluralName": "industries",
-    "displayName": "Industry"
+    "displayName": "Industry",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -23,11 +24,17 @@
     "name": {
       "type": "string"
     },
-    "articles": {
+    "sub_industries": {
       "type": "relation",
       "relation": "manyToMany",
+      "target": "api::sub-industry.sub-industry",
+      "inversedBy": "industries"
+    },
+    "articles": {
+      "type": "relation",
+      "relation": "oneToMany",
       "target": "api::article.article",
-      "mappedBy": "industries"
+      "mappedBy": "industry"
     }
   }
 }

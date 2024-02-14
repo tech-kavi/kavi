@@ -18,9 +18,6 @@
     "title": {
       "type": "string"
     },
-    "interviewee": {
-      "type": "string"
-    },
     "published_date": {
       "type": "date"
     },
@@ -47,9 +44,9 @@
       "target": "api::tag.tag",
       "mappedBy": "articles"
     },
-    "industries": {
+    "industry": {
       "type": "relation",
-      "relation": "manyToMany",
+      "relation": "manyToOne",
       "target": "api::industry.industry",
       "inversedBy": "articles"
     },
@@ -62,6 +59,24 @@
       "type": "component",
       "repeatable": true,
       "component": "table-of-content.index"
+    },
+    "sub_industries": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::sub-industry.sub-industry",
+      "inversedBy": "articles"
+    },
+    "related_companies": {
+      "displayName": "related_companies",
+      "type": "component",
+      "repeatable": true,
+      "component": "company.related-companies"
+    },
+    "articletags": {
+      "displayName": "localTags",
+      "type": "component",
+      "repeatable": true,
+      "component": "articletags.local-tags"
     }
   }
 }

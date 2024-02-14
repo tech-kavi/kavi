@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_company_related_companies",
+  "info": {
+    "displayName": "related_companies"
+  },
+  "options": {},
+  "attributes": {
+    "company": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::company.company"
+    }
+  }
+}
