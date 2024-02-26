@@ -4,7 +4,8 @@
   "info": {
     "singularName": "pinnedque",
     "pluralName": "pinnedques",
-    "displayName": "pinnedque"
+    "displayName": "pinnedque",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -13,7 +14,7 @@
   "attributes": {
     "quesId": {
       "type": "biginteger",
-      "unique": true,
+      "unique": false,
       "required": true
     },
     "pinned_by_user": {

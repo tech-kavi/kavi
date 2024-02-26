@@ -909,12 +909,13 @@ export interface ApiPinnedquePinnedque extends Schema.CollectionType {
     singularName: 'pinnedque';
     pluralName: 'pinnedques';
     displayName: 'pinnedque';
+    description: '';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
-    quesId: Attribute.BigInteger & Attribute.Required & Attribute.Unique;
+    quesId: Attribute.BigInteger & Attribute.Required;
     pinned_by_user: Attribute.Relation<
       'api::pinnedque.pinnedque',
       'manyToOne',
