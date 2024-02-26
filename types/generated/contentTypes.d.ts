@@ -672,6 +672,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'oneToOne',
       'api::watchlist.watchlist'
     >;
+    pinnedques: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::pinnedque.pinnedque'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -898,6 +903,41 @@ export interface ApiIndustryIndustry extends Schema.CollectionType {
   };
 }
 
+export interface ApiPinnedquePinnedque extends Schema.CollectionType {
+  collectionName: 'pinnedques';
+  info: {
+    singularName: 'pinnedque';
+    pluralName: 'pinnedques';
+    displayName: 'pinnedque';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    quesId: Attribute.BigInteger & Attribute.Required & Attribute.Unique;
+    pinned_by_user: Attribute.Relation<
+      'api::pinnedque.pinnedque',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::pinnedque.pinnedque',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::pinnedque.pinnedque',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiSubIndustrySubIndustry extends Schema.CollectionType {
   collectionName: 'sub_industries';
   info: {
@@ -1032,6 +1072,7 @@ declare module '@strapi/types' {
       'api::bookmark.bookmark': ApiBookmarkBookmark;
       'api::company.company': ApiCompanyCompany;
       'api::industry.industry': ApiIndustryIndustry;
+      'api::pinnedque.pinnedque': ApiPinnedquePinnedque;
       'api::sub-industry.sub-industry': ApiSubIndustrySubIndustry;
       'api::tag.tag': ApiTagTag;
       'api::watchlist.watchlist': ApiWatchlistWatchlist;

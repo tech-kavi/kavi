@@ -1,0 +1,26 @@
+{
+  "kind": "collectionType",
+  "collectionName": "pinnedques",
+  "info": {
+    "singularName": "pinnedque",
+    "pluralName": "pinnedques",
+    "displayName": "pinnedque"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "quesId": {
+      "type": "biginteger",
+      "unique": true,
+      "required": true
+    },
+    "pinned_by_user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "pinnedques"
+    }
+  }
+}

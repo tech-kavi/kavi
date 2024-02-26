@@ -96,6 +96,12 @@
       "relation": "oneToOne",
       "target": "api::watchlist.watchlist",
       "mappedBy": "user"
+    },
+    "pinnedques": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::pinnedque.pinnedque",
+      "mappedBy": "pinned_by_user"
     }
   }
 }
