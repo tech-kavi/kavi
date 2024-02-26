@@ -662,20 +662,20 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
     avatar: Attribute.Media;
     subscription_plan: Attribute.Enumeration<['paid india', 'premium']>;
     expiry_date: Attribute.Date;
-    bookmark: Attribute.Relation<
-      'plugin::users-permissions.user',
-      'oneToOne',
-      'api::bookmark.bookmark'
-    >;
-    watchlist: Attribute.Relation<
-      'plugin::users-permissions.user',
-      'oneToOne',
-      'api::watchlist.watchlist'
-    >;
     pinnedques: Attribute.Relation<
       'plugin::users-permissions.user',
       'oneToMany',
       'api::pinnedque.pinnedque'
+    >;
+    bookmarks: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::bookmark.bookmark'
+    >;
+    watchlists: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::watchlist.watchlist'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -719,11 +719,6 @@ export interface ApiArticleArticle extends Schema.CollectionType {
       'oneToMany',
       'api::company.company'
     >;
-    bookmarks: Attribute.Relation<
-      'api::article.article',
-      'manyToMany',
-      'api::bookmark.bookmark'
-    >;
     tags: Attribute.Relation<
       'api::article.article',
       'manyToMany',
@@ -743,6 +738,11 @@ export interface ApiArticleArticle extends Schema.CollectionType {
     >;
     articletags: Attribute.Component<'articletags.local-tags', true>;
     related_articles: Attribute.Component<'articles.related-articles', true>;
+    bookmarks: Attribute.Relation<
+      'api::article.article',
+      'oneToMany',
+      'api::bookmark.bookmark'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -767,21 +767,21 @@ export interface ApiBookmarkBookmark extends Schema.CollectionType {
     singularName: 'bookmark';
     pluralName: 'bookmarks';
     displayName: 'Bookmark';
+    description: '';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
-    bookmark_id: Attribute.UID;
-    user: Attribute.Relation<
+    article: Attribute.Relation<
       'api::bookmark.bookmark',
-      'oneToOne',
-      'plugin::users-permissions.user'
-    >;
-    articles: Attribute.Relation<
-      'api::bookmark.bookmark',
-      'manyToMany',
+      'manyToOne',
       'api::article.article'
+    >;
+    bookmarked_by: Attribute.Relation<
+      'api::bookmark.bookmark',
+      'manyToOne',
+      'plugin::users-permissions.user'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -827,17 +827,17 @@ export interface ApiCompanyCompany extends Schema.CollectionType {
       'manyToMany',
       'api::industry.industry'
     >;
-    watchlists: Attribute.Relation<
-      'api::company.company',
-      'manyToMany',
-      'api::watchlist.watchlist'
-    >;
     sub_industries: Attribute.Relation<
       'api::company.company',
       'manyToMany',
       'api::sub-industry.sub-industry'
     >;
     related_companies: Attribute.Component<'company.related-companies', true>;
+    watchlists: Attribute.Relation<
+      'api::company.company',
+      'oneToMany',
+      'api::watchlist.watchlist'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1019,21 +1019,21 @@ export interface ApiWatchlistWatchlist extends Schema.CollectionType {
     singularName: 'watchlist';
     pluralName: 'watchlists';
     displayName: 'Watchlist';
+    description: '';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
-    watchlist_id: Attribute.UID;
-    user: Attribute.Relation<
+    company: Attribute.Relation<
       'api::watchlist.watchlist',
-      'oneToOne',
-      'plugin::users-permissions.user'
-    >;
-    companies: Attribute.Relation<
-      'api::watchlist.watchlist',
-      'manyToMany',
+      'manyToOne',
       'api::company.company'
+    >;
+    watchlisted_by: Attribute.Relation<
+      'api::watchlist.watchlist',
+      'manyToOne',
+      'plugin::users-permissions.user'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;

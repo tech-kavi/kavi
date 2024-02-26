@@ -4,26 +4,24 @@
   "info": {
     "singularName": "bookmark",
     "pluralName": "bookmarks",
-    "displayName": "Bookmark"
+    "displayName": "Bookmark",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
   },
   "pluginOptions": {},
   "attributes": {
-    "bookmark_id": {
-      "type": "uid"
-    },
-    "user": {
+    "article": {
       "type": "relation",
-      "relation": "oneToOne",
-      "target": "plugin::users-permissions.user",
-      "inversedBy": "bookmark"
-    },
-    "articles": {
-      "type": "relation",
-      "relation": "manyToMany",
+      "relation": "manyToOne",
       "target": "api::article.article",
+      "inversedBy": "bookmarks"
+    },
+    "bookmarked_by": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
       "inversedBy": "bookmarks"
     }
   }

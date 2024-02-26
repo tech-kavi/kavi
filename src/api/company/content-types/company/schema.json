@@ -44,12 +44,6 @@
       "target": "api::industry.industry",
       "mappedBy": "companies"
     },
-    "watchlists": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::watchlist.watchlist",
-      "mappedBy": "companies"
-    },
     "sub_industries": {
       "type": "relation",
       "relation": "manyToMany",
@@ -60,6 +54,12 @@
       "type": "component",
       "repeatable": true,
       "component": "company.related-companies"
+    },
+    "watchlists": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::watchlist.watchlist",
+      "mappedBy": "company"
     }
   }
 }

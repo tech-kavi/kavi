@@ -85,23 +85,23 @@
     "expiry_date": {
       "type": "date"
     },
-    "bookmark": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::bookmark.bookmark",
-      "mappedBy": "user"
-    },
-    "watchlist": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::watchlist.watchlist",
-      "mappedBy": "user"
-    },
     "pinnedques": {
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::pinnedque.pinnedque",
       "mappedBy": "pinned_by_user"
+    },
+    "bookmarks": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::bookmark.bookmark",
+      "mappedBy": "bookmarked_by"
+    },
+    "watchlists": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::watchlist.watchlist",
+      "mappedBy": "watchlisted_by"
     }
   }
 }

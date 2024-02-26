@@ -32,12 +32,6 @@
       "relation": "oneToMany",
       "target": "api::company.company"
     },
-    "bookmarks": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::bookmark.bookmark",
-      "mappedBy": "articles"
-    },
     "tags": {
       "type": "relation",
       "relation": "manyToMany",
@@ -77,6 +71,12 @@
       "type": "component",
       "repeatable": true,
       "component": "articles.related-articles"
+    },
+    "bookmarks": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::bookmark.bookmark",
+      "mappedBy": "article"
     }
   }
 }
