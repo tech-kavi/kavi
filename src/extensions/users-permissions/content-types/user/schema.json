@@ -66,14 +66,15 @@
       "configurable": false
     },
     "avatar": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
       "allowedTypes": [
         "images",
         "files",
         "videos",
         "audios"
-      ],
-      "type": "media",
-      "multiple": false
+      ]
     },
     "subscription_plan": {
       "type": "enumeration",
@@ -102,6 +103,9 @@
       "relation": "oneToMany",
       "target": "api::watchlist.watchlist",
       "mappedBy": "watchlisted_by"
+    },
+    "note": {
+      "type": "text"
     }
   }
 }
