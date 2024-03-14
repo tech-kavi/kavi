@@ -50,11 +50,6 @@
       "target": "api::sub-industry.sub-industry",
       "inversedBy": "companies"
     },
-    "related_companies": {
-      "type": "component",
-      "repeatable": true,
-      "component": "company.related-companies"
-    },
     "watchlists": {
       "type": "relation",
       "relation": "oneToMany",

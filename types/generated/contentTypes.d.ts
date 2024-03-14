@@ -833,7 +833,6 @@ export interface ApiCompanyCompany extends Schema.CollectionType {
       'manyToMany',
       'api::sub-industry.sub-industry'
     >;
-    related_companies: Attribute.Component<'company.related-companies', true>;
     watchlists: Attribute.Relation<
       'api::company.company',
       'oneToMany',
