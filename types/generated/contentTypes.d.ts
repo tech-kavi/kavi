@@ -615,9 +615,6 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'manyToOne',
       'plugin::users-permissions.role'
     >;
-    avatar: Attribute.Media;
-    subscription_plan: Attribute.Enumeration<['paid india', 'premium']>;
-    expiry_date: Attribute.Date;
     pinnedques: Attribute.Relation<
       'plugin::users-permissions.user',
       'oneToMany',

@@ -65,27 +65,6 @@
       "inversedBy": "users",
       "configurable": false
     },
-    "avatar": {
-      "type": "media",
-      "multiple": false,
-      "required": false,
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
-      ]
-    },
-    "subscription_plan": {
-      "type": "enumeration",
-      "enum": [
-        "paid india",
-        "premium"
-      ]
-    },
-    "expiry_date": {
-      "type": "date"
-    },
     "pinnedques": {
       "type": "relation",
       "relation": "oneToMany",
