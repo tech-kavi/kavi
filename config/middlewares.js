@@ -6,7 +6,7 @@ module.exports = [
     name: 'strapi::cors',
     config: {
       enabled: true,
-      origin: ["https://3dbfa084-3e4a-429b-bdab-3df3b23a9315.weweb-preview.io", "https://dazzling-butterfly-f3a6f1abbb.strapiapp.com"], // Add your project's domain and IP addresses
+      origin: ["https://3dbfa084-3e4a-429b-bdab-3df3b23a9315.weweb-preview.io"], // Add your project's domain and IP addresses
       methods: ["GET", "POST", "PUT", "DELETE"],
       headers: ["Authorization", "Content-Type"],
       credentials: true,
