@@ -15,9 +15,15 @@ module.exports = ({ env }) => ({
            populate:{
             primary_company:{
               name:true,
+              populate:{
+                logo:true,
+              }
             },
             secondary_companies:{
               name:true,
+              populate:{
+                logo:true,
+              }
             },
             industry:{
               name:true,
