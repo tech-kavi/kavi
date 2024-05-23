@@ -4,6 +4,7 @@ module.exports = ({ env }) => ({
 
   'strapi-algolia': {
     enabled: true,
+    provider:'strapi-algolia',
     config: {
       apiKey: env('ALGOLIA_ADMIN_KEY'),
       applicationId: env('ALGOLIA_APP_ID'),
