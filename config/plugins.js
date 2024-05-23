@@ -12,6 +12,25 @@ module.exports = ({ env }) => ({
       contentTypes: [
         {
            name: 'api::article.article',
+           populate:{
+            primary_company:{
+              name:true,
+            },
+            secondary_companies:{
+              name:true,
+            },
+            industry:{
+              name:true,
+            },
+            table_with_content:{
+              tablePoint:true,
+              populate:{
+                ques:{
+                  fields:['question','answer'],
+                },
+              },
+            },
+           },
            
         },
      
