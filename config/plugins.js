@@ -1,27 +1,27 @@
 'use strict';
 
 module.exports = ({ env }) => ({
-  // ...
-  search: {
+
+  'strapi-algolia': {
     enabled: true,
     config: {
-      provider: 'algolia',
-      providerOptions: {
-        apiKey: env('ALGOLIA_PROVIDER_ADMIN_API_KEY'),
-        applicationId: env('ALGOLIA_PROVIDER_APPLICATION_ID'),
-      },
+      apiKey: env('ALGOLIA_ADMIN_KEY'),
+      applicationId: env('ALGOLIA_APP_ID'),
+      
       contentTypes: [
-        { name: 'api::article.article' },
-        { name: 'api::company.company' },
-        { name: 'api::industry.industry'},
+        {
+           name: 'api::article.article',
+           
+        },
+     
       ],
     },
   },
-  'users-permissions': {
-    config: {
-      jwt: {
-        expiresIn: '1d',
-      },
-    },
-  },
+  // 'users-permissions': {
+  //   config: {
+  //     jwt: {
+  //       expiresIn: '1d',
+  //     },
+  //   },
+  // },
 });
