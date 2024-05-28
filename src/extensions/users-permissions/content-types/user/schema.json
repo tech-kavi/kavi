@@ -85,6 +85,29 @@
     },
     "note": {
       "type": "text"
+    },
+    "name": {
+      "type": "string"
+    },
+    "orgID": {
+      "type": "biginteger",
+      "required": true
+    },
+    "slots": {
+      "type": "integer"
+    },
+    "slotFilled": {
+      "type": "integer"
+    },
+    "expiry": {
+      "type": "date"
+    },
+    "linkedinURL": {
+      "type": "string"
+    },
+    "currentToken": {
+      "type": "text",
+      "private": true
     }
   }
 }

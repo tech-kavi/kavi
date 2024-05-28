@@ -631,6 +631,13 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'api::watchlist.watchlist'
     >;
     note: Attribute.Text;
+    name: Attribute.String;
+    orgID: Attribute.BigInteger & Attribute.Required;
+    slots: Attribute.Integer;
+    slotFilled: Attribute.Integer;
+    expiry: Attribute.Date;
+    linkedinURL: Attribute.String;
+    currentToken: Attribute.Text & Attribute.Private;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
