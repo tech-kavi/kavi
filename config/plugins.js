@@ -43,11 +43,26 @@ module.exports = ({ env }) => ({
       ],
     },
   },
-  // 'users-permissions': {
-  //   config: {
-  //     jwt: {
-  //       expiresIn: '1d',
-  //     },
-  //   },
-  // },
+  'users-permissions': {
+    config: {
+      jwt: {
+        expiresIn: '1d',
+      },
+    },
+  },
+  email: {
+    config: {
+      provider: 'sendgrid',
+      providerOptions: {
+        apiKey: env('SENDGRID_APP_KEY'),
+      },
+      settings: {
+        defaultFrom: env('DEFAULT_FROM'),
+        defaultReplyTo: env('DEFAULT_TO'),
+      },
+      
+    },
+  },
+
+
 });
