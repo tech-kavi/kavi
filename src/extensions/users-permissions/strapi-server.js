@@ -326,6 +326,31 @@ module.exports = (plugin) => {
 
      }
 
+     //find only yourself
+    const me = plugin.controllers.user.me;
+
+    /**
+   * Retrieve user records.
+   * @return {Object|Array}
+   */
+
+    plugin.controllers.user.me = async(ctx) =>{
+      const authUser = ctx.state.user;
+      const { query } = ctx;
+  
+      if (!authUser) {
+        return ctx.unauthorized();
+      }
+  
+      await validateQuery(query, ctx);
+      const sanitizedQuery = await sanitizeQuery(query, ctx);
+      const user = await getService('user').fetch(authUser.id,{
+        ...sanitizedQuery,
+        populate:{role:true}
+      });
+  
+      ctx.body = await sanitizeOutput(user, ctx);
+    }
 
 
 

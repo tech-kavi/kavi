@@ -52,8 +52,7 @@ module.exports = (plugin) =>{
         await passwordless.updateTokenOnLogin(token);
 
         const user = await strapi.query('plugin::users-permissions.user').findOne({
-        where: {email: token.email},
-        populate:{role:true}
+        where: {email: token.email}
         });
         
         console.log("email fetched");
@@ -109,11 +108,7 @@ module.exports = (plugin) =>{
         // Sanitize the template's user information
         const sanitizedUserInfo = await sanitize.sanitizers.defaultSanitizeOutput(userSchema, user);
 
-        //include the user's role in the response
-        const userWithRole={
-          ...sanitizedUserInfo,
-          role:user.role
-        };
+        
 
         let context;
         try {
@@ -124,7 +119,7 @@ module.exports = (plugin) =>{
         //jwtService.issue({id: user.id})
         ctx.send({
         jwt: jwtService.issue({id: user.id}),
-        user: userWithRole,
+        user: sanitizedUserInfo,
         context
         });
 
