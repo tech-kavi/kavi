@@ -32,12 +32,6 @@
     "description": {
       "type": "text"
     },
-    "articles": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::article.article",
-      "mappedBy": "primary_company"
-    },
     "industries": {
       "type": "relation",
       "relation": "manyToMany",
@@ -55,6 +49,33 @@
       "relation": "oneToMany",
       "target": "api::watchlist.watchlist",
       "mappedBy": "company"
+    },
+    "ipo": {
+      "type": "enumeration",
+      "enum": [
+        "Recent IPO",
+        "Upcoming IPO"
+      ]
+    },
+    "ownership_type": {
+      "type": "enumeration",
+      "enum": [
+        "Public",
+        "Private"
+      ],
+      "required": true
+    },
+    "secondary_articles": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::article.article",
+      "mappedBy": "secondary_companies"
+    },
+    "articles": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::article.article",
+      "mappedBy": "primary_companies"
     }
   }
 }

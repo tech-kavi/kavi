@@ -35,6 +35,11 @@
       "relation": "oneToMany",
       "target": "api::article.article",
       "mappedBy": "industry"
+    },
+    "top_companies": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::company.company"
     }
   }
 }

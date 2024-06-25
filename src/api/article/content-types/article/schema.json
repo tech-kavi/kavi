@@ -21,7 +21,7 @@
     "published_date": {
       "type": "date"
     },
-    "primary_company": {
+    "primary_companies": {
       "type": "relation",
       "relation": "manyToMany",
       "target": "api::company.company",
@@ -29,8 +29,9 @@
     },
     "secondary_companies": {
       "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::company.company"
+      "relation": "manyToMany",
+      "target": "api::company.company",
+      "inversedBy": "secondary_articles"
     },
     "tags": {
       "type": "relation",
@@ -60,22 +61,38 @@
       "target": "api::sub-industry.sub-industry",
       "inversedBy": "articles"
     },
-    "articletags": {
-      "displayName": "localTags",
-      "type": "component",
-      "repeatable": true,
-      "component": "articletags.local-tags"
-    },
-    "related_articles": {
-      "displayName": "related_articles",
-      "type": "component",
-      "repeatable": true,
-      "component": "articles.related-articles"
-    },
     "bookmarks": {
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::bookmark.bookmark",
+      "mappedBy": "article"
+    },
+    "expert_type": {
+      "type": "enumeration",
+      "enum": [
+        "Competitor",
+        "Customer",
+        "Industry Expert",
+        "Former",
+        "Partner"
+      ],
+      "default": "Industry Expert",
+      "required": true
+    },
+    "est_read": {
+      "type": "integer",
+      "required": true
+    },
+    "read_details": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::read-article.read-article",
+      "mappedBy": "article"
+    },
+    "like_details": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::liked-article.liked-article",
       "mappedBy": "article"
     }
   }

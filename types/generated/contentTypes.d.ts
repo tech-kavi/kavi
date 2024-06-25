@@ -738,14 +738,23 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'oneToMany',
       'api::watchlist.watchlist'
     >;
-    note: Attribute.Text;
     name: Attribute.String;
     orgID: Attribute.BigInteger & Attribute.Required;
     slots: Attribute.Integer;
     slotFilled: Attribute.Integer;
     expiry: Attribute.Date;
-    linkedinURL: Attribute.String;
     currentToken: Attribute.Text & Attribute.Private;
+    read_articles: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::read-article.read-article'
+    >;
+    liked_articles: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::liked-article.liked-article'
+    >;
+    LinkedinURL: Attribute.String & Attribute.Private;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -867,14 +876,14 @@ export interface ApiArticleArticle extends Schema.CollectionType {
     article_id: Attribute.UID;
     title: Attribute.String;
     published_date: Attribute.Date;
-    primary_company: Attribute.Relation<
+    primary_companies: Attribute.Relation<
       'api::article.article',
       'manyToMany',
       'api::company.company'
     >;
     secondary_companies: Attribute.Relation<
       'api::article.article',
-      'oneToMany',
+      'manyToMany',
       'api::company.company'
     >;
     tags: Attribute.Relation<
@@ -894,12 +903,26 @@ export interface ApiArticleArticle extends Schema.CollectionType {
       'manyToMany',
       'api::sub-industry.sub-industry'
     >;
-    articletags: Attribute.Component<'articletags.local-tags', true>;
-    related_articles: Attribute.Component<'articles.related-articles', true>;
     bookmarks: Attribute.Relation<
       'api::article.article',
       'oneToMany',
       'api::bookmark.bookmark'
+    >;
+    expert_type: Attribute.Enumeration<
+      ['Competitor', 'Customer', 'Industry Expert', 'Former', 'Partner']
+    > &
+      Attribute.Required &
+      Attribute.DefaultTo<'Industry Expert'>;
+    est_read: Attribute.Integer & Attribute.Required;
+    read_details: Attribute.Relation<
+      'api::article.article',
+      'oneToMany',
+      'api::read-article.read-article'
+    >;
+    like_details: Attribute.Relation<
+      'api::article.article',
+      'oneToMany',
+      'api::liked-article.liked-article'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -975,11 +998,6 @@ export interface ApiCompanyCompany extends Schema.CollectionType {
     name: Attribute.String;
     logo: Attribute.Media;
     description: Attribute.Text;
-    articles: Attribute.Relation<
-      'api::company.company',
-      'manyToMany',
-      'api::article.article'
-    >;
     industries: Attribute.Relation<
       'api::company.company',
       'manyToMany',
@@ -994,6 +1012,19 @@ export interface ApiCompanyCompany extends Schema.CollectionType {
       'api::company.company',
       'oneToMany',
       'api::watchlist.watchlist'
+    >;
+    ipo: Attribute.Enumeration<['Recent IPO', 'Upcoming IPO']>;
+    ownership_type: Attribute.Enumeration<['Public', 'Private']> &
+      Attribute.Required;
+    secondary_articles: Attribute.Relation<
+      'api::company.company',
+      'manyToMany',
+      'api::article.article'
+    >;
+    articles: Attribute.Relation<
+      'api::company.company',
+      'manyToMany',
+      'api::article.article'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -1042,6 +1073,11 @@ export interface ApiIndustryIndustry extends Schema.CollectionType {
       'oneToMany',
       'api::article.article'
     >;
+    top_companies: Attribute.Relation<
+      'api::industry.industry',
+      'oneToMany',
+      'api::company.company'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1053,6 +1089,46 @@ export interface ApiIndustryIndustry extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::industry.industry',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiLikedArticleLikedArticle extends Schema.CollectionType {
+  collectionName: 'liked_articles';
+  info: {
+    singularName: 'liked-article';
+    pluralName: 'liked-articles';
+    displayName: 'LikedArticle';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    user: Attribute.Relation<
+      'api::liked-article.liked-article',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    article: Attribute.Relation<
+      'api::liked-article.liked-article',
+      'manyToOne',
+      'api::article.article'
+    >;
+    like_time: Attribute.DateTime;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::liked-article.liked-article',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::liked-article.liked-article',
       'oneToOne',
       'admin::user'
     > &
@@ -1089,6 +1165,46 @@ export interface ApiPinnedquePinnedque extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::pinnedque.pinnedque',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiReadArticleReadArticle extends Schema.CollectionType {
+  collectionName: 'read_articles';
+  info: {
+    singularName: 'read-article';
+    pluralName: 'read-articles';
+    displayName: 'ReadArticle';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    user: Attribute.Relation<
+      'api::read-article.read-article',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    article: Attribute.Relation<
+      'api::read-article.read-article',
+      'manyToOne',
+      'api::article.article'
+    >;
+    read_time: Attribute.DateTime;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::read-article.read-article',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::read-article.read-article',
       'oneToOne',
       'admin::user'
     > &
@@ -1233,7 +1349,9 @@ declare module '@strapi/types' {
       'api::bookmark.bookmark': ApiBookmarkBookmark;
       'api::company.company': ApiCompanyCompany;
       'api::industry.industry': ApiIndustryIndustry;
+      'api::liked-article.liked-article': ApiLikedArticleLikedArticle;
       'api::pinnedque.pinnedque': ApiPinnedquePinnedque;
+      'api::read-article.read-article': ApiReadArticleReadArticle;
       'api::sub-industry.sub-industry': ApiSubIndustrySubIndustry;
       'api::tag.tag': ApiTagTag;
       'api::watchlist.watchlist': ApiWatchlistWatchlist;

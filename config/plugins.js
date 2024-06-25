@@ -39,6 +39,20 @@ module.exports = ({ env }) => ({
            },
            
         },
+        {
+          name: 'api::company.company'
+        },
+        {
+          name: 'api::industry.industry',
+          populate:{
+            companies:{
+              name:true,
+            },
+            sub_industries:{
+              name:true,
+            }
+          }
+        }
      
       ],
     },

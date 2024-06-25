@@ -83,9 +83,6 @@
       "target": "api::watchlist.watchlist",
       "mappedBy": "watchlisted_by"
     },
-    "note": {
-      "type": "text"
-    },
     "name": {
       "type": "string"
     },
@@ -102,11 +99,24 @@
     "expiry": {
       "type": "date"
     },
-    "linkedinURL": {
-      "type": "string"
-    },
     "currentToken": {
       "type": "text",
+      "private": true
+    },
+    "read_articles": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::read-article.read-article",
+      "mappedBy": "user"
+    },
+    "liked_articles": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::liked-article.liked-article",
+      "mappedBy": "user"
+    },
+    "LinkedinURL": {
+      "type": "string",
       "private": true
     }
   }

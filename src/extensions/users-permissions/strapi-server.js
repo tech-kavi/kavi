@@ -241,6 +241,11 @@ module.exports = (plugin) => {
     throw new ApplicationError('Authentication required', 401);
   }
 
+  if(requestingUser.role.name.toLowerCase() !== 'admin')
+    {
+      throw new ApplicationError("Only admin can delete a member");
+    }
+
   // Fetch the user to be deleted
   const userToDelete = await strapi.query('plugin::users-permissions.user').findOne({ where: { id } });
 
@@ -286,7 +291,7 @@ module.exports = (plugin) => {
         const requestingUser = ctx.state.user;
 
         //only admins can fetch all users
-        if (!requestingUser) {
+        if (!requestingUser || requestingUser.role.name.toLowerCase() !== 'admin') {
             throw new ApplicationError('You are not authorized to perform this action', 403);
           }
 
@@ -311,7 +316,7 @@ module.exports = (plugin) => {
         await validateQuery(ctx.query, ctx);
         const sanitizedQuery = await sanitizeQuery(ctx.query, ctx);
 
-        if (!requestingUser) {
+        if (!requestingUser || requestingUser.role.name.toLowerCase() !== 'admin') {
             throw new ApplicationError('You are not authorized to perform this action', 403);
         }
         

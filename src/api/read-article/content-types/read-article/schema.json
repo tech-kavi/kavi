@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "read_articles",
+  "info": {
+    "singularName": "read-article",
+    "pluralName": "read-articles",
+    "displayName": "ReadArticle"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "read_articles"
+    },
+    "article": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::article.article",
+      "inversedBy": "read_details"
+    },
+    "read_time": {
+      "type": "datetime"
+    }
+  }
+}
