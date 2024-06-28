@@ -1,3 +1,4 @@
+// @ts-nocheck
 'use strict';
 
 module.exports = ({ env }) => ({
@@ -64,6 +65,9 @@ module.exports = ({ env }) => ({
       },
     },
   },
+
+
+  //sendgrid
   email: {
     config: {
       provider: 'sendgrid',

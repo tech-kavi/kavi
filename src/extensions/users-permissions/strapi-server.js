@@ -97,6 +97,14 @@ module.exports = (plugin) => {
       await validateCreateUserBody(ctx.request.body);
    
       const { email, username} = ctx.request.body;
+
+      const adminEmail = requestingUser.email;
+      const adminDomain = adminEmail.split('@')[1];
+      const newUserDomain = email.split('@')[1];
+
+      if(adminDomain !== newUserDomain){
+        return ctx.badRequest('New member must have the same email domain as the admin. If you still want to add user then contact KAVI team');
+      }
   
       
       const userWithSameUsername = await strapi
