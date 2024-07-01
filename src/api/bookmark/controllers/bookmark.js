@@ -23,7 +23,7 @@ module.exports = createCoreController('api::bookmark.bookmark',{
                 article:{
                     populate:{
                         industry:true,
-                        primary_company:{
+                        primary_companies:{
                             populate:{
                                 logo:true
                             },

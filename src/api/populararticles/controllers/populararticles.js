@@ -25,6 +25,7 @@ module.exports = {
           industry:{
               fields:['name'],
           },
+          brief:true,
           primary_companies:{
               fields:['name'],
               populate:{

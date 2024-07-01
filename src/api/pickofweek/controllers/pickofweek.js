@@ -29,7 +29,8 @@ module.exports = {
               populate:{
                   logo:true,
               }
-          }
+          },
+          brief:true,
       },
       sort:['publishedAt:desc']
       }
