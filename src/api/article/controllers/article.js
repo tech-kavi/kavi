@@ -28,7 +28,7 @@ module.exports = createCoreController('api::article.article',{
                 industry:{
                     fields:['name'],
                 },
-                primary_company:{
+                primary_companies:{
                     fields:['name'],
                     populate:{
                         logo:true,

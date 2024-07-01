@@ -25,7 +25,7 @@ module.exports = {
           industry:{
               fields:['name'],
           },
-          primary_company:{
+          primary_companies:{
               fields:['name'],
               populate:{
                   logo:true,
@@ -36,6 +36,6 @@ module.exports = {
       }
     );
 
-    ctx.send(pickofweekArticles);
+    return popularArticles;
   }
 };

@@ -139,7 +139,7 @@ module.exports = createCoreController('api::industry.industry',{
                 articles:{
                     populate:{
                         industry:true,
-                        primary_company:{
+                        primary_companies:{
                             populate:{
                                 logo:true
                             },
@@ -148,6 +148,12 @@ module.exports = createCoreController('api::industry.industry',{
                     },
 
                 },
+                companies:{
+                    populate:{
+                        logo:true,
+                        articles:true,
+                    },
+                },
                 sub_industries:true,
             }
         };
@@ -155,6 +161,23 @@ module.exports = createCoreController('api::industry.industry',{
         const industry = await super.findOne(ctx);
 
         industry.data.attributes.articleCounts = industry.data.attributes.articles.data.length;
+
+        //counting articles of companies
+        const companiesWithArticleCount = industry.data.attributes.companies.data.map(company => {
+            const articleCount = company.attributes.articles.data.length;
+
+            const {articles, ...companyAttributesWithoutArticles} = company.attributes;
+            return {
+                ...company,
+                attributes:{
+                    ...companyAttributesWithoutArticles,
+                    articleCount,
+                }
+
+            };
+        });
+        
+        industry.data.attributes.companies=companiesWithArticleCount;
 
         return industry;
     }
