@@ -1,3 +1,4 @@
+// @ts-nocheck
 'use strict';
 
 const { findAllInRenderedTree } = require("react-dom/test-utils");
@@ -47,7 +48,7 @@ module.exports = {
               logo:true,
           },
       },
-      }
+      },
     };
     
     const articles = await strapi.entityService.findMany('api::article.article',query);
