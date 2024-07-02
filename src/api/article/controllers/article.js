@@ -45,7 +45,7 @@ module.exports = createCoreController('api::article.article',{
  
         const articles = await super.find(ctx);
 
-        const bookmarkedArticles = await strapi.entityService.findMany('api::read-article.read-article', {
+        const bookmarkedArticles = await strapi.entityService.findMany('api::bookmark.bookmark', {
         filters: {
             bookmarked_by: user.id,
         },
@@ -57,6 +57,8 @@ module.exports = createCoreController('api::article.article',{
 
 
     const BookmarkArticleIds = bookmarkedArticles.map(bookmark => bookmark.article.id);
+
+    console.log(BookmarkArticleIds);
 
     const articleWithBookmarkStatus = articles.data.map(article =>({
             ...article,
