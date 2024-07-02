@@ -50,6 +50,22 @@ module.exports = {
             const totalEntries = await strapi.entityService.count('api::article.article',{
                 filters:{primary_companies:{id:{$in:companyIds}}}
             });
+
+            const bookmarkedArticles = await strapi.entityService.findMany('api::bookmark.bookmark', {
+                filters: {
+                    bookmarked_by: userId,
+                },
+                populate:{
+                    article:true,
+                }
+            });
+
+            const BookmarkArticleIds = bookmarkedArticles.map(bookmark => bookmark.article.id);
+
+            const watchlistArticlesWithBookmarkStatus = entries.map(article =>({
+                ...article,
+                isBookmarked:BookmarkArticleIds.includes(article.id),
+        }));
         
 
             const meta={
@@ -59,7 +75,7 @@ module.exports = {
                 total:totalEntries,
               }
 
-        return {data:entries,meta:meta};
+        return {data:watchlistArticlesWithBookmarkStatus,meta:meta};
         } catch(err){
             return err;
         }

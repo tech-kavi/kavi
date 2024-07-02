@@ -58,7 +58,7 @@ module.exports = createCoreController('api::article.article',{
 
     const BookmarkArticleIds = bookmarkedArticles.map(bookmark => bookmark.article.id);
 
-    console.log(BookmarkArticleIds);
+    // console.log(BookmarkArticleIds);
 
     const articleWithBookmarkStatus = articles.data.map(article =>({
             ...article,
