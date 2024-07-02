@@ -17,6 +17,7 @@ module.exports = createCoreController('api::bookmark.bookmark',{
         ctx.query={
             ...ctx.query,
             filters:{
+                ...ctx.query.filters,
                 bookmarked_by:user.id,
             },
             populate:{

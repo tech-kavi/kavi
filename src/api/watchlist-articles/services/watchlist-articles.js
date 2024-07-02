@@ -35,7 +35,6 @@ module.exports = {
                     start:start,
                     limit:pageSizeNumber,
                     filters:{primary_companies:{id:{$in:companyIds}}},
-                    fields:['id','title','createdAt'],
                     populate:{
                         primary_companies:{
                             fields:['name'],

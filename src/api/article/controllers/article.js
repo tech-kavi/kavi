@@ -45,6 +45,24 @@ module.exports = createCoreController('api::article.article',{
  
         const articles = await super.find(ctx);
 
+        const bookmarkedArticles = await strapi.entityService.findMany('api::read-article.read-article', {
+        filters: {
+            bookmarked_by: user.id,
+        },
+        populate:{
+            article:true,
+        }
+    });
+
+
+
+    const BookmarkArticleIds = bookmarkedArticles.map(bookmark => bookmark.article.id);
+
+    const articleWithBookmarkStatus = articles.data.map(article =>({
+            ...article,
+            isBookmarked:BookmarkArticleIds.includes(article.id),
+    }));
+
         //below code are is useful if we want to show that article is already read or not with each article
 
     //     const articleIds = articles.data.map(article => article.id);
@@ -82,7 +100,7 @@ module.exports = createCoreController('api::article.article',{
 
     // return {...articles,"data":articlesWithReadStatus};
 
-    return articles;
+    return articleWithBookmarkStatus;
        
 
     },

@@ -96,7 +96,7 @@ module.exports = (plugin) => {
   
       await validateCreateUserBody(ctx.request.body);
    
-      const { email, username} = ctx.request.body;
+      const { email, username, name} = ctx.request.body;
 
       const adminEmail = requestingUser.email;
       const adminDomain = adminEmail.split('@')[1];
@@ -128,6 +128,7 @@ module.exports = (plugin) => {
       const user = {
         ...ctx.request.body,
         email: email.toLowerCase(),
+        name: name,
         provider: 'local',
         slots:requestingUser.slots,
         orgID:requestingUser.orgID,
