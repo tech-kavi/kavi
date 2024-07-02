@@ -100,7 +100,10 @@ module.exports = createCoreController('api::article.article',{
 
     // return {...articles,"data":articlesWithReadStatus};
 
-    return articleWithBookmarkStatus;
+    return {
+        data:articleWithBookmarkStatus,
+        meta:articles.meta
+    };
        
 
     },
