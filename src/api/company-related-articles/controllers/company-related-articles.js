@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * A set of functions called "actions" for `company-articles`
+ * A set of functions called "actions" for `company-related-articles`
  */
 
 module.exports = {
@@ -19,7 +19,7 @@ module.exports = {
       
 
         const { page = 1, pageSize = 10, ...filters } = ctx.query.pagination;
-        console.log(ctx.query.pagination);
+        
         // Convert page and pageSize to integers
         const pageInt = parseInt(page, 10);
         const pageSizeInt = parseInt(pageSize, 10);
@@ -29,7 +29,7 @@ module.exports = {
     const query = {
       filters:{
         ...ctx.request.query.filters,
-        primary_companies:{
+        secondary_companies:{
           id:{
             $containsi:id,
           }

@@ -1,7 +1,9 @@
 'use strict';
 
+const { findAllInRenderedTree } = require("react-dom/test-utils");
+
 /**
- * A set of functions called "actions" for `company-articles`
+ * A set of functions called "actions" for `industry-articles`
  */
 
 module.exports = {
@@ -19,7 +21,7 @@ module.exports = {
       
 
         const { page = 1, pageSize = 10, ...filters } = ctx.query.pagination;
-        console.log(ctx.query.pagination);
+        
         // Convert page and pageSize to integers
         const pageInt = parseInt(page, 10);
         const pageSizeInt = parseInt(pageSize, 10);
@@ -29,14 +31,22 @@ module.exports = {
     const query = {
       filters:{
         ...ctx.request.query.filters,
-        primary_companies:{
+        industry:{
           id:{
             $containsi:id,
           }
         }
       },
       populate:{
-        industry:true,
+        sub_industries:{
+          fields:['name'],
+      },
+      primary_companies:{
+          fields:['name'],
+          populate:{
+              logo:true,
+          },
+      },
       }
     };
     
