@@ -38,14 +38,17 @@ module.exports = createCoreController('api::watchlist.watchlist',{
         const watchlists = await super.find(ctx);
 
         const companiesWatclists = watchlists.data.map(watchlist => {
+            
             const company = watchlist.attributes.company;
+            console.log(company);
             const articleCount = company.data.attributes.articles.data.length;
 
             const { articles, ...companyAttributesWithoutArticles} = company.data.attributes;
-            
+
             return{
                 watchlistId:watchlist.id,
                 company:{
+                            id: company.data.id,
                             ...companyAttributesWithoutArticles,
                             articleCount: articleCount,
                         },

@@ -119,6 +119,7 @@ module.exports = createCoreController('api::article.article',{
         {
             return ctx.unauthorized("you must be logged in");
         }
+        const currentArticleId = ctx.params.id;
         
         ctx.query = {
             ...ctx.query,
@@ -156,9 +157,9 @@ module.exports = createCoreController('api::article.article',{
 
         const primaryCompanies = article.data.attributes.primary_companies.data.map(company => company.id);
         const secondaryCompanies = article.data.attributes.secondary_companies.data.map(company => company.id);
-        const currentArticleId = article.data.id;
+       
 
-              // Fetch articles for primary companies
+              // Fetch articles & secondary articles for primary companies 
     const primaryArticlesPromises = primaryCompanies.map(async (company) => {
         const companyWithArticles = await strapi.entityService.findOne(
             'api::company.company',company,
@@ -201,9 +202,44 @@ module.exports = createCoreController('api::article.article',{
 
     primaryArticles = primaryArticles.filter(x => x.id!= currentArticleId);
 
-    article.data.attributes.relatedArticles = primaryArticles;
+    //fetching bookmarked articles of user
+    const bookmarkedArticles = await strapi.entityService.findMany('api::bookmark.bookmark', {
+        filters: {
+            bookmarked_by: user.id,
+        },
+        populate:{
+            article:true,
+        }
+    });
+
+    //fetching liked articles of user
+
+    const likedArticles = await strapi.entityService.findMany('api::liked-article.liked-article', {
+        filters: {
+            user: user.id,
+        },
+        populate:{
+            article:true,
+        }
+    });
 
 
+    const BookmarkArticleIds = bookmarkedArticles.map(bookmark => bookmark.article.id);
+    const LikeArticleIds = likedArticles.map(likedArticle => likedArticle.article.id);
+
+    console.log(LikeArticleIds);
+    //putting bookmark status of each article
+    const articleWithBookmarkStatus = primaryArticles.map(article =>({
+            ...article,
+            isBookmarked:BookmarkArticleIds.includes(article.id),
+    }));
+
+   
+
+
+    article.data.attributes.relatedArticles = articleWithBookmarkStatus;
+
+    article.data.attributes.isLiked = LikeArticleIds.includes(article.data.id);
     return article;
     },
 

@@ -56,7 +56,8 @@ module.exports = createCoreController('api::bookmark.bookmark',{
     },
 
     //create bookmark
-    async create(ctx){
+    async create(ctx)
+    {
         const {user} = ctx.state;
 
         if(!user){
