@@ -240,6 +240,7 @@ module.exports = createCoreController('api::article.article',{
     article.data.attributes.relatedArticles = articleWithBookmarkStatus;
 
     article.data.attributes.isLiked = LikeArticleIds.includes(article.data.id);
+    article.data.attributes.isBookmarked= BookmarkArticleIds.includes(article.data.id);
     return article;
     },
 
