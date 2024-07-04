@@ -14,7 +14,7 @@ module.exports = ({ env }) => ({
         {
            name: 'api::article.article',
            populate:{
-            primary_company:{
+            primary_companies:{
               name:true,
               populate:{
                 logo:true,
@@ -29,6 +29,7 @@ module.exports = ({ env }) => ({
             industry:{
               name:true,
             },
+            expert_type:true,
             table_with_content:{
               tablePoint:true,
               populate:{
@@ -41,7 +42,20 @@ module.exports = ({ env }) => ({
            
         },
         {
-          name: 'api::company.company'
+          name: 'api::company.company',
+          populate:{
+            articles:{
+              title:true,
+            },
+            industries:{
+              name:true,
+            },
+            sub_industries:{
+              name:true,
+            },
+            ipo:true,
+            ownership_type:true,
+          }
         },
         {
           name: 'api::industry.industry',

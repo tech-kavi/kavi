@@ -46,6 +46,20 @@ module.exports = createCoreController('api::industry.industry',{
 
         const industries=await super.find(ctx);
 
+        //to check watchlist status
+    const WatchlistedCompanies = await strapi.entityService.findMany('api::watchlist.watchlist', {
+        filters: {
+            watchlisted_by: user.id,
+        },
+        populate:{
+            company:true,
+        }
+    });
+  
+    const WatchlistedCompanyIds = WatchlistedCompanies.map(watchlist => watchlist.company.id);
+  
+    
+
 
         const industriesWithArticleCounts = industries.data.map(industry =>{
             // const totalCompanies = industry.attributes.companies.data.length;
@@ -75,6 +89,7 @@ module.exports = createCoreController('api::industry.industry',{
                     ...topcompany,
                     attributes:{
                         ...topcompanyAttributesWithoutArticles,
+                        isWatchlisted:WatchlistedCompanyIds.includes(topcompany.id),
                         articleCount,
                     }
 

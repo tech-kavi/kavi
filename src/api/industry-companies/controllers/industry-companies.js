@@ -1,7 +1,6 @@
 // @ts-nocheck
 'use strict';
 
-const { find } = require("../../company-articles/controllers/company-articles");
 
 /**
  * A set of functions called "actions" for `industry-companies`
@@ -57,29 +56,28 @@ module.exports = {
     })
 
 
-    // const paginatedArticles = articles.slice((pageInt-1)* pageSizeInt, pageInt*pageSizeInt);
 
     //to check bookmark status
-  //   const bookmarkedArticles = await strapi.entityService.findMany('api::bookmark.bookmark', {
-  //     filters: {
-  //         bookmarked_by: user.id,
-  //     },
-  //     populate:{
-  //         article:true,
-  //     }
-  // });
+    const WatchlistedCompanies = await strapi.entityService.findMany('api::watchlist.watchlist', {
+      filters: {
+          watchlisted_by: user.id,
+      },
+      populate:{
+          company:true,
+      }
+  });
 
-//   const BookmarkArticleIds = bookmarkedArticles.map(bookmark => bookmark.article.id);
+  const WatchlistedCompanyIds = WatchlistedCompanies.map(watchlist => watchlist.company.id);
 
-//   const CompanyArticleWithBookmarkStatus = paginatedArticles.map(article =>({
-//     ...article,
-//     isBookmarked:BookmarkArticleIds.includes(article.id),
-// }));
+  const CompanyWithWatchlistStatus = CompaniesWithArticleCount.map(company =>({
+    ...company,
+    isWatchlisted:WatchlistedCompanyIds.includes(company.id),
+}));
 
-    // const total = companies.length;
+    const total = companies.length;
 
     return {
-      data:CompaniesWithArticleCount
+      data:CompanyWithWatchlistStatus,
     };
 
 
