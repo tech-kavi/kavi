@@ -173,6 +173,7 @@ module.exports = createCoreController('api::article.article',{
                                     logo:true,
                                 }
                             },
+                            industry:true,
                         }
                        
                     },
@@ -185,6 +186,7 @@ module.exports = createCoreController('api::article.article',{
                                     logo:true,
                                 }
                             },
+                            industry:true,
                         }
                     },
                 },
@@ -227,7 +229,7 @@ module.exports = createCoreController('api::article.article',{
     const BookmarkArticleIds = bookmarkedArticles.map(bookmark => bookmark.article.id);
     const LikeArticleIds = likedArticles.map(likedArticle => likedArticle.article.id);
 
-    console.log(LikeArticleIds);
+    // console.log(LikeArticleIds);
     //putting bookmark status of each article
     const articleWithBookmarkStatus = primaryArticles.map(article =>({
             ...article,

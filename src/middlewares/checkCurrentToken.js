@@ -1,31 +1,35 @@
+// @ts-nocheck
 // // @ts-nocheck
-// const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 
-// module.exports = () => {
-//   return async (ctx, next) => {
-//     // Check if the request path matches '/articles'
-//     if (ctx.request.path === '/api/articles' || ctx.request.path === '/api/users') {
-//       const authorization = ctx.request.header.authorization;
-//       if (!authorization) {
-//         return ctx.unauthorized('No authorization header found');
-//       }
+module.exports = () => {
+  return async (ctx, next) => {
+    // Check if the request path matches '/articles'
+    if (ctx.request.path === '/api/articles' || ctx.request.path === '/api/users' || ctx.request.path === '/api/articles' || /^\/api\/articles\/\d+$/.test(ctx.request.path)) {
+      const authorization = ctx.request.header.authorization;
+      if (!authorization) {
+        return ctx.unauthorized('No authorization header found');
+      }
+     
 
-//       const token = authorization.split(' ')[1];
-//       let decoded;
-//       try {
-//         decoded = jwt.verify(token, strapi.config.get('plugin.users-permissions.jwtSecret'));
-//       } catch (err) {
-//         return ctx.unauthorized('Invalid token');
-//       }
+    //   console.log(ctx.request);
 
-//       const user = await strapi.entityService.findOne('plugin::users-permissions.user', decoded.id);
+      const token = authorization.split(' ')[1];
+      let decoded;
+      try {
+        decoded = jwt.verify(token, strapi.config.get('plugin.users-permissions.jwtSecret'));
+      } catch (err) {
+        return ctx.unauthorized('Invalid token');
+      }
 
-//       if (!user || user.currentToken !== token) {
-//         return ctx.unauthorized('Invalid token');
-//       }
-//     }
+      const user = await strapi.entityService.findOne('plugin::users-permissions.user', decoded.id);
 
-//     // Call the next middleware in the chain
-//     await next();
-//   };
-// };
+      if (!user || user.currentToken !== token) {
+        return ctx.badRequest('New device logged in');
+      }
+    }
+
+    // Call the next middleware in the chain
+    await next();
+  };
+};

@@ -42,6 +42,7 @@ module.exports = {
                                 logo:true,
                             }
                         },
+                        industry:true,
 
                     }
                 }
