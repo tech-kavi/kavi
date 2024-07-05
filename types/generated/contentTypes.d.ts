@@ -723,11 +723,6 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'manyToOne',
       'plugin::users-permissions.role'
     >;
-    pinnedques: Attribute.Relation<
-      'plugin::users-permissions.user',
-      'oneToMany',
-      'api::pinnedque.pinnedque'
-    >;
     bookmarks: Attribute.Relation<
       'plugin::users-permissions.user',
       'oneToMany',
@@ -1136,42 +1131,6 @@ export interface ApiLikedArticleLikedArticle extends Schema.CollectionType {
   };
 }
 
-export interface ApiPinnedquePinnedque extends Schema.CollectionType {
-  collectionName: 'pinnedques';
-  info: {
-    singularName: 'pinnedque';
-    pluralName: 'pinnedques';
-    displayName: 'pinnedque';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    quesId: Attribute.BigInteger & Attribute.Required;
-    pinned_by_user: Attribute.Relation<
-      'api::pinnedque.pinnedque',
-      'manyToOne',
-      'plugin::users-permissions.user'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::pinnedque.pinnedque',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::pinnedque.pinnedque',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
 export interface ApiReadArticleReadArticle extends Schema.CollectionType {
   collectionName: 'read_articles';
   info: {
@@ -1350,7 +1309,6 @@ declare module '@strapi/types' {
       'api::company.company': ApiCompanyCompany;
       'api::industry.industry': ApiIndustryIndustry;
       'api::liked-article.liked-article': ApiLikedArticleLikedArticle;
-      'api::pinnedque.pinnedque': ApiPinnedquePinnedque;
       'api::read-article.read-article': ApiReadArticleReadArticle;
       'api::sub-industry.sub-industry': ApiSubIndustrySubIndustry;
       'api::tag.tag': ApiTagTag;

@@ -65,12 +65,6 @@
       "inversedBy": "users",
       "configurable": false
     },
-    "pinnedques": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::pinnedque.pinnedque",
-      "mappedBy": "pinned_by_user"
-    },
     "bookmarks": {
       "type": "relation",
       "relation": "oneToMany",
