@@ -55,6 +55,7 @@ module.exports = ({ env }) => ({
             },
             ipo:true,
             ownership_type:true,
+            logo:true
           }
         },
         {
