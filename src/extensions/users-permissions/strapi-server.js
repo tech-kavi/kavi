@@ -37,14 +37,14 @@ const sanitizeQuery = async (query, ctx) => {
 };
 
 //Welcome mail
-const sendWelcomeEmail = async (userEmail, username) => {
+const sendWelcomeEmail = async (userEmail, name) => {
     try {
       await strapi.plugins['email'].services.email.send({
         to: userEmail,
         from: 'nishant@joinkavi.com', // Replace with your verified sender email
         subject: 'Welcome to Our KAVI Platform!',
-        text: `Hello ${username},\n\nWelcome to our service! We are glad to have you on board.\n\nBest regards,\nThe Team`,
-        html: `<p>Hello ${username},</p><p>Welcome to our Platform! We are glad to have you on board.</p><p>Best regards,<br/>The Team</p>`,
+        text: `Hello ${name},\n\nWelcome to our service! We are glad to have you on board.\n\nBest regards,\nThe Team`,
+        html: `<p>Hello ${name},</p><p>Welcome to our Platform! We are glad to have you on board.</p><p>Best regards,<br/>The Team</p>`,
       });
     } catch (error) {
       strapi.log.error('Error sending welcome email:', error);
@@ -156,7 +156,7 @@ module.exports = (plugin) => {
         data: { slotFilled: requestingUser.slotFilled },
       });
       //sending welcome mail
-      await sendWelcomeEmail(user.email,user.username);
+      await sendWelcomeEmail(user.email,user.name);
       console.log("mail sent");
       ctx.created(sanitizedData);
 

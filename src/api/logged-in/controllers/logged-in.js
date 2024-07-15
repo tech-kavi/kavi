@@ -1,0 +1,83 @@
+// @ts-nocheck
+'use strict';
+
+/**
+ * logged-in controller
+ */
+
+const { createCoreController } = require('@strapi/strapi').factories;
+
+const sendWelcomeEmail = async (userEmail, name) => {
+    try {
+      await strapi.plugins['email'].services.email.send({
+        to: userEmail,
+        from: 'nishant@joinkavi.com', // Replace with your verified sender email
+        subject: 'Welcome to Our KAVI Platform!',
+        text: `Hello ${name},\n\nWelcome to our service! We are glad to have you on board.\n\nBest regards,\nThe Team`,
+        html: `<p>Hello ${name},</p><p>Welcome to our Platform! We are glad to have you on board.</p><p>Best regards,<br/>The Team</p>`,
+      });
+    } catch (error) {
+      strapi.log.error('Error sending welcome email:', error);
+    }
+  };
+
+module.exports = createCoreController('api::logged-in.logged-in',{
+    async create(ctx){
+        const user = ctx.state.user;
+        if(!user){
+            return ctx.badRequest("User not authenticated");
+        }
+
+        ctx.request.body.data.user.connect[0] = user.id;
+
+        const existingEntity = await strapi.entityService.findMany(
+            'api::logged-in.logged-in',
+            {
+                filters:{
+                    user:user.id,
+                }
+            }
+        );
+//get user data
+        const userData = await strapi.entityService.findOne('plugin::users-permissions.user',user.id);
+        // console.log(userData);
+        if(existingEntity && existingEntity.length==0){
+            const result = await super.create(ctx);
+            console.log(userData.email);
+            await sendWelcomeEmail(userData.email,userData.name);
+            console.log("email sent");
+            return result;
+        }
+        else{
+            return "Not a first time user";
+        }
+
+
+    },
+
+    async find(ctx)
+    {
+        const user = ctx.state.user; // Get the logged-in user
+
+        if (!user) {
+            return ctx.badRequest('User not authenticated');
+        }
+
+        // Force locale to 'en' and add filter for the current user's bookmarks
+        ctx.query = {
+            ...ctx.query,
+            locale: 'en',
+            filters:{
+                ...ctx.query.filters,
+                user: user.id // Add user filter
+            }
+            
+        };
+        const result = await super.find(ctx);
+
+
+  
+
+    return result;
+    }
+});

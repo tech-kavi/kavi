@@ -53,8 +53,7 @@
     "ipo": {
       "type": "enumeration",
       "enum": [
-        "Recent IPO",
-        "Upcoming IPO"
+        "IPO Alert"
       ]
     },
     "ownership_type": {

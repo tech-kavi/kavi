@@ -750,6 +750,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'api::liked-article.liked-article'
     >;
     LinkedinURL: Attribute.String & Attribute.Private;
+    logged_in: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToOne',
+      'api::logged-in.logged-in'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -1008,7 +1013,7 @@ export interface ApiCompanyCompany extends Schema.CollectionType {
       'oneToMany',
       'api::watchlist.watchlist'
     >;
-    ipo: Attribute.Enumeration<['Recent IPO', 'Upcoming IPO']>;
+    ipo: Attribute.Enumeration<['IPO Alert']>;
     ownership_type: Attribute.Enumeration<['Public', 'Private']> &
       Attribute.Required;
     secondary_articles: Attribute.Relation<
@@ -1124,6 +1129,40 @@ export interface ApiLikedArticleLikedArticle extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::liked-article.liked-article',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiLoggedInLoggedIn extends Schema.CollectionType {
+  collectionName: 'logged_ins';
+  info: {
+    singularName: 'logged-in';
+    pluralName: 'logged-ins';
+    displayName: 'loggedIn';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    user: Attribute.Relation<
+      'api::logged-in.logged-in',
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::logged-in.logged-in',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::logged-in.logged-in',
       'oneToOne',
       'admin::user'
     > &
@@ -1309,6 +1348,7 @@ declare module '@strapi/types' {
       'api::company.company': ApiCompanyCompany;
       'api::industry.industry': ApiIndustryIndustry;
       'api::liked-article.liked-article': ApiLikedArticleLikedArticle;
+      'api::logged-in.logged-in': ApiLoggedInLoggedIn;
       'api::read-article.read-article': ApiReadArticleReadArticle;
       'api::sub-industry.sub-industry': ApiSubIndustrySubIndustry;
       'api::tag.tag': ApiTagTag;

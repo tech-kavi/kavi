@@ -112,6 +112,12 @@
     "LinkedinURL": {
       "type": "string",
       "private": true
+    },
+    "logged_in": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::logged-in.logged-in",
+      "mappedBy": "user"
     }
   }
 }
