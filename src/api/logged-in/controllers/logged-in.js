@@ -6,6 +6,7 @@
  */
 
 const { createCoreController } = require('@strapi/strapi').factories;
+const axios = require('axios');
 
 const sendWelcomeEmail = async (userEmail, name) => {
     try {
@@ -42,11 +43,30 @@ module.exports = createCoreController('api::logged-in.logged-in',{
         const userData = await strapi.entityService.findOne('plugin::users-permissions.user',user.id);
         // console.log(userData);
         if(existingEntity && existingEntity.length==0){
-            const result = await super.create(ctx);
-            console.log(userData.email);
-            await sendWelcomeEmail(userData.email,userData.name);
-            console.log("email sent");
-            return result;
+            const response = await axios.put(
+                'https://api.sendgrid.com/v3/marketing/contacts',
+                {
+                    contacts:[{email: userData.email}],
+                    list_ids:[`${process.env.SENDGRID_API_KEY_LIST_ID}`],
+                },
+                {
+                    headers:{
+                        Authorization:`Bearer ${process.env.SENDGRID_API_KEY_MARKETING}`
+                    },
+                }
+            );
+            // console.log(response);
+            if(response.status==202)
+            {
+                const result = await super.create(ctx);
+                console.log(userData.email);
+                await sendWelcomeEmail(userData.email,userData.name);
+                return result;
+            }
+            else{
+                return "Some error in sendgrid contact add";
+            }
+            
         }
         else{
             return "Not a first time user";
