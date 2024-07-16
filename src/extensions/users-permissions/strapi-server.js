@@ -197,10 +197,14 @@ module.exports = (plugin) => {
   
     }
   
-      await validateCreateUserBody(ctx.request.body);
+      // await validateCreateUserBody(ctx.request.body);
    
       const { email, username, name} = ctx.request.body;
 
+      if (email==undefined) throw new ApplicationError('Please enter email');
+      if (username==undefined) throw new ApplicationError('Please enter username');
+      if (name==undefined) throw new ApplicationError('Please enter name');
+      
       const adminEmail = requestingUser.email;
       const adminDomain = adminEmail.split('@')[1];
       const newUserDomain = email.split('@')[1];
