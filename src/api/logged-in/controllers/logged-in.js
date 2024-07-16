@@ -60,7 +60,7 @@ module.exports = createCoreController('api::logged-in.logged-in',{
             {
                 const result = await super.create(ctx);
                 console.log(userData.email);
-                await sendWelcomeEmail(userData.email,userData.name);
+                // await sendWelcomeEmail(userData.email,userData.name);
                 return result;
             }
             else{
