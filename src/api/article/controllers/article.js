@@ -225,9 +225,19 @@ module.exports = createCoreController('api::article.article',{
         }
     });
 
+    const dislikedArticles = await strapi.entityService.findMany('api::disliked-article.disliked-article', {
+        filters: {
+            user: user.id,
+        },
+        populate:{
+            article:true,
+        }
+    });
+
 
     const BookmarkArticleIds = bookmarkedArticles.map(bookmark => bookmark.article.id);
     const LikeArticleIds = likedArticles.map(likedArticle => likedArticle.article.id);
+    const DisLikeArticleIds = dislikedArticles.map(dislikedArticle => dislikedArticle.article.id);
 
     // console.log(LikeArticleIds);
     //putting bookmark status of each article
@@ -242,6 +252,7 @@ module.exports = createCoreController('api::article.article',{
     article.data.attributes.relatedArticles = articleWithBookmarkStatus;
 
     article.data.attributes.isLiked = LikeArticleIds.includes(article.data.id);
+    article.data.attributes.isDisiked = DisLikeArticleIds.includes(article.data.id);
     article.data.attributes.isBookmarked= BookmarkArticleIds.includes(article.data.id);
     return article;
     },

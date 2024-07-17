@@ -118,6 +118,12 @@
       "relation": "oneToOne",
       "target": "api::logged-in.logged-in",
       "mappedBy": "user"
+    },
+    "disliked_articles": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::disliked-article.disliked-article",
+      "mappedBy": "user"
     }
   }
 }

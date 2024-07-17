@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "disliked_articles",
+  "info": {
+    "singularName": "disliked-article",
+    "pluralName": "disliked-articles",
+    "displayName": "DislikedArticle",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "disliked_articles"
+    },
+    "article": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::article.article",
+      "inversedBy": "disliked_articles"
+    },
+    "dislike_time": {
+      "type": "datetime"
+    }
+  }
+}

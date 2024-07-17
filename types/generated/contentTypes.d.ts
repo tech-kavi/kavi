@@ -755,6 +755,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'oneToOne',
       'api::logged-in.logged-in'
     >;
+    disliked_articles: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::disliked-article.disliked-article'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -924,6 +929,11 @@ export interface ApiArticleArticle extends Schema.CollectionType {
       'oneToMany',
       'api::liked-article.liked-article'
     >;
+    disliked_articles: Attribute.Relation<
+      'api::article.article',
+      'oneToMany',
+      'api::disliked-article.disliked-article'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1013,7 +1023,7 @@ export interface ApiCompanyCompany extends Schema.CollectionType {
       'oneToMany',
       'api::watchlist.watchlist'
     >;
-    ipo: Attribute.Enumeration<['IPO Alert']>;
+    ipo: Attribute.Enumeration<['IPO']>;
     ownership_type: Attribute.Enumeration<['Public', 'Private']> &
       Attribute.Required;
     secondary_articles: Attribute.Relation<
@@ -1037,6 +1047,48 @@ export interface ApiCompanyCompany extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::company.company',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiDislikedArticleDislikedArticle
+  extends Schema.CollectionType {
+  collectionName: 'disliked_articles';
+  info: {
+    singularName: 'disliked-article';
+    pluralName: 'disliked-articles';
+    displayName: 'DislikedArticle';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    user: Attribute.Relation<
+      'api::disliked-article.disliked-article',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    article: Attribute.Relation<
+      'api::disliked-article.disliked-article',
+      'manyToOne',
+      'api::article.article'
+    >;
+    dislike_time: Attribute.DateTime;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::disliked-article.disliked-article',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::disliked-article.disliked-article',
       'oneToOne',
       'admin::user'
     > &
@@ -1346,6 +1398,7 @@ declare module '@strapi/types' {
       'api::article.article': ApiArticleArticle;
       'api::bookmark.bookmark': ApiBookmarkBookmark;
       'api::company.company': ApiCompanyCompany;
+      'api::disliked-article.disliked-article': ApiDislikedArticleDislikedArticle;
       'api::industry.industry': ApiIndustryIndustry;
       'api::liked-article.liked-article': ApiLikedArticleLikedArticle;
       'api::logged-in.logged-in': ApiLoggedInLoggedIn;

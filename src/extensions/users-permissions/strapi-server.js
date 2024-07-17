@@ -43,9 +43,8 @@ const sendWelcomeEmail = async (userEmail, name) => {
         to: userEmail,
         from: 'nishant@joinkavi.com', // Replace with your verified sender email
         subject: 'Added to KAVI',
-        text: `Hello ${name},\n\nWelcome to our service! We are glad to have you on board.\n\nBest regards,\nThe Team`,
-        html: `<!DOCTYPE html>
-<html lang="en">
+        text: `Hello ${name},\n\nWelcome to KAVI platform! We are glad to have you on board.\n\nBest regards,\nKAVI Team`,
+        html: `<html lang="en">
 
 <head>
   <meta charset="UTF-8">
@@ -53,7 +52,7 @@ const sendWelcomeEmail = async (userEmail, name) => {
   <title>Welcome Email</title>
   <style>
     body {
-      font-family: Avenir, sans-serif;
+      font-family: 'Lato', Helvetica, Arial, sans-serif;
       margin: 0;
       padding: 0;
       background-color: #f5f5f5;
@@ -67,8 +66,8 @@ const sendWelcomeEmail = async (userEmail, name) => {
       border: 1px solid #e0e0e0;
     }
 
-    .logo{
-      max-width:600px;
+    .logo {
+      max-width: 600px;
     }
 
     .content {
@@ -76,8 +75,6 @@ const sendWelcomeEmail = async (userEmail, name) => {
       color: #333333;
       text-align: justify;
     }
-
-  
 
     .content p {
       font-size: 16px;
@@ -91,26 +88,12 @@ const sendWelcomeEmail = async (userEmail, name) => {
       font-size: 14px;
       color: #888888;
       padding: 20px;
-
     }
 
     .footer .footer-text {
       flex: 1;
       margin-right: 10px;
     }
-
-	button{
-	padding:8px 16px;
-	color:#ffffff;
-	background-color:#313D74;
-	border:0px;
-	border-radius:6px;
-	}
-
-button a{
-color:#ffffff;
-text-decoration:none;
-}
 
     .footer .footer-logo {
       width: 50px;
@@ -127,22 +110,16 @@ text-decoration:none;
 <body>
   <div class="container">
     <div class="logo">
-      <img src="http://cdn.mcauto-images-production.sendgrid.net/fb8ab3bf269eb3b8/2c86e82c-93a7-433c-b01e-af6f78f07ec5/790x348.png" width="600px"/>
+      <img src="http://cdn.mcauto-images-production.sendgrid.net/fb8ab3bf269eb3b8/2c86e82c-93a7-433c-b01e-af6f78f07ec5/790x348.png" width="600px" />
     </div>
     <div class="content">
       <p>Dear ${name},</p>
-      <p>Welcome to KAVI's Content Library! We're thrilled to have you on board.
-</p>
-      <p>Our platform offers interviews with experts across different companies and industries to help you make informed investment decisions. As you explore, you'll find valuable insights across various sectors, all curated to give you a competitive edge. </p>
+      <p>Welcome to KAVI's Content Library! We're thrilled to have you on board.</p>
+      <p>Our platform offers interviews with experts across different companies and industries to help you make informed investment decisions. As you explore, you'll find valuable insights across various sectors, all curated to give you a competitive edge.</p>
       <p>Click here to head to our platform:</p>
-	<button><a href="https://www.joinkavi.com/" target="_blank">Sign in</a></button>
-      <p>We're here to support your journey. If you have any questions or need assistance, you can connect with our support team at <a href="mailto:tech@kaviresearch.in">tech@kaviresearch.in</a>.
-</p>
+      <a href="https://3dbfa084-3e4a-429b-bdab-3df3b23a9315.weweb-preview.io/" target="_blank" style="display: inline-block; padding: 8px 16px; color: #ffffff; background-color: #313D74; border-radius: 6px; text-decoration: none;">Sign in</a>
+      <p>We're here to support your journey. If you have any questions or need assistance, you can connect with our support team at <a href="mailto:tech@kaviresearch.in">tech@kaviresearch.in</a>.</p>
       <p>Warm regards,<br>Kavi Team</p>
-    </div>
-   
-        
-      </div>
     </div>
   </div>
 </body>
@@ -154,6 +131,97 @@ text-decoration:none;
     }
   };
   
+
+  //Admin mail
+const sendAdminEmail = async (userEmail) => {
+  try {
+    await strapi.plugins['email'].services.email.send({
+      to: userEmail,
+      from: 'nishant@joinkavi.com', // Replace with your verified sender email
+      subject: 'You are now Admin [KAVI]',
+      text: `Upgraded to Admin at KAVI Platform`,
+      html: `
+
+      <html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome Email</title>
+    <style>
+      body {
+        font-family: 'Lato', Helvetica, Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f5f5f5;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #ffffff;
+        padding: 20px;
+        border: 1px solid #e0e0e0;
+      }
+
+      .logo {
+        max-width: 600px;
+        text-align: center;
+      }
+
+      .content {
+        padding: 30px;
+        color: #333333;
+        text-align: justify;
+      }
+
+      .content p {
+        font-size: 15px;
+        line-height: 1.5;
+        margin: 10px 0;
+      }
+
+      .button {
+        padding: 8px 16px;
+        color: #ffffff;
+        background-color: #313D74;
+        border: 0px;
+        border-radius: 6px;
+        font-size: 15px;
+        font-family: 'Lato', Helvetica, Arial, sans-serif;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+      }
+
+      .footer {
+        font-size: 15px;
+        text-align: center;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="logo">
+        <img src="https://dazzling-butterfly-f3a6f1abbb.media.strapiapp.com/admin_user_icon_da30a9ed96.png" width="100px"/>
+      </div>
+      <div class="content">
+        <p>You have now been made Admin for your organization’s KAVI Library account. Please login in again to claim Admin Status.</p>
+        <div style="text-align: center" class="button-items">
+          <a href="https://3dbfa084-3e4a-429b-bdab-3df3b23a9315.weweb-preview.io/" target="_blank" style="padding: 8px 16px; color: #ffffff; background-color: #313D74; border: 0px; border-radius: 6px; text-align: center; text-decoration: none; display: inline-block;">Log in</a>
+        </div>
+        <p>As Admin, you can now add or remove users from your organization’s KAVI account and set someone else as Admin. If this requested was not warranted by your organizations please contact us at <a href="mailto:tech@kaviresearch.in" class="support">tech@kaviresearch.in</a> or call us at <a href="tel:+919606008727" class="support">+91 9606008727</a>.</p>
+      </div>
+    </div>
+  </body>
+
+  </html>`
+    });
+    } catch (error) {
+    strapi.log.error('Error sending welcome email:', error);
+  }
+};
 
 
 module.exports = (plugin) => {
@@ -178,7 +246,7 @@ module.exports = (plugin) => {
              // Log the members field for debugging
             //  console.log('Requesting user members:', requestingUser.members);
          
-             // Check if the requesting user's "members" field has a value >= 1
+             // Check if the requesting user's "slotFilled" field has a value >= 1
              if (requestingUser.slotFilled == requestingUser.slots) {
                throw new ApplicationError('All seats occupied. Extend your plan to add members', 403);
              }
@@ -274,7 +342,7 @@ module.exports = (plugin) => {
       }
     };
 
-    //update 
+    //update to admin role
 
     const update = plugin.controllers.user.update;
 
@@ -331,7 +399,7 @@ module.exports = (plugin) => {
         where: { id: requestingUser.id },
         data: { slotFilled: requestingUser.slotFilled },
         });
-
+        await sendAdminEmail(userToPromote.email);
         ctx.send('User promoted to admin successfully');
         } catch (error) {
         throw new ApplicationError('Failed to promote user to admin');

@@ -94,6 +94,12 @@
       "relation": "oneToMany",
       "target": "api::liked-article.liked-article",
       "mappedBy": "article"
+    },
+    "disliked_articles": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::disliked-article.disliked-article",
+      "mappedBy": "article"
     }
   }
 }

@@ -37,6 +37,11 @@ module.exports = {
       },
       populate:{
         industry:true,
+        primary_companies:{
+          populate:{
+            logo:true,
+          }
+        }
       }
     };
     
