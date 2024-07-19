@@ -24,8 +24,22 @@ module.exports = () => {
 
       const user = await strapi.entityService.findOne('plugin::users-permissions.user', decoded.id);
 
+      
       if (!user || user.currentToken !== token) {
         return ctx.badRequest('New device logged in');
+      }
+      //check user expiry
+      if (user.expiry) {
+        const expiryDate = new Date(user.expiry); // Convert user.expiry to a Date object
+      
+        // Reset the time part of both dates
+        expiryDate.setHours(0, 0, 0, 0);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+      
+        if (expiryDate < today) {
+          return ctx.badRequest('plan.expired');
+        }
       }
     }
 

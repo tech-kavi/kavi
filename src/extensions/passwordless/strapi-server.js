@@ -24,6 +24,8 @@ module.exports = (plugin) =>{
         const {loginToken} = ctx.query;
         const {passwordless} = strapi.plugins['passwordless'].services;
         const {user: userService, jwt: jwtService} = strapi.plugins['users-permissions'].services;
+        
+        
         const isEnabled = await passwordless.isEnabled();
 
         if (!isEnabled) {
@@ -47,7 +49,7 @@ module.exports = (plugin) =>{
         await passwordless.deactivateToken(token);
         return ctx.badRequest('token.invalid');
         }
-        console.log("token validated");
+        // console.log("token validated");
 
         await passwordless.updateTokenOnLogin(token);
 
@@ -55,28 +57,28 @@ module.exports = (plugin) =>{
         where: {email: token.email}
         });
         
-        console.log("email fetched");
+        // console.log("email fetched");
 
         if (!user) {
-        return ctx.badRequest('wrong.email');
+        return ctx.badRequest('No user found. Contact to KAVI Team');
         }
 
-        console.log("email checked");
+        // console.log("email checked");
 
         if (user.blocked) {
-        return ctx.badRequest('blocked.user');
+        return ctx.badRequest('Unable to access. Contact to KAVI Team');
         }
-        console.log("blocked checked");
+        // console.log("blocked checked");
 
         // Check if the user's plan expiry date has passed
         const currentDateTime = new Date();
         const expiryDateTime = new Date(user.expiry); // Assuming 'expiry' field holds the expiry date
 
         if (currentDateTime > expiryDateTime) {
-        return ctx.badRequest('plan.expired');
+        return ctx.badRequest('Plan expired. Contact to KAVI Team');
         }
 
-        console.log("not expired");
+        // console.log("not expired");
 
         if (!user.confirmed) {
         // await userService.edit({id: user.id}, {confirmed: true});
@@ -87,7 +89,7 @@ module.exports = (plugin) =>{
       });
         }
 
-        console.log("user confirmed");
+        // console.log("user confirmed");
 
         // Generate new token
         const newToken = jwtService.issue({ id: user.id });
@@ -101,7 +103,7 @@ module.exports = (plugin) =>{
             },
         });
 
-        console.log("user newtoken updated");
+        // console.log("user newtoken updated");
 
 
         const userSchema = strapi.getModel('plugin::users-permissions.user');
@@ -118,7 +120,7 @@ module.exports = (plugin) =>{
         }
         //jwtService.issue({id: user.id})
         ctx.send({
-        jwt: jwtService.issue({id: user.id}),
+        jwt: newToken,
         user: sanitizedUserInfo,
         context
         });
@@ -148,26 +150,26 @@ module.exports = (plugin) =>{
         const isEmail = emailRegExp.test(email);
     
         if (email && !isEmail) {
-          return ctx.badRequest('wrong.email');
+          return ctx.badRequest('No such user is registered. Please contact kAVI Team');
         }
     
         let user;
         try {
           user = await passwordless.user(email, username);
         } catch (e) {
-          return ctx.badRequest('wrong.user')
+          return ctx.badRequest('No such user is registered. Please contact kAVI Team')
         }
     
         if (!user) {
-          return ctx.badRequest('wrong.email');
+          return ctx.badRequest('No such user is registered. Please contact kAVI Team');
         }
     
         if (email && user.email !== email) {
-          return ctx.badRequest('wrong.user')
+          return ctx.badRequest('No such user is registered. Please contact to KAVI Team')
         }
     
         if (user.blocked) {
-          return ctx.badRequest('blocked.user');
+          return ctx.badRequest('Unable to access. Contact to KAVI Team');
         }
     
         // Check if the user's plan expiry date has passed
@@ -175,7 +177,7 @@ module.exports = (plugin) =>{
         const expiryDateTime = new Date(user.expiry); // Assuming 'expiry' field holds the expiry date
     
         if (currentDateTime > expiryDateTime) {
-          return ctx.badRequest('plan.expired');
+          return ctx.badRequest('Your plan is expired. Please contact to KAVI Team');
         }
     
     
