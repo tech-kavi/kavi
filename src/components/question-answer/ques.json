@@ -6,12 +6,12 @@
   },
   "options": {},
   "attributes": {
-    "question": {
-      "type": "text"
-    },
     "answer": {
       "type": "blocks",
       "required": true
+    },
+    "question": {
+      "type": "blocks"
     }
   }
 }

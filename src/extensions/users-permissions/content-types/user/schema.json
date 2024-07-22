@@ -77,7 +77,7 @@
       "target": "api::watchlist.watchlist",
       "mappedBy": "watchlisted_by"
     },
-    "name": {
+    "first_name": {
       "type": "string"
     },
     "orgID": {
@@ -109,9 +109,10 @@
       "target": "api::liked-article.liked-article",
       "mappedBy": "user"
     },
-    "LinkedinURL": {
+    "linkedinurl": {
       "type": "string",
-      "private": true
+      "private": true,
+      "regex": "(http(s?)://)?(www\\.)?linkedin\\.([a-z])+/(in/)([A-Za-z0-9]+)+/?"
     },
     "logged_in": {
       "type": "relation",
@@ -124,6 +125,12 @@
       "relation": "oneToMany",
       "target": "api::disliked-article.disliked-article",
       "mappedBy": "user"
+    },
+    "last_name": {
+      "type": "string"
+    },
+    "dob": {
+      "type": "date"
     }
   }
 }

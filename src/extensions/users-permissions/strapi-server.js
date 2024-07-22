@@ -267,11 +267,14 @@ module.exports = (plugin) => {
   
       // await validateCreateUserBody(ctx.request.body);
    
-      const { email, username, name} = ctx.request.body;
+      const { email, username, first_name, last_name, dob, linkedinurl} = ctx.request.body;
 
       if (email==undefined) throw new ApplicationError('Please enter email');
       if (username==undefined) throw new ApplicationError('Please enter username');
-      if (name==undefined) throw new ApplicationError('Please enter name');
+      if (first_name==undefined) throw new ApplicationError('Please enter First Name');
+      if (last_name==undefined) throw new ApplicationError('Please enter :Last Name');
+      if (dob==undefined) throw new ApplicationError('Please enter DOB');
+      if (linkedinurl==undefined) throw new ApplicationError('Please enter Linkedid');
       
       const adminEmail = requestingUser.email;
       const adminDomain = adminEmail.split('@')[1];
@@ -303,7 +306,10 @@ module.exports = (plugin) => {
       const user = {
         ...ctx.request.body,
         email: email.toLowerCase(),
-        name: name,
+        first_name: first_name,
+        last_name:last_name,
+        dob:dob,
+        linkedinurl:linkedinurl,
         password:email.toLowerCase(),
         provider: 'local',
         slots:requestingUser.slots,

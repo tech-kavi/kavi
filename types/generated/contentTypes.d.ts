@@ -733,7 +733,7 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'oneToMany',
       'api::watchlist.watchlist'
     >;
-    name: Attribute.String;
+    first_name: Attribute.String;
     orgID: Attribute.BigInteger & Attribute.Required;
     slots: Attribute.Integer;
     slotFilled: Attribute.Integer;
@@ -749,7 +749,7 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'oneToMany',
       'api::liked-article.liked-article'
     >;
-    LinkedinURL: Attribute.String & Attribute.Private;
+    linkedinurl: Attribute.String & Attribute.Private;
     logged_in: Attribute.Relation<
       'plugin::users-permissions.user',
       'oneToOne',
@@ -760,6 +760,8 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'oneToMany',
       'api::disliked-article.disliked-article'
     >;
+    last_name: Attribute.String;
+    dob: Attribute.Date;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
