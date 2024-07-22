@@ -292,6 +292,14 @@ module.exports = (plugin) => {
       if (userWithSameUsername) {
         if (!email) throw new ApplicationError('Username already taken');
       }
+
+      const userWithSameLinkedin = await strapi
+        .query('plugin::users-permissions.user')
+        .findOne({ where: { linkedinurl } });
+  
+      if (userWithSameLinkedin) {
+          throw new ApplicationError('A user with this LinkedIn ID already exists');
+      }
   
       if (advanced.unique_email) {
         const userWithSameEmail = await strapi

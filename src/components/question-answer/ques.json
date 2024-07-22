@@ -7,10 +7,12 @@
   "options": {},
   "attributes": {
     "question": {
-      "type": "richtext"
+      "type": "richtext",
+      "required": true
     },
     "answer": {
-      "type": "richtext"
+      "type": "richtext",
+      "required": true
     }
   }
 }
