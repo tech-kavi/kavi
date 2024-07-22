@@ -52,10 +52,11 @@ export interface QuestionAnswerQues extends Schema.Component {
   collectionName: 'components_question_answer_ques';
   info: {
     displayName: 'Ques';
+    description: '';
   };
   attributes: {
     question: Attribute.Text;
-    answer: Attribute.Text;
+    answer: Attribute.Blocks & Attribute.Required;
   };
 }
 

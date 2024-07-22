@@ -1,7 +1,8 @@
 {
   "collectionName": "components_question_answer_ques",
   "info": {
-    "displayName": "Ques"
+    "displayName": "Ques",
+    "description": ""
   },
   "options": {},
   "attributes": {
@@ -9,7 +10,8 @@
       "type": "text"
     },
     "answer": {
-      "type": "text"
+      "type": "blocks",
+      "required": true
     }
   }
 }

@@ -150,18 +150,18 @@ module.exports = (plugin) =>{
         const isEmail = emailRegExp.test(email);
     
         if (email && !isEmail) {
-          return ctx.badRequest('No such user is registered. Please contact kAVI Team');
+          return ctx.badRequest('No such user is registered. Please contact KAVI Team');
         }
     
         let user;
         try {
           user = await passwordless.user(email, username);
         } catch (e) {
-          return ctx.badRequest('No such user is registered. Please contact kAVI Team')
+          return ctx.badRequest('No such user is registered. Please contact KAVI Team')
         }
     
         if (!user) {
-          return ctx.badRequest('No such user is registered. Please contact kAVI Team');
+          return ctx.badRequest('No such user is registered. Please contact KAVI Team');
         }
     
         if (email && user.email !== email) {
