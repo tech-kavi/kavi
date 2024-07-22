@@ -6,12 +6,11 @@
   },
   "options": {},
   "attributes": {
-    "answer": {
-      "type": "blocks",
-      "required": true
-    },
     "question": {
-      "type": "blocks"
+      "type": "richtext"
+    },
+    "answer": {
+      "type": "richtext"
     }
   }
 }

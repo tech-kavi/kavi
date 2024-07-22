@@ -55,8 +55,8 @@ export interface QuestionAnswerQues extends Schema.Component {
     description: '';
   };
   attributes: {
-    answer: Attribute.Blocks & Attribute.Required;
-    question: Attribute.Blocks;
+    question: Attribute.RichText;
+    answer: Attribute.RichText;
   };
 }
 
