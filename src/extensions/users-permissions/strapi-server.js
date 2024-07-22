@@ -224,8 +224,14 @@ const sendAdminEmail = async (userEmail) => {
 };
 
 
+
+
 module.exports = (plugin) => {
     const create = plugin.controllers.user.create;
+
+    const normalizedLinkedInUrl = (url) =>{
+      return url.replace(/^https?:\/\//, "");
+    }
   
     plugin.controllers.user.create = async (ctx) => {
 
@@ -293,9 +299,13 @@ module.exports = (plugin) => {
         if (!email) throw new ApplicationError('Username already taken');
       }
 
+
+      //check if linkedid is already present
+
+      const normalizedurl = normalizedLinkedInUrl(linkedinurl);
       const userWithSameLinkedin = await strapi
         .query('plugin::users-permissions.user')
-        .findOne({ where: { linkedinurl } });
+        .findOne({ where: { linkedinurl:normalizedurl } });
   
       if (userWithSameLinkedin) {
           throw new ApplicationError('A user with this LinkedIn ID already exists');
@@ -317,7 +327,7 @@ module.exports = (plugin) => {
         first_name: first_name,
         last_name:last_name,
         dob:dob,
-        linkedinurl:linkedinurl,
+        linkedinurl:normalizedurl,
         password:email.toLowerCase(),
         provider: 'local',
         slots:requestingUser.slots,
