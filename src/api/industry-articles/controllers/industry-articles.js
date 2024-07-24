@@ -34,7 +34,7 @@ module.exports = {
         ...ctx.request.query.filters,
         industry:{
           id:{
-            $containsi:id,
+            $eq:id,
           }
         }
       },

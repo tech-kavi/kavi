@@ -1,3 +1,4 @@
+// @ts-nocheck
 'use strict';
 
 /**
@@ -31,7 +32,7 @@ module.exports = {
         ...ctx.request.query.filters,
         secondary_companies:{
           id:{
-            $containsi:id,
+            $in:[id],
           }
         }
       },
@@ -41,8 +42,9 @@ module.exports = {
           populate:{
             logo:true,
           }
-        }
-      }
+        },
+      },
+      sort:['publishedAt:desc']
     };
     
     const articles = await strapi.entityService.findMany('api::article.article',query);

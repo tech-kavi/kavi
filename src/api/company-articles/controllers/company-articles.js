@@ -31,7 +31,7 @@ module.exports = {
         ...ctx.request.query.filters,
         primary_companies:{
           id:{
-            $containsi:id,
+            $in:[id],
           }
         }
       },

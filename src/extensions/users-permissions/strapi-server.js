@@ -501,7 +501,7 @@ module.exports = (plugin) => {
 
         //only admins can fetch all users
         if (!requestingUser || requestingUser.role.name.toLowerCase() !== 'admin') {
-            throw new ApplicationError('You are not authorized to perform this action', 403);
+            throw new ApplicationError('You are not authorized to fetch the members of organization', 403);
           }
 
         const users = await getService('user').fetchAll(sanitizedQuery);
