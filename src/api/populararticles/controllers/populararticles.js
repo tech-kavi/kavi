@@ -20,6 +20,9 @@ module.exports = {
           tags:{
             tag_name:'popular',
           },
+          publishedAt:{
+            $notNull:true,
+          },
         },
         populate:{
           industry:{

@@ -19,7 +19,10 @@ module.exports = createCoreController('api::read-article.read-article',{
             locale:'en',
             filters:{
                 ...ctx.query.filters,
-                user: user.id
+                user: user.id,
+                publishedAt:{
+                    $notNull:true,
+                }
             },
             populate:{
                 article:{

@@ -18,32 +18,85 @@ module.exports = createCoreController('api::article.article',{
             return ctx.unauthorized("you must be logged in");
         }
         
-        const oneMonthAgo = new Date();
-        oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+        // const oneMonthAgo = new Date();
+        // oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
 
+        // ctx.query = {
+        //     ...ctx.query,
+        //     locale:'en',
+        //     populate:{
+        //         industry:{
+        //             fields:['name'],
+        //         },
+        //         primary_companies:{
+        //             fields:['name'],
+        //             populate:{
+        //                 logo:true,
+        //             }
+        //         }
+        //     },
+        //     sort:['publishedAt:desc'],
+        //     filters: {
+        //         publishedAt: {
+        //           $gte: oneMonthAgo.toISOString(),
+        //         },
+        //       },
+        // };
+ 
+        // const articles = await super.find(ctx);
+
+          // Function to get the start of a month in IST
+    const getISTStartOfMonth = (year, month) => {
+        const date = new Date(Date.UTC(year, month, 1, 0, 0, 0)); // First day of the month at UTC
+        date.setHours(date.getHours() + 5); // Convert to IST
+        date.setMinutes(date.getMinutes() + 30);
+        return date;
+    };
+
+    const currentDate = new Date();
+    const startOfCurrentMonth = getISTStartOfMonth(currentDate.getFullYear(), currentDate.getMonth());
+    const startOfPreviousMonth = getISTStartOfMonth(currentDate.getFullYear(), currentDate.getMonth() - 1);
+
+    console.log(startOfCurrentMonth);
+    console.log(startOfPreviousMonth);
+
+    // Helper function to perform the article query
+    const getArticles = async (startDate) => {
         ctx.query = {
             ...ctx.query,
-            locale:'en',
-            populate:{
-                industry:{
-                    fields:['name'],
+            locale: 'en',
+            populate: {
+                industry: {
+                    fields: ['name'],
                 },
-                primary_companies:{
-                    fields:['name'],
-                    populate:{
-                        logo:true,
+                primary_companies: {
+                    fields: ['name'],
+                    populate: {
+                        logo: true,
                     }
                 }
             },
-            sort:['publishedAt:desc'],
+            sort: ['publishedAt:desc'],
             filters: {
                 publishedAt: {
-                  $gte: oneMonthAgo.toISOString(),
+                    $gte: startDate.toISOString(),
+                    $notNull:true,//ensuring the article is published
                 },
-              },
+            },
         };
- 
-        const articles = await super.find(ctx);
+
+        return await super.find(ctx);
+    };
+
+    // Initial query for the current month's articles
+    let articles = await getArticles(startOfCurrentMonth);
+
+    // If no articles are found, query for the previous month's articles
+    if (articles.data.length === 0) {
+        console.log("fetching articles from pervious month")
+        articles = await getArticles(startOfPreviousMonth);
+    }
+
 
         const bookmarkedArticles = await strapi.entityService.findMany('api::bookmark.bookmark', {
         filters: {
@@ -65,42 +118,6 @@ module.exports = createCoreController('api::article.article',{
             isBookmarked:BookmarkArticleIds.includes(article.id),
     }));
 
-        //below code are is useful if we want to show that article is already read or not with each article
-
-    //     const articleIds = articles.data.map(article => article.id);
-        
-
-    // // Fetch read-articles for the current user and these articles using entityService.findMany
-    // const readArticles = await strapi.entityService.findMany('api::read-article.read-article', {
-    //     filters: {
-    //         user: user.id,
-    //         article:{
-    //             id:articleIds,
-    //         },
-    //     },
-    //     populate:{
-    //         article:true,
-    //     }
-    // });
-
-    // console.log(articleIds);
-
-    // // Create a set of read article IDs for faster lookup
-    // const readArticleIds = new Set(readArticles.map(read => read.article.id));
-
-    // // Add read attribute to each article
-
-    
-    // const articlesWithReadStatus = articles.data.map(article => {
-    //     return {
-    //         ...article,
-    //      read: readArticleIds.has(article.id),
- 
-            
-    //     };
-    // });
-
-    // return {...articles,"data":articlesWithReadStatus};
 
     return {
         data:articleWithBookmarkStatus,
@@ -150,9 +167,19 @@ module.exports = createCoreController('api::article.article',{
                     }
                 }
             },
+            fitlers:{
+                publishedAt:{
+                    $notNull:true,
+                }
+            }
         };
  
         const article = await super.findOne(ctx);
+
+        if(article.data.attributes.publishedAt==null)
+        {
+            return ctx.badRequest("No article found");
+        }
        
 
         const primaryCompanies = article.data.attributes.primary_companies.data.map(company => company.id);
@@ -174,7 +201,12 @@ module.exports = createCoreController('api::article.article',{
                                 }
                             },
                             industry:true,
-                        }
+                        },
+                        filters:{
+                            publishedAt:{
+                                $notNull:true,
+                            },
+                        },
                        
                     },
                     secondary_articles:
@@ -184,12 +216,27 @@ module.exports = createCoreController('api::article.article',{
                                 fields:['name'],
                                 populate:{
                                     logo:true,
-                                }
+                                },
+                                filters:{
+                                    publishedAt:{
+                                        $notNull:true,
+                                    },
+                                },
                             },
                             industry:true,
+                        },
+                        filters:{
+                            publishedAt:{
+                                $notNull:true,
+                            }
                         }
                     },
                 },
+                filters:{
+                    publishedAt:{
+                        $notNull:true,
+                    }
+                }
             }
         );
         return {
@@ -219,6 +266,9 @@ module.exports = createCoreController('api::article.article',{
     const likedArticles = await strapi.entityService.findMany('api::liked-article.liked-article', {
         filters: {
             user: user.id,
+            publishedAt:{
+                $notNull:true,
+            },
         },
         populate:{
             article:true,
@@ -228,6 +278,9 @@ module.exports = createCoreController('api::article.article',{
     const dislikedArticles = await strapi.entityService.findMany('api::disliked-article.disliked-article', {
         filters: {
             user: user.id,
+            publishedAt:{
+                $notNull:true,
+            },
         },
         populate:{
             article:true,

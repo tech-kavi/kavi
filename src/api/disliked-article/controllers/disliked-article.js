@@ -18,13 +18,17 @@ module.exports = createCoreController('api::disliked-article.disliked-article',{
             locale:'en',
             filters:{
                 ...ctx.query.filters,
-                user: user.id
+                user: user.id,
+                publishedAt:{
+                    $notNull:true,
+                },
             },
             populate:{
                 article:{
                     fields:['title'],
                 }
             }
+            
         };
 
         const result = await super.find(ctx);
@@ -51,6 +55,9 @@ module.exports = createCoreController('api::disliked-article.disliked-article',{
                 filters:{
                     user:user.id,
                     article:articleId,
+                    publishedAt:{
+                        $notNull:true,
+                    }
                 }
             }
         );
@@ -62,6 +69,9 @@ module.exports = createCoreController('api::disliked-article.disliked-article',{
                 filters:{
                     user:user.id,
                     article:articleId,
+                    publishedAt:{
+                        $notNull:true,
+                    }
                 }
             }
         )

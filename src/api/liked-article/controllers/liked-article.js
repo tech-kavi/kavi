@@ -18,7 +18,10 @@ module.exports = createCoreController('api::liked-article.liked-article',{
             locale:'en',
             filters:{
                 ...ctx.query.filters,
-                user: user.id
+                user: user.id,
+                publishedAt:{
+                    $notNull:true,
+                }
             },
             populate:{
                 article:{

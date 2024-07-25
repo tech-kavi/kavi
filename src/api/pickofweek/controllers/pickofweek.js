@@ -19,16 +19,21 @@ module.exports = {
           tags:{
             tag_name:'pickofweek',
           },
+          publishedAt:{
+            $notNull:true,
+          }
         },
         populate:{
           industry:{
               fields:['name'],
+              
           },
           primary_companies:{
               fields:['name'],
               populate:{
                   logo:true,
-              }
+              },
+              
           },
           brief:true,
       },

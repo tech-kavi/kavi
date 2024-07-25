@@ -34,6 +34,9 @@ module.exports = {
           id:{
             $in:[id],
           }
+        },
+        publishedAt:{
+          $notNull:true,
         }
       },
       populate:{
@@ -44,7 +47,8 @@ module.exports = {
           }
         },
       },
-      sort:['publishedAt:desc']
+      sort:['publishedAt:desc'],
+      limit:-1,
     };
     
     const articles = await strapi.entityService.findMany('api::article.article',query);
@@ -57,6 +61,9 @@ module.exports = {
     const bookmarkedArticles = await strapi.entityService.findMany('api::bookmark.bookmark', {
       filters: {
           bookmarked_by: user.id,
+          publishedAt:{
+            $notNull:true,
+          },
       },
       populate:{
           article:true,

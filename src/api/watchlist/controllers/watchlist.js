@@ -21,6 +21,9 @@ module.exports = createCoreController('api::watchlist.watchlist',{
             local:'en',
             filters:{
                 watchlisted_by:user.id,
+                publishedAt:{
+                    $notNull:true,
+                }
             },
             populate:{
                 company:{

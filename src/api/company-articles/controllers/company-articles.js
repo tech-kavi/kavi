@@ -33,11 +33,15 @@ module.exports = {
           id:{
             $in:[id],
           }
+        },
+        publishedAt:{
+          $notNull:true,
         }
       },
       populate:{
         industry:true,
-      }
+      },
+      
     };
     
     const articles = await strapi.entityService.findMany('api::article.article',query);

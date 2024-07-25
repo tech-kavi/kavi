@@ -36,16 +36,29 @@ module.exports = {
           id:{
             $eq:id,
           }
+        },
+        publishedAt:{
+          $notNull:true,
         }
       },
       populate:{
         sub_industries:{
           fields:['name'],
+          filters:{
+            publishedAt:{
+              $notNull:true,
+            },
+          },
       },
       primary_companies:{
           fields:['name'],
           populate:{
               logo:true,
+          },
+          filters:{
+            publishedAt:{
+              $notNull:true,
+            },
           },
       },
       },

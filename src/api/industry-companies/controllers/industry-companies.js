@@ -27,6 +27,9 @@ module.exports = {
           id:{
             $in:[id],
           }
+        },
+        publishedAt:{
+          $notNull:true,
         }
       },
       populate:{
@@ -38,6 +41,7 @@ module.exports = {
       },
 
       sort:{name:'asc'},
+      limit:-1,
     
     };
     

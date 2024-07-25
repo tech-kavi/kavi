@@ -26,7 +26,12 @@ module.exports = createCoreController('api::industry.industry',{
                         logo:true,
                         articles:true,
                         ipo:true,
-                    }
+                    },
+                    filters:{
+                        publishedAt:{
+                            $notNull:true,
+                        },
+                    },
                 },
                 articles:true,
                top_companies:{
@@ -36,10 +41,25 @@ module.exports = createCoreController('api::industry.industry',{
                             articles:true,
                             ipo:true,
                         },
+                        filters:{
+                            publishedAt:{
+                                $notNull:true,
+                            },
+                        },
                },
                sub_industries:{
                 fields:['name'],
+                filters:{
+                    publishedAt:{
+                        $notNull:true,
+                    },
+                },
                }
+            },
+            filters:{
+                publishedAt:{
+                    $notNull:true,
+                },
             },
             sort:['name']
         };
@@ -50,6 +70,9 @@ module.exports = createCoreController('api::industry.industry',{
     const WatchlistedCompanies = await strapi.entityService.findMany('api::watchlist.watchlist', {
         filters: {
             watchlisted_by: user.id,
+            publishedAt:{
+                $notNull:true,
+            },
         },
         populate:{
             company:true,
@@ -170,10 +193,20 @@ module.exports = createCoreController('api::industry.industry',{
                     },
                 },
                 sub_industries:true,
-            }
+            },
+            filters:{
+                publishedAt:{
+                    $notNull:true,
+                },
+            },
         };
 
         const industry = await super.findOne(ctx);
+
+        if(industry.data.attributes.publishedAt==null)
+        {
+            return ctx.badRequest("No industry found");
+        }
 
         industry.data.attributes.articleCounts = industry.data.attributes.articles.data.length;
 

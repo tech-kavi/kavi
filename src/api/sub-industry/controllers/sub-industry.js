@@ -26,7 +26,12 @@ module.exports = createCoreController('api::sub-industry.sub-industry',{
                         logo:true,
                         articles:true,
                         ipo:true,
-                    }
+                    },
+                    filters:{
+                        publishedAt:{
+                          $notNull:true,
+                        },
+                    },
                 },
                 articles:{
                     populate:{
@@ -35,14 +40,29 @@ module.exports = createCoreController('api::sub-industry.sub-industry',{
                                 logo:true,
                             }
                         },
-                    }
+                    },
+                    filters:{
+                        publishedAt:{
+                          $notNull:true,
+                        },
+                      },
                 },
                
             },
+            filters:{
+                publishedAt:{
+                    $notNull:true,
+                },
+            }
             
         };
 
         const subIndustry=await super.findOne(ctx);
+
+        if(subIndustry.data.attributes.publishedAt==null)
+        {
+            return ctx.badRequest("No sub-industry found");
+        }
 
         //counting articles of companies
         const companiesWithArticleCount = subIndustry.data.attributes.companies.data.map(company => {

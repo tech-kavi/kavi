@@ -36,6 +36,7 @@ module.exports = createCoreController('api::logged-in.logged-in',{
             {
                 filters:{
                     user:user.id,
+                   
                 }
             }
         );
@@ -83,13 +84,16 @@ module.exports = createCoreController('api::logged-in.logged-in',{
             return ctx.badRequest('User not authenticated');
         }
 
-        // Force locale to 'en' and add filter for the current user's bookmarks
+        
         ctx.query = {
             ...ctx.query,
             locale: 'en',
             filters:{
                 ...ctx.query.filters,
-                user: user.id // Add user filter
+                user: user.id, // Add user filter
+                publishedAt:{
+                    $notNull:true,
+                }
             }
             
         };
