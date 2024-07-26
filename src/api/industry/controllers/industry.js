@@ -57,6 +57,7 @@ module.exports = createCoreController('api::industry.industry',{
                }
             },
             filters:{
+                ...ctx.request.query.filters,
                 publishedAt:{
                     $notNull:true,
                 },

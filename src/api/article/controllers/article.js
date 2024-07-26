@@ -168,6 +168,7 @@ module.exports = createCoreController('api::article.article',{
                 }
             },
             fitlers:{
+                // ...ctx.request.query.filters,
                 publishedAt:{
                     $notNull:true,
                 }
