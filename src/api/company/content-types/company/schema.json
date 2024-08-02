@@ -29,7 +29,7 @@
         "audios"
       ]
     },
-    "description": {
+    "meta": {
       "type": "text"
     },
     "industries": {
