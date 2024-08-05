@@ -28,9 +28,10 @@ export interface BriefBriefs extends Schema.Component {
   collectionName: 'components_brief_briefs';
   info: {
     displayName: 'Briefs';
+    description: '';
   };
   attributes: {
-    point: Attribute.Text;
+    point: Attribute.RichText;
   };
 }
 
@@ -64,9 +65,10 @@ export interface TableOfContentIndex extends Schema.Component {
   collectionName: 'components_table_of_content_indices';
   info: {
     displayName: 'Index';
+    description: '';
   };
   attributes: {
-    tablePoint: Attribute.Text;
+    tablePoint: Attribute.RichText;
     ques: Attribute.Component<'question-answer.ques', true>;
   };
 }
