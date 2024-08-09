@@ -129,6 +129,7 @@ module.exports = createCoreController('api::industry.industry',{
                     ...company,
                     attributes:{
                         ...companyAttributesWithoutArticles,
+                        isWatchlisted:WatchlistedCompanyIds.includes(company.id),
                         articleCount,
                     }
 
