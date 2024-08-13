@@ -16,7 +16,9 @@
       "type": "uid"
     },
     "name": {
-      "type": "string"
+      "type": "string",
+      "required": true,
+      "unique": true
     },
     "logo": {
       "type": "media",

@@ -19,9 +19,9 @@ module.exports = {
       });
   
   
-      console.log("in lifecycle");
-      console.log(updatedUser.role);
-      console.log(data);
+      // console.log("in lifecycle");
+      // console.log(updatedUser.role);
+      // console.log(data);
   
       // Check if the user has the "authenticated" role and the expiry field is updated
       if (updatedUser.role && updatedUser.role.type === 'admin' && data.expiry) {
@@ -39,7 +39,7 @@ module.exports = {
           }
         });
   
-        console.log("members",memberUsers);
+        // console.log("members",memberUsers);
         // Update the expiry field for each "member" user
         await Promise.all(
           memberUsers.map(async (member) => {

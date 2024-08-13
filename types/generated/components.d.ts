@@ -31,7 +31,7 @@ export interface BriefBriefs extends Schema.Component {
     description: '';
   };
   attributes: {
-    point: Attribute.RichText;
+    point: Attribute.RichText & Attribute.Required;
   };
 }
 
@@ -68,7 +68,7 @@ export interface TableOfContentIndex extends Schema.Component {
     description: '';
   };
   attributes: {
-    tablePoint: Attribute.RichText;
+    tablePoint: Attribute.RichText & Attribute.Required;
     ques: Attribute.Component<'question-answer.ques', true>;
   };
 }

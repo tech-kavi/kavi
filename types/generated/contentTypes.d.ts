@@ -1007,7 +1007,7 @@ export interface ApiCompanyCompany extends Schema.CollectionType {
   };
   attributes: {
     company_id: Attribute.UID;
-    name: Attribute.String;
+    name: Attribute.String & Attribute.Required & Attribute.Unique;
     logo: Attribute.Media;
     meta: Attribute.Text;
     industries: Attribute.Relation<
@@ -1116,7 +1116,7 @@ export interface ApiIndustryIndustry extends Schema.CollectionType {
       'manyToMany',
       'api::company.company'
     >;
-    name: Attribute.String;
+    name: Attribute.String & Attribute.Required & Attribute.Unique;
     sub_industries: Attribute.Relation<
       'api::industry.industry',
       'manyToMany',
