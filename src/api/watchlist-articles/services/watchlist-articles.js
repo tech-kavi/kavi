@@ -34,7 +34,12 @@ module.exports = {
                 {
                     start:start,
                     limit:pageSizeNumber,
-                    filters:{primary_companies:{id:{$in:companyIds}}},
+                    filters:{
+                        primary_companies:{id:{$in:companyIds}},
+                        publishedAt:{
+                            $notNull:true,
+                          }
+                    },
                     populate:{
                         primary_companies:{
                             fields:['name'],
@@ -49,7 +54,12 @@ module.exports = {
             );
 
             const totalEntries = await strapi.entityService.count('api::article.article',{
-                filters:{primary_companies:{id:{$in:companyIds}}}
+                filters:{
+                    primary_companies:{id:{$in:companyIds}},
+                    publishedAt:{
+                        $notNull:true,
+                      }
+                }
             });
 
             const bookmarkedArticles = await strapi.entityService.findMany('api::bookmark.bookmark', {

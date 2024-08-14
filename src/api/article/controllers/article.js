@@ -460,6 +460,9 @@ module.exports = createCoreController('api::article.article',{
                 }
             }
         }
+
+        // Sort related articles by latest publishedAt date
+    relatedArticles = relatedArticles.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
     
         // Ensure only 3 related articles are returned
         relatedArticles = relatedArticles.slice(0, 3);
