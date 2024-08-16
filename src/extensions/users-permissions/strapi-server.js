@@ -62,8 +62,8 @@ const sendWelcomeEmail = async (userEmail, name, password) => {
         }
         
         .top{
-        height:10px;
-        background-color:#273789;
+            height:10px;
+            background-color:#273789;
         }
  
         .container {
@@ -83,28 +83,27 @@ const sendWelcomeEmail = async (userEmail, name, password) => {
  
         .header h1 {
             color: #000;
-            font-size: 24px;
+            font-size: 36px;
             margin-top: 20px;
         }
  
         .content {
-            padding: 20px;
+            padding: 0px 20px;
             text-align: center;
         }
  
         .content p {
             font-size: 16px;
-            color: #333333;
+            color: #000;
             line-height: 1.5;
             text-align: justify;
         }
  
-        .content a {
+        .content a.button {
             display: inline-block;
             padding: 10px 20px;
-            
             background-color: #273789;
-            color: #FFFFFF;
+            color: #FFFFFF !important;
             text-decoration: none;
             border-radius: 5px;
             font-size: 16px;
@@ -126,16 +125,15 @@ const sendWelcomeEmail = async (userEmail, name, password) => {
         .footer {
             margin-top: 0px;
             padding: 0px 20px;
-            
-            font-size: 14px;
-            color: #666666;
+            font-size: 16px;
+            color: #000;
         }
         
-        .last{
-        margin-top:50px;
-            background-color:#eaebf4;
-            padding:20px;
-            text-align:center;
+        .last {
+            margin-top: 50px;
+            background-color: #eaebf4;
+            padding: 20px;
+            text-align: center;
             font-size: 14px;
             color: #666666;
         }
@@ -150,33 +148,35 @@ const sendWelcomeEmail = async (userEmail, name, password) => {
 <body>
 
 <div class="container">
-<div class="top"></div>
-<div class="header">
-<h1>Welcome to KAVI!</h1>
+    <div class="top"></div>
+    <div class="header">
+        <h1>Welcome to KAVI!</h1>
+    </div>
+    <div class="content">
+        <p>Dear ${name},</p>
+        <p>Welcome to the Kavi Library! We're thrilled to have you on board.</p>
+        <p>You’re now a step closer to exclusive interviews with industry experts across different companies and industries that will help you make informed investment decisions. Login now to access valuable insights curated to give you a competitive edge.</p>
+        <a href="${process.env.FRONTED_URL}" class="button">Login Now</a>
+        <div class="account-info">
+            <p><strong>Here’s your account information:</strong></p>
+            <p>Email: <span style="font-weight: normal; color: #000;">${userEmail}</span></p>
+            <p>Password: <span style="font-weight: normal; color: #000;">${password}</span></p>
+        </div>
+    </div>
+    <div class="footer">
+        <p>Thank you for choosing KAVI. We look forward to helping you achieve your investment goals.</p>
+        <p>Warm regards,<br>KAVI Team</p>
+    </div>
+    <div class="last">
+        <p>If you have any questions or need assistance, please reach out to us at <a href="mailto:tech@kaviresearch.com">tech@kaviresearch.com</a></p>
+    </div>
+    <div class="top" style="margin-top:50px;"></div>
 </div>
-<div class="content">
-<p>Dear ${name},</p>
-<p>Welcome to the Kavi Library! We're thrilled to have you on board.</p>
-<p>You’re now a step closer to exclusive interviews with industry experts across different companies and industries that will help you make informed investment decisions. Login now to access valuable insights curated to give you a competitive edge.</p>
- <a href=${process.env.FRONTED_URL} class="button" style="padding: 12px 24px; color: #ffffff !important; background-color: #313D74; border: 0px; border-radius: 6px; text-align: center; text-decoration: none; display: inline-block; font-weight: bold;">Login Now</a>
-<div class="account-info">
-<p><strong>Here’s your account information:</strong></p>
-<p>Email: ${userEmail}</p>
-<p>Password: ${password}</p>
-</div>
-</div>
-<div class="footer">
-<p>Thank you for choosing KAVI. We look forward to helping you achieve your investment goals.</p>
-<p>Warm regards,<br>KAVI Team</p>
-</div>
-<div class="last">
-<p>If you have any questions or need assistance, please reach out to us at <a href="mailto:tech@kaviresearch.com">tech@kaviresearch.com</a></p>
-</div>
-<div class="top" style="margin-top:50px;"></div>
-</div>
+
 </body>
  
-</html>`,
+</html>
+`,
       });
     } catch (error) {
       strapi.log.error('Error sending welcome email:', error);
