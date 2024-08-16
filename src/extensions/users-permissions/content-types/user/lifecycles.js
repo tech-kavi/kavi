@@ -19,16 +19,19 @@ module.exports = {
       });
   
   
-      // console.log("in lifecycle");
+      console.log("in lifecycle");
+      console.log(data);
       // console.log(updatedUser.role);
+      // console.log(updatedUser);
       // console.log(data);
 
       if (data.password) { // Check if the password field was updated
         // console.log("in password change email function");
         try {
+          console.log(updatedUser.email);
           // Send the email to the user
           await strapi.plugins['email'].services.email.send({
-            to: data.email,
+            to: updatedUser.email,
             from: `KAVI <${process.env.DEFAULT_FROM}>`,
             subject: 'Your password has been changed',
             text: 'Your password has been successfully changed. If you did not request this change, please contact support.',
@@ -102,7 +105,7 @@ module.exports = {
     </div>
     <div class="content">
       <h1>Your password has changed</h1>
-      <p>Hello ${data.first_name},</p>
+      <p>Hello ${updatedUser.first_name},</p>
       <p>We wanted to give you notice that your password has been recently changed.</p>
       <p>You can now <a href="<%= URL %>">login</a> with your new password.</p>
       <p>If you did not make this change, please contact our support team at <a href="mailto:tech@kaviresearch.com">tech@kaviresearch.com</a>.</p>
