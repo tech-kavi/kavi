@@ -12,6 +12,8 @@ const utils = require('@strapi/utils');
 const { getService } = require('../../../node_modules/@strapi/plugin-users-permissions/server/utils');
 const { validateCreateUserBody, validateUpdateUserBody } = require('../../../node_modules/@strapi/plugin-users-permissions/server/controllers/validation/user');
 
+const crypto = require('crypto');
+
 const { sanitize, validate } = utils;
 const { ApplicationError, ValidationError, NotFoundError } = utils.errors;
 
@@ -37,11 +39,11 @@ const sanitizeQuery = async (query, ctx) => {
 };
 
 //Welcome mail
-const sendWelcomeEmail = async (userEmail, name) => {
+const sendWelcomeEmail = async (userEmail, name, password) => {
     try {
       await strapi.plugins['email'].services.email.send({
         to: userEmail,
-        from: 'nishant@joinkavi.com', // Replace with your verified sender email
+        from: process.env.DEFAULT_FROM, // Replace with your verified sender email
         subject: 'Added to KAVI',
         text: `Hello ${name},\n\nWelcome to KAVI platform! We are glad to have you on board.\n\nBest regards,\nKAVI Team`,
         html: `<html lang="en">
@@ -116,6 +118,7 @@ const sendWelcomeEmail = async (userEmail, name) => {
       <p>Dear ${name},</p>
       <p>Welcome to KAVI's Content Library! We're thrilled to have you on board.</p>
       <p>Our platform offers interviews with experts across different companies and industries to help you make informed investment decisions. As you explore, you'll find valuable insights across various sectors, all curated to give you a competitive edge.</p>
+      <p>Initial Password : ${password}</p>
       <p>Click here to head to our platform:</p>
       <a href="https://3dbfa084-3e4a-429b-bdab-3df3b23a9315.weweb-preview.io/" target="_blank" style="display: inline-block; padding: 8px 16px; color: #ffffff; background-color: #313D74; border-radius: 6px; text-decoration: none;">Sign in</a>
       <p>We're here to support your journey. If you have any questions or need assistance, you can connect with our support team at <a href="mailto:tech@kaviresearch.in">tech@kaviresearch.in</a>.</p>
@@ -137,7 +140,7 @@ const sendAdminEmail = async (userEmail) => {
   try {
     await strapi.plugins['email'].services.email.send({
       to: userEmail,
-      from: 'nishant@joinkavi.com', // Replace with your verified sender email
+      from: process.env.DEFAULT_FROM, // Replace with your verified sender email
       subject: 'You are now Admin [KAVI]',
       text: `Upgraded to Admin at KAVI Platform`,
       html: `
@@ -208,6 +211,7 @@ const sendAdminEmail = async (userEmail) => {
       </div>
       <div class="content">
         <p>You have now been made Admin for your organization’s KAVI Library account. Please login in again to claim Admin Status.</p>
+        
         <div style="text-align: center" class="button-items">
           <a href="https://3dbfa084-3e4a-429b-bdab-3df3b23a9315.weweb-preview.io/" target="_blank" style="padding: 8px 16px; color: #ffffff; background-color: #313D74; border: 0px; border-radius: 6px; text-align: center; text-decoration: none; display: inline-block;">Log in</a>
         </div>
@@ -320,6 +324,9 @@ module.exports = (plugin) => {
           throw new ApplicationError('Email already taken');
         }
       }
+
+       // Generate a random password
+      const randomPassword = crypto.randomBytes(8).toString('hex');
   
       const user = {
         ...ctx.request.body,
@@ -328,7 +335,7 @@ module.exports = (plugin) => {
         last_name:last_name,
         dob:dob,
         linkedinurl:normalizedurl,
-        password:email.toLowerCase(),
+        password:randomPassword,
         provider: 'local',
         slots:requestingUser.slots,
         orgID:requestingUser.orgID,
@@ -356,7 +363,7 @@ module.exports = (plugin) => {
         data: { slotFilled: requestingUser.slotFilled },
       });
       //sending welcome mail
-      await sendWelcomeEmail(user.email,user.name);
+      await sendWelcomeEmail(user.email,first_name,randomPassword);
       console.log("mail sent");
       ctx.created(sanitizedData);
 

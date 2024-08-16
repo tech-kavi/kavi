@@ -21,7 +21,22 @@ module.exports = {
   
       // console.log("in lifecycle");
       // console.log(updatedUser.role);
-      // console.log(data);
+      console.log(data);
+
+      if (data.password) { // Check if the password field was updated
+        console.log("in password change email function");
+        try {
+          // Send the email to the user
+          await strapi.plugins['email'].services.email.send({
+            to: data.email,
+            from: process.env.DEFAULT_FROM,
+            subject: 'Your password has been changed',
+            text: 'Your password has been successfully changed. If you did not request this change, please contact support.',
+          });
+        } catch (err) {
+          strapi.log.error('Failed to send password change notification email:', err);
+        }
+      }
   
       // Check if the user has the "authenticated" role and the expiry field is updated
       if (updatedUser.role && updatedUser.role.type === 'admin' && data.expiry) {

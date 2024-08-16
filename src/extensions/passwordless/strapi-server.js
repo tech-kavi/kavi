@@ -8,6 +8,9 @@
  */
 const {sanitize} = require('@strapi/utils');
 
+const { ValidationError } = require('@strapi/utils').errors;
+
+
 /* eslint-disable no-useless-escape */
 const _ = require('lodash');
 const emailRegExp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -144,6 +147,8 @@ module.exports = (plugin) =>{
         const params = _.assign(ctx.request.body);
     
         const email = params.email ? params.email.trim().toLowerCase() : null;
+        const password = params.password || null;
+        
         const context = params.context || {};
         const username = params.username || null;
     
@@ -155,7 +160,10 @@ module.exports = (plugin) =>{
     
         let user;
         try {
-          user = await passwordless.user(email, username);
+          //user = await passwordless.user(email, username);
+          user = await strapi.query('plugin::users-permissions.user').findOne({
+            where: { email }
+          });
         } catch (e) {
           return ctx.badRequest('No such user is registered. Please contact KAVI Team')
         }
@@ -167,6 +175,8 @@ module.exports = (plugin) =>{
         if (email && user.email !== email) {
           return ctx.badRequest('No such user is registered. Please contact to KAVI Team')
         }
+
+        // console.log(user);
     
         if (user.blocked) {
           return ctx.badRequest('Unable to access. Contact to KAVI Team');
@@ -179,10 +189,29 @@ module.exports = (plugin) =>{
         if (currentDateTime > expiryDateTime) {
           return ctx.badRequest('Your plan is expired. Please contact to KAVI Team');
         }
-    
+        
+        //password check
+
+        if (!password) {
+          return ctx.badRequest('Password is required');
+        }
+        // console.log(password);
+        // console.log(user.password);
+        const userService = strapi.plugin('users-permissions').service('user');
+        const validPassword = await userService.validatePassword(
+          password,
+          user.password
+        );
+  
+        if (!validPassword) {
+          throw new ValidationError('Invalid identifier or password');
+        }
+        // console.log('password validated');
+
     
         try {
           const token = await passwordless.createToken(user.email, context);
+          // console.log('token created');
           await passwordless.sendLoginLink(token);
           ctx.send({
             email,
