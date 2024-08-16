@@ -44,89 +44,138 @@ const sendWelcomeEmail = async (userEmail, name, password) => {
       await strapi.plugins['email'].services.email.send({
         to: userEmail,
         from: process.env.DEFAULT_FROM, // Replace with your verified sender email
-        subject: 'Added to KAVI',
+        subject: '[KAVI] Welcome to KAVI',
         text: `Hello ${name},\n\nWelcome to KAVI platform! We are glad to have you on board.\n\nBest regards,\nKAVI Team`,
-        html: `<html lang="en">
-
+        html: `<!DOCTYPE html>
+<html lang="en">
+ 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Welcome Email</title>
-  <style>
-    body {
-      font-family: 'Lato', Helvetica, Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f5f5f5;
-    }
-
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-      background-color: #ffffff;
-      padding: 0px;
-      border: 1px solid #e0e0e0;
-    }
-
-    .logo {
-      max-width: 600px;
-    }
-
-    .content {
-      padding: 30px;
-      color: #333333;
-      text-align: justify;
-    }
-
-    .content p {
-      font-size: 16px;
-      line-height: 1.5;
-      margin: 10px 0;
-    }
-
-    .footer {
-      display: flex;
-      justify-content: space-between;
-      font-size: 14px;
-      color: #888888;
-      padding: 20px;
-    }
-
-    .footer .footer-text {
-      flex: 1;
-      margin-right: 10px;
-    }
-
-    .footer .footer-logo {
-      width: 50px;
-      /* Adjust the size as needed */
-    }
-
-    .footer a {
-      color: #1E2A78;
-      text-decoration: none;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welcome Email</title>
+<style>
+        body {
+            font-family: 'Avenir', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #F4F4F4;
+        }
+        
+        .top{
+        height:10px;
+        background-color:#273789;
+        }
+ 
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #FFFFFF;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            padding: 0px;
+        }
+ 
+        .header {
+            padding: 0px 20px;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+        }
+ 
+        .header h1 {
+            color: #000;
+            font-size: 24px;
+            margin-top: 20px;
+        }
+ 
+        .content {
+            padding: 20px;
+            text-align: center;
+        }
+ 
+        .content p {
+            font-size: 16px;
+            color: #333333;
+            line-height: 1.5;
+            text-align: justify;
+        }
+ 
+        .content a {
+            display: inline-block;
+            padding: 10px 20px;
+            
+            background-color: #273789;
+            color: #FFFFFF;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+ 
+        .account-info {
+            margin-top: 20px;
+            padding: 10px 0px;
+            border-top: 1px solid #E0E0E0;
+            border-bottom: 1px solid #E0E0E0;
+        }
+ 
+        .account-info p {
+            font-size: 16px;
+            color: #333333;
+            margin: 5px 0;
+        }
+ 
+        .footer {
+            margin-top: 0px;
+            padding: 0px 20px;
+            
+            font-size: 14px;
+            color: #666666;
+        }
+        
+        .last{
+        margin-top:50px;
+            background-color:#eaebf4;
+            padding:20px;
+            text-align:center;
+            font-size: 14px;
+            color: #666666;
+        }
+ 
+        .footer a {
+            color: #3650A2;
+            text-decoration: none;
+        }
+</style>
 </head>
-
+ 
 <body>
-  <div class="container">
-    <div class="logo">
-      <img src="http://cdn.mcauto-images-production.sendgrid.net/fb8ab3bf269eb3b8/2c86e82c-93a7-433c-b01e-af6f78f07ec5/790x348.png" width="600px" />
-    </div>
-    <div class="content">
-      <p>Dear ${name},</p>
-      <p>Welcome to KAVI's Content Library! We're thrilled to have you on board.</p>
-      <p>Our platform offers interviews with experts across different companies and industries to help you make informed investment decisions. As you explore, you'll find valuable insights across various sectors, all curated to give you a competitive edge.</p>
-      <p>Initial Password : ${password}</p>
-      <p>Click here to head to our platform:</p>
-      <a href="https://3dbfa084-3e4a-429b-bdab-3df3b23a9315.weweb-preview.io/" target="_blank" style="display: inline-block; padding: 8px 16px; color: #ffffff; background-color: #313D74; border-radius: 6px; text-decoration: none;">Sign in</a>
-      <p>We're here to support your journey. If you have any questions or need assistance, you can connect with our support team at <a href="mailto:tech@kaviresearch.in">tech@kaviresearch.in</a>.</p>
-      <p>Warm regards,<br>Kavi Team</p>
-    </div>
-  </div>
-</body>
 
+<div class="container">
+<div class="top"></div>
+<div class="header">
+<h1>Welcome to KAVI!</h1>
+</div>
+<div class="content">
+<p>Dear ${name},</p>
+<p>Welcome to the Kavi Library! We're thrilled to have you on board.</p>
+<p>You’re now a step closer to exclusive interviews with industry experts across different companies and industries that will help you make informed investment decisions. Login now to access valuable insights curated to give you a competitive edge.</p>
+ <a href=${process.env.FRONTED_URL} class="button" style="padding: 12px 24px; color: #ffffff !important; background-color: #313D74; border: 0px; border-radius: 6px; text-align: center; text-decoration: none; display: inline-block; font-weight: bold;">Login Now</a>
+<div class="account-info">
+<p><strong>Here’s your account information:</strong></p>
+<p>Email: ${userEmail}</p>
+<p>Password: ${password}</p>
+</div>
+</div>
+<div class="footer">
+<p>Thank you for choosing KAVI. We look forward to helping you achieve your investment goals.</p>
+<p>Warm regards,<br>KAVI Team</p>
+</div>
+<div class="last">
+<p>If you have any questions or need assistance, please reach out to us at <a href="mailto:tech@kaviresearch.com">tech@kaviresearch.com</a></p>
+</div>
+<div class="top" style="margin-top:50px;"></div>
+</div>
+</body>
+ 
 </html>`,
       });
     } catch (error) {
@@ -136,91 +185,148 @@ const sendWelcomeEmail = async (userEmail, name, password) => {
   
 
   //Admin mail
-const sendAdminEmail = async (userEmail) => {
+const sendAdminEmail = async (userEmail,name,slots,expiry) => {
   try {
     await strapi.plugins['email'].services.email.send({
       to: userEmail,
-      from: process.env.DEFAULT_FROM, // Replace with your verified sender email
-      subject: 'You are now Admin [KAVI]',
+      from: `KAVI <${process.env.DEFAULT_FROM}>`, // Replace with your verified sender email
+      subject: '[KAVI] Upgraded to Admin',
       text: `Upgraded to Admin at KAVI Platform`,
       html: `
 
-      <html lang="en">
-
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome Email</title>
-    <style>
-      body {
-        font-family: 'Lato', Helvetica, Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #f5f5f5;
-      }
-
-      .container {
-        max-width: 600px;
-        margin: 0 auto;
-        background-color: #ffffff;
-        padding: 20px;
-        border: 1px solid #e0e0e0;
-      }
-
-      .logo {
-        max-width: 600px;
-        text-align: center;
-      }
-
-      .content {
-        padding: 30px;
-        color: #333333;
-        text-align: justify;
-      }
-
-      .content p {
-        font-size: 15px;
-        line-height: 1.5;
-        margin: 10px 0;
-      }
-
-      .button {
-        padding: 8px 16px;
-        color: #ffffff;
-        background-color: #313D74;
-        border: 0px;
-        border-radius: 6px;
-        font-size: 15px;
-        font-family: 'Lato', Helvetica, Arial, sans-serif;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-      }
-
-      .footer {
-        font-size: 15px;
-        text-align: center;
-      }
-    </style>
-  </head>
-
-  <body>
-    <div class="container">
-      <div class="logo">
-        <img src="https://dazzling-butterfly-f3a6f1abbb.media.strapiapp.com/admin_user_icon_da30a9ed96.png" width="100px"/>
-      </div>
-      <div class="content">
-        <p>You have now been made Admin for your organization’s KAVI Library account. Please login in again to claim Admin Status.</p>
+      <!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welcome Email</title>
+<style>
+        body {
+            font-family: 'Avenir', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #F4F4F4;
+        }
         
-        <div style="text-align: center" class="button-items">
-          <a href="https://3dbfa084-3e4a-429b-bdab-3df3b23a9315.weweb-preview.io/" target="_blank" style="padding: 8px 16px; color: #ffffff; background-color: #313D74; border: 0px; border-radius: 6px; text-align: center; text-decoration: none; display: inline-block;">Log in</a>
-        </div>
-        <p>As Admin, you can now add or remove users from your organization’s KAVI account and set someone else as Admin. If this requested was not warranted by your organizations please contact us at <a href="mailto:tech@kaviresearch.in" class="support">tech@kaviresearch.in</a> or call us at <a href="tel:+919606008727" class="support">+91 9606008727</a>.</p>
-      </div>
-    </div>
-  </body>
+        .top{
+        height:10px;
+        background-color:#273789;
+        }
+ 
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #FFFFFF;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            padding: 0px;
+        }
+ 
+        .header {
+            padding: 0px 20px;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+        }
+ 
+        .header h1 {
+            color: #000;
+            font-size: 24px;
+            margin-top: 20px;
+        }
+ 
+        .content {
+            padding: 20px;
+            text-align: center;
+        }
+ 
+        .content p {
+            font-size: 16px;
+            color: #333333;
+            line-height: 1.5;
+            text-align: justify;
+        }
+ 
+        .content a {
+            display: inline-block;
+            padding: 10px 20px;
+            
+            background-color: #273789;
+            color: #FFFFFF;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+ 
+        .account-info {
+            margin-top: 20px;
+            padding: 10px 0px;
+            border-top: 1px solid #E0E0E0;
+            border-bottom: 1px solid #E0E0E0;
+        }
+ 
+        .account-info p {
+            font-size: 16px;
+            color: #333333;
+            margin: 5px 0;
+        }
+ 
+        .footer {
+            margin-top: 0px;
+            padding: 0px 20px;
+            
+            font-size: 14px;
+            color: #666666;
+        }
+        
+        .last{
+        margin-top:50px;
+            background-color:#eaebf4;
+            padding:20px;
+            text-align:center;
+            font-size: 14px;
+            color: #666666;
+        }
+ 
+        .footer a {
+            color: #3650A2;
+            text-decoration: none;
+        }
+</style>
+</head>
+ 
+<body>
 
-  </html>`
+<div class="container">
+<div class="top"></div>
+<div class="header">
+<h1>Welcome to KAVI!</h1>
+</div>
+<div class="content">
+<p>Dear ${name},</p>
+<p>Welcome to the Kavi Library! We're thrilled to have you on board.</p>
+<p>You’re now a step closer to exclusive interviews with industry experts across different companies and industries that will help you make informed investment decisions. Share these insights by adding your colleagues on the Settings page of the platform. 
+</p>
+ <a href=${process.env.FRONTED_URL} class="button" style="padding: 12px 24px; color: #ffffff !important; background-color: #313D74; border: 0px; border-radius: 6px; text-align: center; text-decoration: none; display: inline-block; font-weight: bold;">Login Now</a>
+<div class="account-info">
+<p><strong>Here’s your account information:</strong></p>
+<p>Seats: ${slots}</p>
+<p>Expiry Date: ${expiry}</p>
+</div>
+</div>
+<div class="footer">
+<p>Thank you for choosing KAVI. We look forward to helping you achieve your investment goals.</p>
+<p>Warm regards,<br>KAVI Team</p>
+</div>
+<div class="last">
+<p>If you have any questions or need assistance, please reach out to us at <a href="mailto:tech@kaviresearch.com">tech@kaviresearch.com</a></p>
+</div>
+<div class="top" style="margin-top:50px;"></div>
+</div>
+</body>
+ 
+</html>
+`
     });
     } catch (error) {
     strapi.log.error('Error sending welcome email:', error);
@@ -430,7 +536,7 @@ module.exports = (plugin) => {
         where: { id: requestingUser.id },
         data: { slotFilled: requestingUser.slotFilled },
         });
-        await sendAdminEmail(userToPromote.email);
+        await sendAdminEmail(userToPromote.email,userToPromote.first_name,userToPromote.slots,userToPromote.expiry);
         ctx.send('User promoted to admin successfully');
         } catch (error) {
         throw new ApplicationError('Failed to promote user to admin');
