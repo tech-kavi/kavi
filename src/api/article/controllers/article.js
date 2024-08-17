@@ -459,26 +459,26 @@ module.exports = createCoreController('api::article.article',{
             }
     
             // If we still don't have 3 articles, fetch industry articles
-            if (relatedArticles.length < 3) {
-                const industry = article.data.attributes.industry.data?.attributes.name;
-                if (industry) {
-                    const industryArticles = await strapi.entityService.findMany('api::article.article', {
-                        filters: {
-                            industry: { name: industry },
-                            publishedAt: { $notNull: true },
-                            id: { $ne: currentArticleId }
-                        },
-                        populate: {
-                            primary_companies: {
-                                fields: ['name'],
-                                populate: { logo: true }
-                            },
-                            industry: true
-                        }
-                    });
-                    relatedArticles.push(...industryArticles);
-                }
-            }
+            // if (relatedArticles.length < 3) {
+            //     const industry = article.data.attributes.industry.data?.attributes.name;
+            //     if (industry) {
+            //         const industryArticles = await strapi.entityService.findMany('api::article.article', {
+            //             filters: {
+            //                 industry: { name: industry },
+            //                 publishedAt: { $notNull: true },
+            //                 id: { $ne: currentArticleId }
+            //             },
+            //             populate: {
+            //                 primary_companies: {
+            //                     fields: ['name'],
+            //                     populate: { logo: true }
+            //                 },
+            //                 industry: true
+            //             }
+            //         });
+            //         relatedArticles.push(...industryArticles);
+            //     }
+            // }
         }
 
         console.log(relatedArticles);
