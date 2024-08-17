@@ -173,7 +173,7 @@ const sendWelcomeEmail = async (userEmail, name, password) => {
         <p>Warm regards,<br>KAVI Team</p>
     </div>
     <div class="last">
-        <p>If you have any questions or need assistance, please reach out to us at <a href="mailto:tech@kaviresearch.com">tech@kaviresearch.com</a></p>
+        <p>If you have any questions or need assistance, please reach out to us at <a href="mailto:tech@kaviresearch.in">tech@kaviresearch.com</a></p>
     </div>
     <div class="top" style="margin-top:50px;"></div>
 </div>
@@ -327,7 +327,7 @@ const sendAdminEmail = async (userEmail,name,slots,expiry) => {
 <p>Warm regards,<br>KAVI Team</p>
 </div>
 <div class="last">
-<p>If you have any questions or need assistance, please reach out to us at <a href="mailto:tech@kaviresearch.com">tech@kaviresearch.com</a></p>
+<p>If you have any questions or need assistance, please reach out to us at <a href="mailto:tech@kaviresearch.in">tech@kaviresearch.com</a></p>
 </div>
 <div class="top" style="margin-top:50px;"></div>
 </div>
@@ -399,6 +399,14 @@ module.exports = (plugin) => {
       if (last_name==undefined) throw new ApplicationError('Please enter :Last Name');
       if (dob==undefined) throw new ApplicationError('Please enter DOB');
       if (linkedinurl==undefined) throw new ApplicationError('Please enter Linkedid');
+
+      //linkedin url validation
+      const linkedInUrlPattern = /^https:\/\/www\.linkedin\.com\/in\/[a-zA-Z0-9-]+\/?$/;
+
+      if(!linkedInUrlPattern.test(linkedinurl))
+      {
+        throw new ApplicationError('Please enter a valid LinkedIn URL');
+      }
       
       const adminEmail = requestingUser.email;
       const adminDomain = adminEmail.split('@')[1];
@@ -419,6 +427,8 @@ module.exports = (plugin) => {
 
 
       //check if linkedid is already present
+
+      
 
       const normalizedurl = normalizedLinkedInUrl(linkedinurl);
       const userWithSameLinkedin = await strapi
