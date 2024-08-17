@@ -107,7 +107,7 @@ module.exports = {
       <h1>Your password has changed</h1>
       <p>Hello ${updatedUser.first_name},</p>
       <p>We wanted to give you notice that your password has been recently changed.</p>
-      <p>You can now <a href=${process.env.FRONTED_URL}>login</a> with your new password.</p>
+      <p>You can now <a href=${process.env.FRONTEND_URL}>login</a> with your new password.</p>
       <p>If you did not make this change, please contact our support team at <a href="mailto:tech@kaviresearch.com">tech@kaviresearch.com</a>.</p>
     </div>
     <div class="footer">
