@@ -15,6 +15,9 @@ module.exports = createCoreController('api::company.company',{
         return ctx.unauthorized('You must be logged in to access bookmarks');
     }
 
+    const currentCompanyId=ctx.params.id;
+    // console.log(currentCompanyId);
+
     ctx.query = {
         ...ctx.query,
         populate: {
@@ -79,6 +82,9 @@ module.exports = createCoreController('api::company.company',{
         populate: {
             companies: {
                 filters: {
+                    id:{
+                        $ne:currentCompanyId,
+                    },
                     publishedAt: {
                         $notNull: true,
                     }
@@ -97,61 +103,73 @@ module.exports = createCoreController('api::company.company',{
         },
     });
 
-    let companies = relatedCompaniesOfSub.flatMap(subIndustry => subIndustry.companies);
+    // console.log(relatedCompaniesOfSub);
+
+    //filtering subIndustry to get their companies only
+    let companies = relatedCompaniesOfSub.flatMap(subIndustry => subIndustry.companies).filter(company => company.id !== currentCompanyId);
+    console.log(companies);
+
+    //filtering to get distinct companies
     let uniqueCompaniesMap = new Map();
 
-    companies.forEach(company => {
+
+    companies.forEach(relatedCompany => {
         if (!uniqueCompaniesMap.has(company.id)) {
-            uniqueCompaniesMap.set(company.id, company);
+            uniqueCompaniesMap.set(relatedCompany.id, relatedCompany);
         }
     });
 
     let uniqueCompanies = Array.from(uniqueCompaniesMap.values());
 
-    if (uniqueCompanies.length < 6) {
-        // If companies of the same sub-industry are less than 6, then get companies of the same industry
-        const companiesNeeded = 6 - uniqueCompanies.length;
-        const industries = company.data.attributes.industries.data;
-        const industryNames = industries.map(industry => industry.attributes.name);
 
-        const relatedCompaniesOfIndustry = await strapi.entityService.findMany('api::industry.industry', {
-            filters: {
-                name: {
-                    $in: industryNames,
-                },
-            },
-            populate: {
-                companies: {
-                    filters: {
-                        publishedAt: {
-                            $notNull: true,
-                        }
-                    },
-                    populate: {
-                        logo: true,
-                        articles: {
-                            filters: {
-                                publishedAt: {
-                                    $notNull: true,
-                                }
-                            },
-                        },
-                    },
-                },
-            },
-        });
 
-        companies = relatedCompaniesOfIndustry.flatMap(industry => industry.companies);
-        uniqueCompaniesMap = new Map();
-        companies.forEach(company => {
-            if (!uniqueCompaniesMap.has(company.id)) {
-                uniqueCompaniesMap.set(company.id, company);
-            }
-        });
 
-        let uniqueCompaniesOfIndustry = Array.from(uniqueCompaniesMap.values());
-        uniqueCompanies = uniqueCompanies.concat(uniqueCompaniesOfIndustry).filter(x => x.id !== company.data.id);
-    }
+    // console.log(uniqueCompanies);
+
+    // if (uniqueCompanies.length < 6) {
+    //     // If companies of the same sub-industry are less than 6, then get companies of the same industry
+    //     const companiesNeeded = 6 - uniqueCompanies.length;
+    //     const industries = company.data.attributes.industries.data;
+    //     const industryNames = industries.map(industry => industry.attributes.name);
+
+    //     const relatedCompaniesOfIndustry = await strapi.entityService.findMany('api::industry.industry', {
+    //         filters: {
+    //             name: {
+    //                 $in: industryNames,
+    //             },
+    //         },
+    //         populate: {
+    //             companies: {
+    //                 filters: {
+    //                     publishedAt: {
+    //                         $notNull: true,
+    //                     }
+    //                 },
+    //                 populate: {
+    //                     logo: true,
+    //                     articles: {
+    //                         filters: {
+    //                             publishedAt: {
+    //                                 $notNull: true,
+    //                             }
+    //                         },
+    //                     },
+    //                 },
+    //             },
+    //         },
+    //     });
+
+    //     companies = relatedCompaniesOfIndustry.flatMap(industry => industry.companies);
+    //     uniqueCompaniesMap = new Map();
+    //     companies.forEach(company => {
+    //         if (!uniqueCompaniesMap.has(company.id)) {
+    //             uniqueCompaniesMap.set(company.id, company);
+    //         }
+    //     });
+
+    //     let uniqueCompaniesOfIndustry = Array.from(uniqueCompaniesMap.values());
+    //     uniqueCompanies = uniqueCompanies.concat(uniqueCompaniesOfIndustry).filter(x => x.id !== company.data.id);
+    // }
 
     const uniqueCompaniesWithArticleCount = uniqueCompanies.map(company => {
         const articleCount = company.articles ? company.articles.length : 0;

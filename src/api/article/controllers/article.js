@@ -326,21 +326,41 @@ module.exports = createCoreController('api::article.article',{
                 brief: true,
                 industry: {
                     fields: ['name', 'articles'],
+                    // filters:{
+                    //     publishedAt:{
+                    //         $notNull:true,
+                    //     }
+                    // }
                 },
                 sub_industries: {
                     fields: ['name'],
+                    // filters:{
+                    //     publishedAt:{
+                    //         $notNull:true,
+                    //     }
+                    // }
                 },
                 primary_companies: {
                     fields: ['name'],
                     populate: {
                         logo: true,
-                    }
+                    },
+                    // filters:{
+                    //     publishedAt:{
+                    //         $notNull:true,
+                    //     }
+                    // }
                 },
                 secondary_companies: {
                     fields: ['name'],
                     populate: {
                         logo: true,
-                    }
+                    },
+                    // filters:{
+                    //     publishedAt:{
+                    //         $notNull:true,
+                    //     }
+                    // }
                 },
                 table_with_content: {
                     populate: {
@@ -460,6 +480,12 @@ module.exports = createCoreController('api::article.article',{
                 }
             }
         }
+
+        console.log(relatedArticles);
+
+        // //remove duplicate articles by ID using a Set
+        relatedArticles = Array.from(new Set(relatedArticles.map(article => article.id)))
+        .map(id => relatedArticles.find(article => article.id === id));
 
         // Sort related articles by latest publishedAt date
     relatedArticles = relatedArticles.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
