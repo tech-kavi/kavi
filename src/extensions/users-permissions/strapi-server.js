@@ -55,7 +55,7 @@ const sendWelcomeEmail = async (userEmail, name, password) => {
 <title>Welcome Email</title>
 <style>
         body {
-            font-family: 'Avenir', sans-serif;
+            font-family: 'Avenir', 'Helvetica Neue', Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #F4F4F4;
@@ -127,6 +127,7 @@ const sendWelcomeEmail = async (userEmail, name, password) => {
             padding: 0px 20px;
             font-size: 16px;
             color: #000;
+            text-align:justify;
         }
         
         .last {
@@ -157,9 +158,10 @@ const sendWelcomeEmail = async (userEmail, name, password) => {
         <p>Welcome to the Kavi Library! We're thrilled to have you on board.</p>
         <p>You’re now a step closer to exclusive interviews with industry experts across different companies and industries that will help you make informed investment decisions. Login now to access valuable insights curated to give you a competitive edge.</p>
         <a href="${process.env.FRONTED_URL}" 
-   style="display: inline-block; width: 200px; padding: 10px 20px; background-color: #273789; color: #FFFFFF !important; text-decoration: none; border-radius: 5px; font-size: 16px; text-align: center;">
-   Login Now
+    style="display: inline-block; width: 200px; padding: 10px 20px; background-color: #273789 !important; color: #FFFFFF !important; text-decoration: none; border-radius: 5px; font-size: 16px; text-align: center !important;">
+    Login Now
 </a>
+
         <div class="account-info">
             <p><strong>Here’s your account information:</strong></p>
             <p>Email: <span style="font-weight: normal; color: #000;">${userEmail}</span></p>
@@ -206,7 +208,7 @@ const sendAdminEmail = async (userEmail,name,slots,expiry) => {
 <title>Welcome Email</title>
 <style>
         body {
-            font-family: 'Avenir', sans-serif;
+            font-family: 'Avenir', 'Helvetica Neue', Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #F4F4F4;
@@ -310,7 +312,10 @@ const sendAdminEmail = async (userEmail,name,slots,expiry) => {
 <p>Welcome to the Kavi Library! We're thrilled to have you on board.</p>
 <p>You’re now a step closer to exclusive interviews with industry experts across different companies and industries that will help you make informed investment decisions. Share these insights by adding your colleagues on the Settings page of the platform. 
 </p>
- <a href=${process.env.FRONTED_URL} class="button" style="padding: 12px 24px; color: #ffffff !important; background-color: #313D74; border: 0px; border-radius: 6px; text-align: center; text-decoration: none; display: inline-block; font-weight: bold;">Login Now</a>
+ <a href="${process.env.FRONTED_URL}" class="button" style="padding: 12px 24px; color: #ffffff !important; background-color: #313D74 !important; border: 0px; border-radius: 6px; text-align: center; text-decoration: none; display: inline-block; font-weight: bold;">
+    Login Now
+</a>
+
 <div class="account-info">
 <p><strong>Here’s your account information:</strong></p>
 <p>Seats: ${slots}</p>
