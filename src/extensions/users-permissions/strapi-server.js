@@ -173,7 +173,7 @@ const sendWelcomeEmail = async (userEmail, name, password) => {
         <p>Warm regards,<br>KAVI Team</p>
     </div>
     <div class="last">
-        <p>If you have any questions or need assistance, please reach out to us at <a href="mailto:tech@kaviresearch.in">tech@kaviresearch.com</a></p>
+        <p>If you have any questions or need assistance, please reach out to us at <a href="mailto:support@joinkavi.com">support@joinkavi.com</a></p>
     </div>
     <div class="top" style="margin-top:50px;"></div>
 </div>
@@ -199,141 +199,100 @@ const sendAdminEmail = async (userEmail,name,slots,expiry) => {
       text: `Upgraded to Admin at KAVI Platform`,
       html: `
 
-      <!DOCTYPE html>
-<html lang="en">
- 
+      <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Welcome Email</title>
-<style>
-        body {
-            font-family: 'Avenir', 'Helvetica Neue', Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #F4F4F4;
-        }
-        
-        .top{
-        height:10px;
-        background-color:#273789;
-        }
- 
-        .container {
-            max-width: 600px;
-            margin: 20px auto;
-            background-color: #FFFFFF;
-            border-radius: 5px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            padding: 0px;
-        }
- 
-        .header {
-            padding: 0px 20px;
-            border-top-left-radius: 5px;
-            border-top-right-radius: 5px;
-        }
- 
-        .header h1 {
-            color: #000;
-            font-size: 24px;
-            margin-top: 20px;
-        }
- 
-        .content {
-            padding: 20px;
-            text-align: center;
-        }
- 
-        .content p {
-            font-size: 16px;
-            color: #333333;
-            line-height: 1.5;
-            text-align: justify;
-        }
- 
-        .content a {
-            display: inline-block;
-            padding: 10px 20px;
-            
-            background-color: #273789;
-            color: #FFFFFF;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 16px;
-        }
- 
-        .account-info {
-            margin-top: 20px;
-            padding: 10px 0px;
-            border-top: 1px solid #E0E0E0;
-            border-bottom: 1px solid #E0E0E0;
-        }
- 
-        .account-info p {
-            font-size: 16px;
-            color: #333333;
-            margin: 5px 0;
-        }
- 
-        .footer {
-            margin-top: 0px;
-            padding: 0px 20px;
-            
-            font-size: 14px;
-            color: #666666;
-        }
-        
-        .last{
-        margin-top:50px;
-            background-color:#eaebf4;
-            padding:20px;
-            text-align:center;
-            font-size: 14px;
-            color: #666666;
-        }
- 
-        .footer a {
-            color: #3650A2;
-            text-decoration: none;
-        }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Status Email</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Avenir:wght@300;400;600&display=swap');
+
+    body {
+      font-family: 'Avenir', Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #ffffff;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      padding: 20px;
+     
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .content {
+      color: #333333;
+      text-align: center;
+    }
+
+    .content h1 {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .content p {
+      font-size: 14px;
+      line-height: 1.5;
+      margin: 10px 0;
+      text-align:start;
+    }
+
+    .button {
+      padding: 12px 24px;
+      color: #ffffff;
+      background-color: #313D74;
+      border: 0px;
+      border-radius: 6px;
+      text-decoration: none;
+      display: inline-block;
+      font-weight: bold;
+      margin: 20px;
+      font-size: 14px;
+    }
+
+    .content .expiry-text {
+      font-size: 10px;
+      color: #999999;
+      margin-top: 10px;
+    }
+
+    .footer {
+      font-size: 12px;
+      color: #333333;
+      margin-top: 30px;
+    }
+  </style>
 </head>
- 
+
 <body>
-
-<div class="container">
-<div class="top"></div>
-<div class="header">
-<h1>Welcome to KAVI!</h1>
-</div>
-<div class="content">
-<p>Dear ${name},</p>
-<p>Welcome to the Kavi Library! We're thrilled to have you on board.</p>
-<p>You’re now a step closer to exclusive interviews with industry experts across different companies and industries that will help you make informed investment decisions. Share these insights by adding your colleagues on the Settings page of the platform. 
-</p>
- <a href=${process.env.FRONTEND_URL} class="button" style="padding: 12px 24px; color: #ffffff !important; background-color: #313D74 !important; border: 0px; border-radius: 6px; text-align: center; text-decoration: none; display: inline-block; font-weight: bold;">
-    Login Now
-</a>
-
-<div class="account-info">
-<p><strong>Here’s your account information:</strong></p>
-<p>Seats: ${slots}</p>
-<p>Expiry Date: ${expiry}</p>
-</div>
-</div>
-<div class="footer">
-<p>Thank you for choosing KAVI. We look forward to helping you achieve your investment goals.</p>
-<p>Warm regards,<br>KAVI Team</p>
-</div>
-<div class="last">
-<p>If you have any questions or need assistance, please reach out to us at <a href="mailto:tech@kaviresearch.in">tech@kaviresearch.com</a></p>
-</div>
-<div class="top" style="margin-top:50px;"></div>
-</div>
+  <div class="container">
+    <div class="logo">
+      <img src="https://dazzling-butterfly-f3a6f1abbb.media.strapiapp.com/Email_designs_1_b444d10760.png" width="120px" alt="Admin Icon"/>
+    </div>
+    <div class="content">
+      <h1>You’re now Admin</h1>
+      <p>Hello ${name},</p>
+      <p>We wanted to inform you that you have now been an admin for your organization's KAVI account. Please log in again to claim admin status.</p>
+      <a href=${process.env.FRONTEND_URL} class="button">Login Now</a>
+      <p>As an admin, you can now add or remove users from your organization's KAVI account and set someone else as admin. If this request was not warranted by your organization, please contact our support team at <a href="mailto:support@joinkavi.com">support@joinkavi.com</a>.</p>
+      <p class="footer">Regards,<br/>KAVI Team</p>
+    </div>
+  </div>
 </body>
- 
+
 </html>
+
 `
     });
     } catch (error) {
