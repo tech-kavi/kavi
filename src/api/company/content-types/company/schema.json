@@ -55,7 +55,8 @@
     "ipo": {
       "type": "enumeration",
       "enum": [
-        "IPO"
+        "IPO",
+        "DRHP"
       ]
     },
     "ownership_type": {

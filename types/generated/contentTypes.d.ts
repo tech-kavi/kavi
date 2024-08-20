@@ -1025,7 +1025,7 @@ export interface ApiCompanyCompany extends Schema.CollectionType {
       'oneToMany',
       'api::watchlist.watchlist'
     >;
-    ipo: Attribute.Enumeration<['IPO']>;
+    ipo: Attribute.Enumeration<['IPO', 'DRHP']>;
     ownership_type: Attribute.Enumeration<['Public', 'Private']> &
       Attribute.Required;
     secondary_articles: Attribute.Relation<
