@@ -31,6 +31,11 @@ module.exports = createCoreController('api::bookmark.bookmark',{
                             populate:{
                                 logo:true
                             },
+                            filters:{
+                                publishedAt:{
+                                    $notNull:true,
+                                }
+                            }
                         },
                         
                     },

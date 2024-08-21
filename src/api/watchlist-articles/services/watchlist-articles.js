@@ -45,9 +45,20 @@ module.exports = {
                             fields:['name'],
                             populate:{
                                 logo:true,
+                            },
+                            filters:{
+                                publishedAt:{
+                                    $notNull:true,
+                                }
                             }
                         },
-                        industry:true,
+                        industry:{
+                            filters:{
+                                publishedAt:{
+                                    $notNull:true,
+                                }
+                            }
+                        },
 
                     }
                 }

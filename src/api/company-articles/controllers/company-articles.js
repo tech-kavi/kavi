@@ -1,3 +1,4 @@
+// @ts-nocheck
 'use strict';
 
 /**
@@ -39,8 +40,15 @@ module.exports = {
         }
       },
       populate:{
-        industry:true,
+        industry:{
+          filters:{
+            publishedAt:{
+              $notNull:true,
+            }
+          }
+        },
       },
+      sort: ['published_date:desc'],
       
     };
     
@@ -56,7 +64,13 @@ module.exports = {
           bookmarked_by: user.id,
       },
       populate:{
-          article:true,
+          article:{
+            filters:{
+              publishedAt:{
+                $notNull:true,
+              }
+            },
+          },
       }
   });
 

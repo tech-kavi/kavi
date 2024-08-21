@@ -36,8 +36,20 @@ module.exports = {
         logo:true,
         sub_industries:{
           fields:['name'],
+          filters:{
+            publishedAt:{
+              $notNull:true,
+            }
+          }
+        },
+      
+      articles:{
+        filters:{
+          publishedAt:{
+            $notNull:true,
+          }
+        }
       },
-      articles:true,
       },
 
       sort:{name:'asc'},

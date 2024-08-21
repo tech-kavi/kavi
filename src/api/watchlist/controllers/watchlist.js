@@ -29,7 +29,13 @@ module.exports = createCoreController('api::watchlist.watchlist',{
                 company:{
                     populate:{
                         logo:true,
-                        articles:true,
+                        articles:{
+                            filters:{
+                                publishedAt:{
+                                    $notNull:true,
+                                }
+                            }
+                        },
                     },
                 }
             },

@@ -22,15 +22,38 @@ module.exports = createCoreController('api::company.company',{
         ...ctx.query,
         populate: {
             logo: true,
-            industries: true,
-            sub_industries: true,
+            industries: {
+                filters:{
+                    publishedAt:{
+                        $notNull:true,
+                    }
+                }
+            },
+            sub_industries: {
+                filters:{
+                    publishedAt:{
+                        $notNull:true,
+                    }
+                }
+            },
             articles: {
                 populate: {
-                    industry: true,
+                    industry: {
+                        filters:{
+                            publishedAt:{
+                                $notNull:true,
+                            }
+                        }
+                    },
                     primary_companies: {
                         populate: {
                             logo: true,
                         },
+                        filters:{
+                            publishedAt:{
+                                $notNull:true,
+                            }
+                        }
                     },
                 },
                 filters: {
@@ -41,11 +64,22 @@ module.exports = createCoreController('api::company.company',{
             },
             secondary_articles: {
                 populate: {
-                    industry: true,
+                    industry: {
+                        filters:{
+                            publishedAt:{
+                                $notNull:true,
+                            }
+                        }
+                    },
                     primary_companies: {
                         populate: {
                             logo: true,
                         },
+                        filters:{
+                            publishedAt:{
+                                $notNull:true,
+                            }
+                        }
                     },
                 },
                 filters: {

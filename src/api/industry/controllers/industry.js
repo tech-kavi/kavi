@@ -24,7 +24,13 @@ module.exports = createCoreController('api::industry.industry',{
                 {
                     populate:{
                         logo:true,
-                        articles:true,
+                        articles:{
+                            filters:{
+                                publishedAt:{
+                                    $notNull:true,
+                                }
+                            }
+                        },
                         ipo:true,
                     },
                     filters:{
@@ -33,7 +39,13 @@ module.exports = createCoreController('api::industry.industry',{
                         },
                     },
                 },
-                articles:true,
+                articles:{
+                    filters:{
+                        publishedAt:{
+                            $notNull:true,
+                        }
+                    }
+                },
                top_companies:{
                         
                         populate:{
@@ -178,23 +190,57 @@ module.exports = createCoreController('api::industry.industry',{
             populate:{
                 articles:{
                     populate:{
-                        industry:true,
+                        industry:{
+                            filters:{
+                                publishedAt:{
+                                    $notNull:true,
+                                }
+                            }
+                        },
                         primary_companies:{
                             populate:{
                                 logo:true
                             },
+                            filters:{
+                                publishedAt:{
+                                    $notNull:true,
+                                }
+                            }
                         },
                         
                     },
+                    filters:{
+                        publishedAt:{
+                            $notNull:true,
+                        },
+                    }
 
                 },
                 companies:{
                     populate:{
                         logo:true,
-                        articles:true,
+                        articles:
+                        {
+                            filters:{
+                                publishedAt:{
+                                    $notNull:true,
+                                }
+                            }
+                        },
                     },
+                    filters:{
+                        publishedAt:{
+                            $notNull:true,
+                        },
+                    }
                 },
-                sub_industries:true,
+                sub_industries:{
+                    filters:{
+                        publishedAt:{
+                            $notNull:true,
+                        }
+                    }
+                },
             },
             filters:{
                 publishedAt:{

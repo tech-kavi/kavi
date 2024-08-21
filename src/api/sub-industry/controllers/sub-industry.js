@@ -24,7 +24,13 @@ module.exports = createCoreController('api::sub-industry.sub-industry',{
                 {
                     populate:{
                         logo:true,
-                        articles:true,
+                        articles:{
+                            filters:{
+                                publishedAt:{
+                                    $notNull:true,
+                                }
+                            }
+                        },
                         ipo:true,
                     },
                     filters:{
@@ -38,8 +44,18 @@ module.exports = createCoreController('api::sub-industry.sub-industry',{
                         primary_companies:{
                             populate:{
                                 logo:true,
+                            },
+                            filters:{
+                                publishedAt:{
+                                    $notNull:true,
+                                }
                             }
                         },
+                        filters:{
+                            publishedAt:{
+                                $notNull:true,
+                            },
+                        }
                     },
                     filters:{
                         publishedAt:{

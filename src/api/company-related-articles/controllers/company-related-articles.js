@@ -40,11 +40,22 @@ module.exports = {
         }
       },
       populate:{
-        industry:true,
+        industry:{
+          filters:{
+            publishedAt:{
+                $notNull:true,
+            }
+        }
+        },
         primary_companies:{
           populate:{
             logo:true,
-          }
+          },
+          filters:{
+            publishedAt:{
+              $notNull:true,
+            }
+          },
         },
       },
       sort:['publishedAt:desc'],
@@ -66,7 +77,13 @@ module.exports = {
           },
       },
       populate:{
-          article:true,
+          article:{
+            filters:{
+              publishedAt:{
+                $notNull:true,
+              }
+            },
+          }
       }
   });
 

@@ -68,11 +68,21 @@ module.exports = createCoreController('api::article.article',{
             populate: {
                 industry: {
                     fields: ['name'],
+                    filters:{
+                        publishedAt:{
+                            $notNull:true,
+                        }
+                    }
                 },
                 primary_companies: {
                     fields: ['name'],
                     populate: {
                         logo: true,
+                    },
+                    filters:{
+                        publishedAt:{
+                            $notNull:true,
+                        }
                     }
                 }
             },
@@ -326,41 +336,41 @@ module.exports = createCoreController('api::article.article',{
                 brief: true,
                 industry: {
                     fields: ['name', 'articles'],
-                    // filters:{
-                    //     publishedAt:{
-                    //         $notNull:true,
-                    //     }
-                    // }
+                    filters:{
+                        publishedAt:{
+                            $notNull:true,
+                        }
+                    }
                 },
                 sub_industries: {
                     fields: ['name'],
-                    // filters:{
-                    //     publishedAt:{
-                    //         $notNull:true,
-                    //     }
-                    // }
+                    filters:{
+                        publishedAt:{
+                            $notNull:true,
+                        }
+                    }
                 },
                 primary_companies: {
                     fields: ['name'],
                     populate: {
                         logo: true,
                     },
-                    // filters:{
-                    //     publishedAt:{
-                    //         $notNull:true,
-                    //     }
-                    // }
+                    filters:{
+                        publishedAt:{
+                            $notNull:true,
+                        }
+                    }
                 },
                 secondary_companies: {
                     fields: ['name'],
                     populate: {
                         logo: true,
                     },
-                    // filters:{
-                    //     publishedAt:{
-                    //         $notNull:true,
-                    //     }
-                    // }
+                    filters:{
+                        publishedAt:{
+                            $notNull:true,
+                        }
+                    }
                 },
                 table_with_content: {
                     populate: {
@@ -395,9 +405,20 @@ module.exports = createCoreController('api::article.article',{
                                     fields: ['name'],
                                     populate: {
                                         logo: true,
+                                    },
+                                    filters:{
+                                        publishedAt:{
+                                            $notNull:true,
+                                        }
                                     }
                                 },
-                                industry: true,
+                                industry: {
+                                    filters:{
+                                        publishedAt:{
+                                            $notNull:true,
+                                        }
+                                    }
+                                },
                             },
                             filters: {
                                 publishedAt: {
@@ -412,9 +433,20 @@ module.exports = createCoreController('api::article.article',{
                                     fields: ['name'],
                                     populate: {
                                         logo: true,
+                                    },
+                                    filters:{
+                                        publishedAt:{
+                                            $notNull:true,
+                                        }
                                     }
                                 },
-                                industry: true,
+                                industry: {
+                                    filters:{
+                                        publishedAt:{
+                                            $notNull:true,
+                                        }
+                                    }
+                                },
                             },
                             filters: {
                                 publishedAt: {
@@ -450,9 +482,20 @@ module.exports = createCoreController('api::article.article',{
                     populate: {
                         primary_companies: {
                             fields: ['name'],
-                            populate: { logo: true }
+                            populate: { logo: true },
+                            filters:{
+                                publishedAt:{
+                                    $notNull:true,
+                                }
+                            }
                         },
-                        industry: true
+                        industry: {
+                            filters:{
+                                publishedAt:{
+                                    $notNull:true,
+                                }
+                            }
+                        }
                     }
                 });
                 relatedArticles.push(...subIndustryArticles);
