@@ -8,19 +8,19 @@
 const { createCoreController } = require('@strapi/strapi').factories;
 const axios = require('axios');
 
-const sendWelcomeEmail = async (userEmail, name) => {
-    try {
-      await strapi.plugins['email'].services.email.send({
-        to: userEmail,
-        from: `KAVI <${process.env.DEFAULT_FROM}>`, // Replace with your verified sender email
-        subject: 'Welcome to Our KAVI Platform!',
-        text: `Hello ${name},\n\nWelcome to our service! We are glad to have you on board.\n\nBest regards,\nThe Team`,
-        html: `<p>Hello ${name},</p><p>Welcome to our Platform! We are glad to have you on board.</p><p>Best regards,<br/>The Team</p>`,
-      });
-    } catch (error) {
-      strapi.log.error('Error sending welcome email:', error);
-    }
-  };
+// const sendWelcomeEmail = async (userEmail, name) => {
+//     try {
+//       await strapi.plugins['email'].services.email.send({
+//         to: userEmail,
+//         from: `KAVI <${process.env.DEFAULT_FROM}>`, // Replace with your verified sender email
+//         subject: 'Welcome to Our KAVI Platform!',
+//         text: `Hello ${name},\n\nWelcome to our service! We are glad to have you on board.\n\nBest regards,\nThe Team`,
+//         html: `<p>Hello ${name},</p><p>Welcome to our Platform! We are glad to have you on board.</p><p>Best regards,<br/>The Team</p>`,
+//       });
+//     } catch (error) {
+//       strapi.log.error('Error sending welcome email:', error);
+//     }
+//   };
 
 module.exports = createCoreController('api::logged-in.logged-in',{
     async create(ctx){
@@ -52,7 +52,7 @@ module.exports = createCoreController('api::logged-in.logged-in',{
                 },
                 {
                     headers:{
-                        Authorization:`Bearer ${process.env.SENDGRID_API_KEY_MARKETING}`
+                        Authorization:`Bearer ${process.env.SENDGRID_API_KEY}`
                     },
                 }
             );
