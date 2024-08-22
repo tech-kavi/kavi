@@ -12,7 +12,7 @@ const sendWelcomeEmail = async (userEmail, name) => {
     try {
       await strapi.plugins['email'].services.email.send({
         to: userEmail,
-        from: 'nishant@joinkavi.com', // Replace with your verified sender email
+        from: `KAVI <${process.env.DEFAULT_FROM}>`, // Replace with your verified sender email
         subject: 'Welcome to Our KAVI Platform!',
         text: `Hello ${name},\n\nWelcome to our service! We are glad to have you on board.\n\nBest regards,\nThe Team`,
         html: `<p>Hello ${name},</p><p>Welcome to our Platform! We are glad to have you on board.</p><p>Best regards,<br/>The Team</p>`,
