@@ -98,5 +98,13 @@ module.exports = ({ env }) => ({
     },
   },
 
+  'import-export-entries': {
+    enabled: true,
+    config: {
+      // See `Config` section.
+      serverPublicHostname:'https://dazzling-butterfly-f3a6f1abbb.strapiapp.com/',
+    },
+  },
+
 
 });

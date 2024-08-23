@@ -879,6 +879,11 @@ export interface ApiArticleArticle extends Schema.CollectionType {
   options: {
     draftAndPublish: true;
   };
+  pluginOptions: {
+    'import-export-entries': {
+      idField: 'article_id';
+    };
+  };
   attributes: {
     article_id: Attribute.UID;
     title: Attribute.String;
@@ -1005,6 +1010,11 @@ export interface ApiCompanyCompany extends Schema.CollectionType {
   options: {
     draftAndPublish: true;
   };
+  pluginOptions: {
+    'import-export-entries': {
+      idField: 'name';
+    };
+  };
   attributes: {
     company_id: Attribute.UID;
     name: Attribute.String & Attribute.Required & Attribute.Unique;
@@ -1108,6 +1118,11 @@ export interface ApiIndustryIndustry extends Schema.CollectionType {
   };
   options: {
     draftAndPublish: true;
+  };
+  pluginOptions: {
+    'import-export-entries': {
+      idField: 'name';
+    };
   };
   attributes: {
     industry_id: Attribute.UID;
@@ -1274,6 +1289,11 @@ export interface ApiSubIndustrySubIndustry extends Schema.CollectionType {
   };
   options: {
     draftAndPublish: true;
+  };
+  pluginOptions: {
+    'import-export-entries': {
+      idField: 'name';
+    };
   };
   attributes: {
     name: Attribute.String & Attribute.Required & Attribute.Unique;
