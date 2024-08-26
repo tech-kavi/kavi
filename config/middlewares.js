@@ -15,5 +15,11 @@ module.exports = [
       enabled: true,
     },
   },
+  // {
+  //   name:'strapi::body',
+  //   config:{
+  //     jsonLimit:'10mb',
+  //   },
+  // },
 
 ];

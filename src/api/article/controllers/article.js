@@ -10,6 +10,44 @@ const likedArticle = require('../../liked-article/services/liked-article');
 const { createCoreController } = require('@strapi/strapi').factories;
 
 module.exports = createCoreController('api::article.article',{
+
+    
+    countWordsInFields(article){
+        let totalWordCount = 0;
+
+        //count words in brief
+
+        // console.log(article.data.attributes.brief);
+        if(article.data.attributes.brief){
+            article.data.attributes.brief.forEach(brief => {
+                totalWordCount += brief.point.split(' ').length;
+            });
+        }
+        console.log(totalWordCount);
+
+        //count words table-with_content
+        if(article.data.attributes.table_with_content){
+            article.data.attributes.table_with_content.forEach(toc =>{
+                totalWordCount += toc.tablePoint.split(' ').length;
+
+                
+
+                toc.ques.forEach(ques=>{
+                    // console.log(ques);
+                    totalWordCount += ques.question.split(' ').length;
+                    totalWordCount += ques.answer.split(' ').length;
+                })
+            });
+        }
+
+        console.log(totalWordCount);
+
+        const readTime = Math.ceil(totalWordCount/process.env.WPM);
+        return readTime;
+
+    },
+
+
     async find(ctx){
 
         const {user}=ctx.state;
@@ -390,6 +428,11 @@ module.exports = createCoreController('api::article.article',{
         if (article.data.attributes.publishedAt == null) {
             return ctx.badRequest("No article found");
         }
+
+        // console.log(article);
+
+       const read_time=this.countWordsInFields(article);
+
     
         const primaryCompanies = article.data.attributes.primary_companies.data.map(company => company.id);
     
@@ -524,7 +567,7 @@ module.exports = createCoreController('api::article.article',{
             // }
         }
 
-        console.log(relatedArticles);
+        // console.log(relatedArticles);
 
         // //remove duplicate articles by ID using a Set
         relatedArticles = Array.from(new Set(relatedArticles.map(article => article.id)))
@@ -568,6 +611,7 @@ module.exports = createCoreController('api::article.article',{
         article.data.attributes.isLiked = LikeArticleIds.includes(article.data.id);
         article.data.attributes.isDisiked = DisLikeArticleIds.includes(article.data.id);
         article.data.attributes.isBookmarked = BookmarkArticleIds.includes(article.data.id);
+        article.data.attributes.read_time = read_time;
     
         return article;
     }

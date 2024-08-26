@@ -99,7 +99,7 @@ module.exports = createCoreController('api::company.company',{
 
     const company = await super.findOne(ctx);
 
-    if (company.data.attributes.publishedAt==null) {
+    if (!company || company.data.attributes.publishedAt==null) {
         return ctx.badRequest("No Company found");
     }
 
