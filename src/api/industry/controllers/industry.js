@@ -239,7 +239,8 @@ module.exports = createCoreController('api::industry.industry',{
                         publishedAt:{
                             $notNull:true,
                         }
-                    }
+                    },
+                    sort:['name:asc'],
                 },
             },
             filters:{
