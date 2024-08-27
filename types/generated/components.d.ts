@@ -69,7 +69,8 @@ export interface TableOfContentIndex extends Schema.Component {
   };
   attributes: {
     tablePoint: Attribute.RichText & Attribute.Required;
-    ques: Attribute.Component<'question-answer.ques', true>;
+    ques: Attribute.Component<'question-answer.ques', true> &
+      Attribute.Required;
   };
 }
 

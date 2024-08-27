@@ -13,7 +13,8 @@
     "ques": {
       "type": "component",
       "repeatable": true,
-      "component": "question-answer.ques"
+      "component": "question-answer.ques",
+      "required": true
     }
   }
 }

@@ -28,14 +28,14 @@ module.exports = createCoreController('api::article.article',{
         //count words table-with_content
         if(article.data.attributes.table_with_content){
             article.data.attributes.table_with_content.forEach(toc =>{
-                totalWordCount += toc.tablePoint.split(' ').length;
+                totalWordCount += toc.tablePoint?.split(' ').length;
 
                 
 
                 toc.ques.forEach(ques=>{
                     // console.log(ques);
-                    totalWordCount += ques.question.split(' ').length;
-                    totalWordCount += ques.answer.split(' ').length;
+                    totalWordCount += ques?.question.split(' ').length;
+                    totalWordCount += ques?.answer.split(' ').length;
                 })
             });
         }
