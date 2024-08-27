@@ -5,6 +5,48 @@
  * A set of functions called "actions" for `company-related-articles`
  */
 
+function countWordsInFields(article){
+  let totalWordCount = 0;
+
+  //count words in brief
+
+  // console.log(article.data.attributes.brief);
+  console.log(article);
+  console.log('from function');
+  if(article.brief){
+      article.brief.forEach(brief => {
+          totalWordCount += brief.point.split(' ').length;
+      });
+
+      delete article.brief;
+  }
+  console.log(totalWordCount);
+
+
+
+  //count words table-with_content
+  if(article?.table_with_content){
+      article?.table_with_content?.forEach(toc =>{
+          totalWordCount += toc?.tablePoint.split(' ').length;
+
+          
+
+          toc?.ques?.forEach(ques=>{
+              // console.log(ques);
+              totalWordCount += ques?.question.split(' ').length;
+              totalWordCount += ques?.answer.split(' ').length;
+          })
+      });
+
+      delete article?.table_with_content;
+  }
+
+  console.log(totalWordCount);
+
+  const readTime = Math.ceil(totalWordCount/process.env.WPM);
+  return readTime;
+}
+
 module.exports = {
   find: async (ctx, next) => {
     try {
@@ -33,6 +75,9 @@ module.exports = {
         secondary_companies:{
           id:{
             $in:[id],
+          },
+          publishedAt:{
+            $notNull:true,
           }
         },
         publishedAt:{
@@ -46,6 +91,12 @@ module.exports = {
                 $notNull:true,
             }
         }
+        },
+        brief:true,
+        table_with_content: {
+          populate: {
+              ques: true,
+          }
         },
         primary_companies:{
           populate:{
@@ -68,6 +119,20 @@ module.exports = {
 
     const paginatedArticles = articles.slice((pageInt-1)* pageSizeInt, pageInt*pageSizeInt);
 
+    
+
+    //calculate read time for each article
+    const articlesWithReadTime = paginatedArticles.map(article =>{
+      
+      const readTime = countWordsInFields(article);
+      
+
+      return{
+        ...article,
+        read_time:readTime,
+      };
+    })
+
     //to check bookmark status
     const bookmarkedArticles = await strapi.entityService.findMany('api::bookmark.bookmark', {
       filters: {
@@ -89,7 +154,7 @@ module.exports = {
 
   const BookmarkArticleIds = bookmarkedArticles.map(bookmark => bookmark.article.id);
 
-  const CompanyArticleWithBookmarkStatus = paginatedArticles.map(article =>({
+  const CompanyArticleWithBookmarkStatus = articlesWithReadTime.map(article =>({
     ...article,
     isBookmarked:BookmarkArticleIds.includes(article.id),
 }));

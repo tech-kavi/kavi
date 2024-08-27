@@ -26,6 +26,9 @@ module.exports = {
         industries:{
           id:{
             $in:[id],
+          },
+          publishedAt:{
+            $notNull:true,
           }
         },
         publishedAt:{

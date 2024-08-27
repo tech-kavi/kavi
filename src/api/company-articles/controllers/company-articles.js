@@ -17,24 +17,28 @@ function countWordsInFields(article){
       article.brief.forEach(brief => {
           totalWordCount += brief.point.split(' ').length;
       });
+
+      delete article.brief;
   }
   console.log(totalWordCount);
 
 
 
   //count words table-with_content
-  if(article.table_with_content){
-      article.table_with_content.forEach(toc =>{
+  if(article?.table_with_content){
+      article?.table_with_content?.forEach(toc =>{
           totalWordCount += toc?.tablePoint.split(' ').length;
 
           
 
-          toc.ques.forEach(ques=>{
+          toc?.ques?.forEach(ques=>{
               // console.log(ques);
               totalWordCount += ques?.question.split(' ').length;
               totalWordCount += ques?.answer.split(' ').length;
           })
       });
+
+      delete article?.table_with_content;
   }
 
   console.log(totalWordCount);
@@ -75,6 +79,9 @@ module.exports = {
         primary_companies:{
           id:{
             $in:[id],
+          },
+          publishedAt:{
+            $notNull:true,
           }
         },
         publishedAt:{
@@ -94,7 +101,7 @@ module.exports = {
           populate: {
               ques: true,
           }
-      }
+        }
       },
       sort: ['published_date:desc'],
       

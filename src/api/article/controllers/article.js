@@ -11,6 +11,48 @@ const { createCoreController } = require('@strapi/strapi').factories;
 
 module.exports = createCoreController('api::article.article',{
 
+    countWordsInFieldsOfRelatedArticles(article){
+        let totalWordCount = 0;
+      
+        //count words in brief
+      
+        // console.log(article.data.attributes.brief);
+        // console.log(article);
+        // console.log('from function');
+        if(article.brief){
+            article.brief.forEach(brief => {
+                totalWordCount += brief.point.split(' ').length;
+            });
+
+            delete article.brief;
+        }
+        console.log(totalWordCount);
+      
+      
+      
+        //count words table-with_content
+        if(article.table_with_content){
+            article.table_with_content?.forEach(toc =>{
+                totalWordCount += toc?.tablePoint.split(' ').length;
+      
+                
+      
+                toc?.ques?.forEach(ques=>{
+                    // console.log(ques);
+                    totalWordCount += ques?.question.split(' ').length;
+                    totalWordCount += ques?.answer.split(' ').length;
+                })
+            });
+
+            delete article.table_with_content;
+        }
+      
+        console.log(totalWordCount);
+      
+        const readTime = Math.ceil(totalWordCount/process.env.WPM);
+        return readTime;
+    },
+
     
     countWordsInFields(article){
         let totalWordCount = 0;
@@ -26,13 +68,13 @@ module.exports = createCoreController('api::article.article',{
         console.log(totalWordCount);
 
         //count words table-with_content
-        if(article.data.attributes.table_with_content){
-            article.data.attributes.table_with_content.forEach(toc =>{
-                totalWordCount += toc.tablePoint?.split(' ').length;
+        if(article?.data?.attributes?.table_with_content){
+            article?.data?.attributes?.table_with_content?.forEach(toc =>{
+                totalWordCount += toc?.tablePoint?.split(' ').length;
 
                 
 
-                toc.ques.forEach(ques=>{
+                toc?.ques?.forEach(ques=>{
                     // console.log(ques);
                     totalWordCount += ques?.question.split(' ').length;
                     totalWordCount += ques?.answer.split(' ').length;
@@ -462,6 +504,12 @@ module.exports = createCoreController('api::article.article',{
                                         }
                                     }
                                 },
+                                brief:true,
+                                table_with_content: {
+                                populate: {
+                                    ques: true,
+                                }
+                                }
                             },
                             filters: {
                                 publishedAt: {
@@ -490,6 +538,12 @@ module.exports = createCoreController('api::article.article',{
                                         }
                                     }
                                 },
+                                brief:true,
+                                table_with_content: {
+                                populate: {
+                                    ques: true,
+                                }
+                            }
                             },
                             filters: {
                                 publishedAt: {
@@ -510,6 +564,8 @@ module.exports = createCoreController('api::article.article',{
     
         let relatedArticles = primaryArticlesResults.flatMap(result => [...result.articles, ...result.secondary_articles]);
         relatedArticles = relatedArticles.filter(x => x.id != currentArticleId);
+
+        console.log(relatedArticles);
     
         // Fetch sub-industry and industry articles only if sub-industry is not "Miscellaneous"
         const subIndustry = article.data.attributes.sub_industries.data[0]?.attributes.name;
@@ -578,6 +634,17 @@ module.exports = createCoreController('api::article.article',{
     
         // Ensure only 3 related articles are returned
         relatedArticles = relatedArticles.slice(0, 3);
+
+        //calculate read time for each article
+    const RelatedArticlesWithReadTime = relatedArticles.map(article =>{
+      
+        const readTime = this.countWordsInFieldsOfRelatedArticles(article);
+        
+        return{
+          ...article,
+          read_time:readTime,
+        };
+      })
     
         // Fetching bookmarked, liked, and disliked articles for the user
         const [bookmarkedArticles, likedArticles, dislikedArticles] = await Promise.all([
@@ -600,7 +667,7 @@ module.exports = createCoreController('api::article.article',{
         const DisLikeArticleIds = dislikedArticles.map(dislikedArticle => dislikedArticle.article.id);
     
         // Adding bookmark status to related articles
-        const articleWithBookmarkStatus = relatedArticles.map(article => ({
+        const articleWithBookmarkStatus = RelatedArticlesWithReadTime.map(article => ({
             ...article,
             isBookmarked: BookmarkArticleIds.includes(article.id),
         }));

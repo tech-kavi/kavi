@@ -35,6 +35,9 @@ module.exports = {
         industry:{
           id:{
             $eq:id,
+          },
+          publishedAt:{
+            $notNull:true,
           }
         },
         publishedAt:{
