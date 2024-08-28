@@ -65,7 +65,7 @@ module.exports = createCoreController('api::article.article',{
                 totalWordCount += brief.point.split(' ').length;
             });
         }
-        console.log(totalWordCount);
+        // console.log(totalWordCount);
 
         //count words table-with_content
         if(article?.data?.attributes?.table_with_content){
@@ -82,7 +82,7 @@ module.exports = createCoreController('api::article.article',{
             });
         }
 
-        console.log(totalWordCount);
+        // console.log(totalWordCount);
 
         const readTime = Math.ceil(totalWordCount/process.env.WPM);
         return readTime;
@@ -565,7 +565,7 @@ module.exports = createCoreController('api::article.article',{
         let relatedArticles = primaryArticlesResults.flatMap(result => [...result.articles, ...result.secondary_articles]);
         relatedArticles = relatedArticles.filter(x => x.id != currentArticleId);
 
-        console.log(relatedArticles);
+        // console.log(relatedArticles);
     
         // Fetch sub-industry and industry articles only if sub-industry is not "Miscellaneous"
         const subIndustry = article.data.attributes.sub_industries.data[0]?.attributes.name;
@@ -594,6 +594,12 @@ module.exports = createCoreController('api::article.article',{
                                     $notNull:true,
                                 }
                             }
+                        },
+                        brief:true,
+                        table_with_content: {
+                                populate: {
+                                    ques: true,
+                                }
                         }
                     }
                 });
