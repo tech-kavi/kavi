@@ -168,6 +168,7 @@ module.exports = createCoreController('api::article.article',{
             },
             sort: ['publishedAt:desc'],
             filters: {
+                ...ctx.request.query.filters,
                 publishedAt: {
                     $gte: startDate.toISOString(),
                     $notNull:true,//ensuring the article is published

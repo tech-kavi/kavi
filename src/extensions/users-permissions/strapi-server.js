@@ -155,7 +155,7 @@ const sendWelcomeEmail = async (userEmail, name, password) => {
     </div>
     <div class="content">
         <p>Dear ${name},</p>
-        <p>Welcome to the Kavi Library! We're thrilled to have you on board.</p>
+        <p>Welcome to the KAVI Library! We're thrilled to have you on board.</p>
         <p>You’re now a step closer to exclusive interviews with industry experts across different companies and industries that will help you make informed investment decisions. Login now to access valuable insights curated to give you a competitive edge.</p>
         <a href=${process.env.FRONTEND_URL} 
     style="display: inline-block; width: 200px; padding: 10px 20px; background-color: #273789 !important; color: #FFFFFF !important; text-decoration: none; border-radius: 5px; font-size: 16px; text-align: center !important;">
