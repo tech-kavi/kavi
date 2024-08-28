@@ -103,7 +103,7 @@ module.exports = {
           }
         }
       },
-      sort: ['published_date:desc'],
+      sort: [...ctx.request.query.sort,'published_date:desc'],
       
     };
     
