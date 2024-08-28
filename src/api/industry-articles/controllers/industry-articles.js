@@ -65,7 +65,7 @@ module.exports = {
           },
       },
       },
-      sort:[...ctx.request.query.sort],
+      
     };
     
     const articles = await strapi.entityService.findMany('api::article.article',query);
