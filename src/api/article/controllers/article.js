@@ -31,8 +31,8 @@ module.exports = createCoreController('api::article.article',{
       
       
         //count words table-with_content
-        if(article.table_with_content){
-            article.table_with_content?.forEach(toc =>{
+        if(article?.table_with_content){
+            article?.table_with_content?.forEach(toc =>{
                 totalWordCount += toc?.tablePoint.split(' ').length;
       
                 
@@ -44,7 +44,7 @@ module.exports = createCoreController('api::article.article',{
                 })
             });
 
-            delete article.table_with_content;
+            delete article?.table_with_content;
         }
       
         console.log(totalWordCount);
