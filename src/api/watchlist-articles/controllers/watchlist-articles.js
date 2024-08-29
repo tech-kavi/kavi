@@ -13,7 +13,7 @@ module.exports = {
       const pageSize = parseInt(pagination?.pageSize) || 10;
 
     
-      const data = await strapi.service('api::watchlist-articles.watchlist-articles').find(user.id,page,pageSize);
+      const data = await strapi.service('api::watchlist-articles.watchlist-articles').find(user.id,page,pageSize,ctx);
       
       
       ctx.body = data;

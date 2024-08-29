@@ -1,3 +1,4 @@
+// @ts-nocheck
 'use strict';
 
 /**
@@ -5,7 +6,7 @@
  */
 
 module.exports = {
-    find:async(userId,page,pageSize)=>{
+    find:async(userId,page,pageSize,ctx)=>{
         try{
             console.log("in service");
             const watchlistEntries = await strapi.entityService.findMany(
@@ -60,7 +61,8 @@ module.exports = {
                             }
                         },
 
-                    }
+                    },
+                    sort:[...ctx.request.query.sort,'publishedAt:desc'],
                 }
             );
 
