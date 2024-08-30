@@ -570,7 +570,7 @@ module.exports = createCoreController('api::article.article',{
     
         // Fetch sub-industry and industry articles only if sub-industry is not "Miscellaneous"
         const subIndustry = article.data.attributes.sub_industries.data[0]?.attributes.name;
-        if (subIndustry && subIndustry !== "Miscellaneous" && subIndustry !== "Marketplace") {
+        if (subIndustry && subIndustry !== "Miscellaneous" && subIndustry !== "Marketplace" && subIndustry !== "Diversified") {
             // If we don't have enough articles, fetch sub-industry articles
             if (relatedArticles.length < 3) {
                 const subIndustryArticles = await strapi.entityService.findMany('api::article.article', {

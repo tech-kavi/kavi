@@ -104,7 +104,7 @@ module.exports = createCoreController('api::company.company',{
     }
 
     const sub_industries = company.data.attributes.sub_industries.data;
-    const subIndustryNames = sub_industries.filter(subIndustry => subIndustry.attributes.name !== "Miscellaneous" && subIndustry.attributes.name !== "Marketplace").map(subIndustry => subIndustry.attributes.name);
+    const subIndustryNames = sub_industries.filter(subIndustry => subIndustry.attributes.name !== "Miscellaneous" && subIndustry.attributes.name !== "Marketplace" && subIndustry.attributes.name !== "Diversified").map(subIndustry => subIndustry.attributes.name);
 
     // Getting companies of the same sub-industry
     const relatedCompaniesOfSub = await strapi.entityService.findMany('api::sub-industry.sub-industry', {
