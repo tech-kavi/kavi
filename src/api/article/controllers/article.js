@@ -141,7 +141,7 @@ module.exports = createCoreController('api::article.article',{
                     }
                 }
             },
-            sort: [...(ctx.request.query.sort || []),'publishedAt:desc'],
+            sort: [...(ctx.request.query.sort || []),'publishedAt:desc','id:desc'],
             filters: {
                 ...ctx.request.query.filters,
                 publishedAt: {
