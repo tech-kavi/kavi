@@ -158,53 +158,6 @@ module.exports = createCoreController('api::company.company',{
 
 
 
-    // console.log(uniqueCompanies);
-
-    // if (uniqueCompanies.length < 6) {
-    //     // If companies of the same sub-industry are less than 6, then get companies of the same industry
-    //     const companiesNeeded = 6 - uniqueCompanies.length;
-    //     const industries = company.data.attributes.industries.data;
-    //     const industryNames = industries.map(industry => industry.attributes.name);
-
-    //     const relatedCompaniesOfIndustry = await strapi.entityService.findMany('api::industry.industry', {
-    //         filters: {
-    //             name: {
-    //                 $in: industryNames,
-    //             },
-    //         },
-    //         populate: {
-    //             companies: {
-    //                 filters: {
-    //                     publishedAt: {
-    //                         $notNull: true,
-    //                     }
-    //                 },
-    //                 populate: {
-    //                     logo: true,
-    //                     articles: {
-    //                         filters: {
-    //                             publishedAt: {
-    //                                 $notNull: true,
-    //                             }
-    //                         },
-    //                     },
-    //                 },
-    //             },
-    //         },
-    //     });
-
-    //     companies = relatedCompaniesOfIndustry.flatMap(industry => industry.companies);
-    //     uniqueCompaniesMap = new Map();
-    //     companies.forEach(company => {
-    //         if (!uniqueCompaniesMap.has(company.id)) {
-    //             uniqueCompaniesMap.set(company.id, company);
-    //         }
-    //     });
-
-    //     let uniqueCompaniesOfIndustry = Array.from(uniqueCompaniesMap.values());
-    //     uniqueCompanies = uniqueCompanies.concat(uniqueCompaniesOfIndustry).filter(x => x.id !== company.data.id);
-    // }
-
     const uniqueCompaniesWithArticleCount = uniqueCompanies.map(company => {
         const articleCount = company.articles ? company.articles.length : 0;
         const { articles, ...withoutArticles } = company;
