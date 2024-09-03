@@ -737,7 +737,7 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
     orgID: Attribute.BigInteger & Attribute.Required;
     slots: Attribute.Integer;
     slotFilled: Attribute.Integer;
-    expiry: Attribute.Date;
+    expiry: Attribute.DateTime;
     currentToken: Attribute.Text & Attribute.Private;
     read_articles: Attribute.Relation<
       'plugin::users-permissions.user',

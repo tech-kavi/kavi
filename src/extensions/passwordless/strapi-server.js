@@ -192,7 +192,9 @@ module.exports = (plugin) =>{
         // Check if the user's plan expiry date has passed
         const currentDateTime = new Date();
         const expiryDateTime = new Date(user.expiry); // Assuming 'expiry' field holds the expiry date
-    
+
+        console.log(currentDateTime,expiryDateTime);
+
         if (currentDateTime > expiryDateTime) {
           return ctx.badRequest('Your plan is expired. Please contact to KAVI Team');
         }
