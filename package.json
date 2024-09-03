@@ -17,13 +17,15 @@
     "@strapi/strapi": "4.24.2",
     "axios": "^1.7.2",
     "better-sqlite3": "8.6.0",
+    "moment-timezone": "^0.5.45",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-router-dom": "5.3.4",
     "strapi-plugin-import-export-entries": "^1.23.1",
     "strapi-plugin-passwordless": "^4.0.15",
     "strapi-plugin-strapi-algolia": "^1.7.0",
-    "styled-components": "5.3.3"
+    "styled-components": "5.3.3",
+    "uuid": "^10.0.0"
   },
   "author": {
     "name": "A Strapi developer"

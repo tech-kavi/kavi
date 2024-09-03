@@ -10,6 +10,10 @@ const {sanitize} = require('@strapi/utils');
 
 const { ValidationError } = require('@strapi/utils').errors;
 
+const customPasswordless = require('../passwordless/services/customPasswordless');
+
+const moment = require('moment-timezone');
+
 
 /* eslint-disable no-useless-escape */
 const _ = require('lodash');
@@ -103,6 +107,7 @@ module.exports = (plugin) =>{
         const updatedUser = await strapi.entityService.update('plugin::users-permissions.user', user.id, {
             data: {
             currentToken: newToken,
+            last_login: moment().tz('Asia/Kolkata').format()
             },
         });
 
@@ -122,6 +127,8 @@ module.exports = (plugin) =>{
         context = typeof token.context === "object" ? token.context : {};
         }
         //jwtService.issue({id: user.id})
+
+        console.log(sanitizedUserInfo);
         ctx.send({
         jwt: newToken,
         user: sanitizedUserInfo,
@@ -212,12 +219,14 @@ module.exports = (plugin) =>{
         try {
           const token = await passwordless.createToken(user.email, context);
           // console.log('token created');
-          await passwordless.sendLoginLink(token);
+          await customPasswordless.sendLoginLink(token);
           ctx.send({
             email,
             username,
             sent: true,
           });
+
+          console.log(`${user.email} magic link sent`);
         } catch (err) {
           return ctx.badRequest(err);
         } 

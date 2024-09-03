@@ -131,6 +131,9 @@
     },
     "dob": {
       "type": "date"
+    },
+    "last_login": {
+      "type": "datetime"
     }
   }
 }
