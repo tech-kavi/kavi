@@ -29,18 +29,28 @@ module.exports = () => {
         return ctx.badRequest('New device logged in');
       }
       //check user expiry
-      if (user.expiry) {
-        const expiryDate = new Date(user.expiry); // Convert user.expiry to a Date object
-      
-        // Reset the time part of both dates
-        expiryDate.setHours(0, 0, 0, 0);
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-      
-        if (expiryDate < today) {
-          return ctx.badRequest('plan.expired');
+
+      const currentDateTime = new Date();
+      const expiryDateTime = new Date(user.expiry); // Assuming 'expiry' field holds the expiry date
+
+        console.log(currentDateTime,expiryDateTime);
+
+        if (currentDateTime > expiryDateTime) {
+          return ctx.badRequest('Your plan is expired. Please contact to KAVI Team');
         }
-      }
+
+      // if (user.expiry) {
+      //   const expiryDate = new Date(user.expiry); // Convert user.expiry to a Date object
+      
+      //   // Reset the time part of both dates
+      //   expiryDate.setHours(0, 0, 0, 0);
+      //   const today = new Date();
+      //   today.setHours(0, 0, 0, 0);
+      
+      //   if (expiryDate < today) {
+      //     return ctx.badRequest('plan.expired');
+      //   }
+      // }
     }
 
     // Call the next middleware in the chain
