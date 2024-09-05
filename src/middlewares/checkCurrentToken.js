@@ -33,7 +33,7 @@ module.exports = () => {
       const currentDateTime = new Date();
       const expiryDateTime = new Date(user.expiry); // Assuming 'expiry' field holds the expiry date
 
-        console.log(currentDateTime,expiryDateTime);
+        console.log("from middleware",currentDateTime,expiryDateTime);
 
         if (currentDateTime > expiryDateTime) {
           return ctx.badRequest('Your plan is expired. Please contact to KAVI Team');
