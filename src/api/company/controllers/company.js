@@ -37,57 +37,57 @@ module.exports = createCoreController('api::company.company',{
                 }
             },
             articles: {
-                populate: {
-                    industry: {
-                        filters:{
-                            publishedAt:{
-                                $notNull:true,
-                            }
-                        }
-                    },
-                    primary_companies: {
-                        populate: {
-                            logo: true,
-                        },
-                        filters:{
-                            publishedAt:{
-                                $notNull:true,
-                            }
-                        }
-                    },
-                },
+                // populate: {
+                //     industry: {
+                //         filters:{
+                //             publishedAt:{
+                //                 $notNull:true,
+                //             }
+                //         }
+                //     },
+                //     primary_companies: {
+                //         populate: {
+                //             logo: true,
+                //         },
+                //         filters:{
+                //             publishedAt:{
+                //                 $notNull:true,
+                //             }
+                //         }
+                //     },
+                // },
                 filters: {
                     publishedAt: {
                         $notNull: true,
                     },
                 },
             },
-            secondary_articles: {
-                populate: {
-                    industry: {
-                        filters:{
-                            publishedAt:{
-                                $notNull:true,
-                            }
-                        }
-                    },
-                    primary_companies: {
-                        populate: {
-                            logo: true,
-                        },
-                        filters:{
-                            publishedAt:{
-                                $notNull:true,
-                            }
-                        }
-                    },
-                },
-                filters: {
-                    publishedAt: {
-                        $notNull: true,
-                    },
-                },
-            },
+            // secondary_articles: {
+            //     populate: {
+            //         industry: {
+            //             filters:{
+            //                 publishedAt:{
+            //                     $notNull:true,
+            //                 }
+            //             }
+            //         },
+            //         primary_companies: {
+            //             populate: {
+            //                 logo: true,
+            //             },
+            //             filters:{
+            //                 publishedAt:{
+            //                     $notNull:true,
+            //                 }
+            //             }
+            //         },
+            //     },
+            //     filters: {
+            //         publishedAt: {
+            //             $notNull: true,
+            //         },
+            //     },
+            // },
         },
         sort: { publishedAt: 'desc' },
         filters: {
@@ -141,7 +141,7 @@ module.exports = createCoreController('api::company.company',{
 
     //filtering subIndustry to get their companies only
     let companies = relatedCompaniesOfSub.flatMap(subIndustry => subIndustry.companies).filter(company => company.id !== currentCompanyId);
-    console.log(companies);
+    // console.log(companies);
 
     //filtering to get distinct companies
     let uniqueCompaniesMap = new Map();
@@ -186,6 +186,7 @@ module.exports = createCoreController('api::company.company',{
 
     company.data.attributes.relatedCompanies = CompanyWithWatchlistStatus;
     company.data.attributes.isWatchlisted = WatchlistCompanyIds.includes(company.data.id);
+    company.data.attributes.articles=company.data.attributes.articles.data.length;
 
     return company;
 

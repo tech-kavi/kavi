@@ -9,8 +9,8 @@ function countWordsInFieldsOfRelatedArticles(article){
   let totalWordCount = 0;
 
  
-  console.log(article);
-  console.log('from function');
+//   console.log(article);
+//   console.log('from function');
   if(article.brief){
       article.brief.forEach(brief => {
           totalWordCount += brief.point.split(' ').length;
