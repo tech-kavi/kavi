@@ -29,6 +29,9 @@ module.exports = ({ env }) => ({
             industry:{
               name:true,
             },
+            sub_industries:{
+              name:true,
+            },
             expert_type:true,
             table_with_content:{
               tablePoint:true,
