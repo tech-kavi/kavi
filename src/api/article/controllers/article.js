@@ -155,7 +155,9 @@ module.exports = createCoreController('api::article.article',{
     };
 
     // Initial query for the current month's articles
-    let articles = await getArticles(startOfCurrentMonth);
+    // let articles = await getArticles(startOfCurrentMonth);
+
+    let articles = await getArticles(startOfPreviousMonth);
 
     // If no articles are found, query for the previous month's articles
     if (articles.data.length === 0) {
