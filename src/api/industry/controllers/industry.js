@@ -189,26 +189,27 @@ module.exports = createCoreController('api::industry.industry',{
             locale:'en',
             populate:{
                 articles:{
-                    populate:{
-                        industry:{
-                            filters:{
-                                publishedAt:{
-                                    $notNull:true,
-                                }
-                            }
-                        },
-                        primary_companies:{
-                            populate:{
-                                logo:true
-                            },
-                            filters:{
-                                publishedAt:{
-                                    $notNull:true,
-                                }
-                            }
-                        },
+                    // populate:{
+                    //     industry:{
+                    //         filters:{
+                    //             publishedAt:{
+                    //                 $notNull:true,
+                    //             }
+                    //         }
+                    //     },
+                    //     primary_companies:{
+                    //         populate:{
+                    //             logo:true
+                    //         },
+                    //         filters:{
+                    //             publishedAt:{
+                    //                 $notNull:true,
+                    //             }
+                    //         }
+                    //     },
                         
-                    },
+                    // },
+                    count:true,
                     filters:{
                         publishedAt:{
                             $notNull:true,
@@ -216,24 +217,24 @@ module.exports = createCoreController('api::industry.industry',{
                     }
 
                 },
-                companies:{
-                    populate:{
-                        logo:true,
-                        articles:
-                        {
-                            filters:{
-                                publishedAt:{
-                                    $notNull:true,
-                                }
-                            }
-                        },
-                    },
-                    filters:{
-                        publishedAt:{
-                            $notNull:true,
-                        },
-                    }
-                },
+                // companies:{
+                //     populate:{
+                //         logo:true,
+                //         articles:
+                //         {
+                //             filters:{
+                //                 publishedAt:{
+                //                     $notNull:true,
+                //                 }
+                //             }
+                //         },
+                //     },
+                //     filters:{
+                //         publishedAt:{
+                //             $notNull:true,
+                //         },
+                //     }
+                // },
                 sub_industries:{
                     filters:{
                         publishedAt:{
@@ -257,24 +258,24 @@ module.exports = createCoreController('api::industry.industry',{
             return ctx.badRequest("No industry found");
         }
 
-        industry.data.attributes.articleCounts = industry.data.attributes.articles.data.length;
+        // industry.data.attributes.articleCounts = industry.data.attributes.articles.data.length;
 
         //counting articles of companies
-        const companiesWithArticleCount = industry.data.attributes.companies.data.map(company => {
-            const articleCount = company.attributes.articles.data.length;
+        // const companiesWithArticleCount = industry.data.attributes.companies.data.map(company => {
+        //     const articleCount = company.attributes.articles.data.length;
 
-            const {articles, ...companyAttributesWithoutArticles} = company.attributes;
-            return {
-                ...company,
-                attributes:{
-                    ...companyAttributesWithoutArticles,
-                    articleCount,
-                }
+        //     const {articles, ...companyAttributesWithoutArticles} = company.attributes;
+        //     return {
+        //         ...company,
+        //         attributes:{
+        //             ...companyAttributesWithoutArticles,
+        //             articleCount,
+        //         }
 
-            };
-        });
+        //     };
+        // });
         
-        industry.data.attributes.companies=companiesWithArticleCount;
+        // industry.data.attributes.companies=companiesWithArticleCount;
 
         return industry;
     }
