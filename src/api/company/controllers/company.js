@@ -56,6 +56,7 @@ module.exports = createCoreController('api::company.company',{
                 //         }
                 //     },
                 // },
+                count:true,
                 filters: {
                     publishedAt: {
                         $notNull: true,
@@ -186,7 +187,7 @@ module.exports = createCoreController('api::company.company',{
 
     company.data.attributes.relatedCompanies = CompanyWithWatchlistStatus;
     company.data.attributes.isWatchlisted = WatchlistCompanyIds.includes(company.data.id);
-    company.data.attributes.articles=company.data.attributes.articles.data.length;
+    company.data.attributes.articles=company.data.attributes.articles.data.attributes.count;
 
     return company;
 
