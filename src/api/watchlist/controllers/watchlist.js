@@ -30,6 +30,7 @@ module.exports = createCoreController('api::watchlist.watchlist',{
                     populate:{
                         logo:true,
                         articles:{
+                            count:true,
                             filters:{
                                 publishedAt:{
                                     $notNull:true,
@@ -46,13 +47,15 @@ module.exports = createCoreController('api::watchlist.watchlist',{
         
         const watchlists = await super.find(ctx);
 
-        const companiesWatclists = watchlists.data.map(watchlist => {
-            
-            const company = watchlist.attributes.company;
-            console.log(company);
-            const articleCount = company.data.attributes.articles.data.length;
+        // console.log(watchlists);
 
-            const { articles, ...companyAttributesWithoutArticles} = company.data.attributes;
+        const companiesWatclists = watchlists?.data?.map(watchlist => {
+            
+            const company = watchlist?.attributes?.company;
+            console.log(company.data.attributes.articles.data.attributes.count);
+            const articleCount = company.data?.attributes?.articles?.data.attributes.count;
+
+            const { articles, ...companyAttributesWithoutArticles} = company.data?.attributes;
 
             return{
                 watchlistId:watchlist.id,

@@ -127,6 +127,7 @@ module.exports = createCoreController('api::company.company',{
                 populate: {
                     logo: true,
                     articles: {
+                        count:true,
                         filters: {
                             publishedAt: {
                                 $notNull: true,
@@ -160,7 +161,9 @@ module.exports = createCoreController('api::company.company',{
 
 
     const uniqueCompaniesWithArticleCount = uniqueCompanies.map(company => {
-        const articleCount = company.articles ? company.articles.length : 0;
+        // const articleCount = company.articles ? company.articles.length : 0;
+        
+        const articleCount = company.articles.count;
         const { articles, ...withoutArticles } = company;
         return {
             ...withoutArticles,

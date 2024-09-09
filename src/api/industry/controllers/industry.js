@@ -25,6 +25,7 @@ module.exports = createCoreController('api::industry.industry',{
                     populate:{
                         logo:true,
                         articles:{
+                            count:true,
                             filters:{
                                 publishedAt:{
                                     $notNull:true,
@@ -134,7 +135,7 @@ module.exports = createCoreController('api::industry.industry',{
 
             //counting articles of all companies
             let companiesWithArticleCount = industry.attributes.companies.data.map(company => {
-                const articleCount = company.attributes.articles.data.length;
+                const articleCount = company.attributes.articles.data.attributes.count;
 
                 const {articles, ...companyAttributesWithoutArticles} = company.attributes;
                 return {
