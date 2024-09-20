@@ -11,6 +11,8 @@ const _ = require('lodash');
 const utils = require('@strapi/utils');
 const { getService } = require('../../../node_modules/@strapi/plugin-users-permissions/server/utils');
 const { validateCreateUserBody, validateUpdateUserBody } = require('../../../node_modules/@strapi/plugin-users-permissions/server/controllers/validation/user');
+const { validateForgotPasswordBody,validateResetPasswordBody } = require('../../../node_modules/@strapi/plugin-users-permissions/server/controllers/validation/auth');
+const { getAbsoluteAdminUrl, getAbsoluteServerUrl } = utils;
 
 const crypto = require('crypto');
 
@@ -38,6 +40,14 @@ const sanitizeQuery = async (query, ctx) => {
   return sanitize.contentAPI.query(query, schema, { auth });
 };
 
+const sanitizeUser = (user, ctx) => {
+  const { auth } = ctx.state;
+  const userSchema = strapi.getModel('plugin::users-permissions.user');
+
+  return sanitize.contentAPI.output(user, userSchema, { auth });
+};
+
+
 //Welcome mail
 const sendWelcomeEmail = async (userEmail, name, password) => {
     try {
@@ -46,6 +56,9 @@ const sendWelcomeEmail = async (userEmail, name, password) => {
         from: process.env.DEFAULT_FROM, // Replace with your verified sender email
         subject: '[KAVI] Welcome to KAVI',
         text: `Hello ${name},\n\nWelcome to KAVI platform! We are glad to have you on board.\n\nBest regards,\nKAVI Team`,
+        mail_settings:{
+          bypass_list_management:{enable:true},
+        },
         html: `<!DOCTYPE html>
 <html lang="en">
  
@@ -197,6 +210,9 @@ const sendAdminEmail = async (userEmail,name,slots,expiry) => {
       from: `KAVI <${process.env.DEFAULT_FROM}>`, // Replace with your verified sender email
       subject: '[KAVI] Upgraded to Admin',
       text: `Upgraded to Admin at KAVI Platform`,
+      mail_settings:{
+        bypass_list_management:{enable:true},
+      },
       html: `
 
       <html lang="en">
@@ -656,6 +672,204 @@ module.exports = (plugin) => {
       ctx.body = await sanitizeOutput(user, ctx);
     }
 
+    const forgotPassword = plugin.controllers.auth.forgotPassword;
+
+    plugin.controllers.auth.forgotPassword = async(ctx) =>{
+      console.log("from extension");
+      const { email } = await validateForgotPasswordBody(ctx.request.body);
+
+      const pluginStore = await strapi.store({ type: 'plugin', name: 'users-permissions' });
+  
+      const emailSettings = await pluginStore.get({ key: 'email' });
+      const advancedSettings = await pluginStore.get({ key: 'advanced' });
+  
+      // Find the user by email.
+      const user = await strapi
+        .query('plugin::users-permissions.user')
+        .findOne({ where: { email: email.toLowerCase() } });
+  
+      if (!user || user.blocked) {
+        return ctx.send({ ok: true });
+      }
+  
+      // Generate random token.
+      const userInfo = await sanitizeUser(user, ctx);
+  
+      const resetPasswordToken = crypto.randomBytes(64).toString('hex');
+  
+      const resetPasswordSettings = _.get(emailSettings, 'reset_password.options', {});
+      const emailBody = await getService('users-permissions').template(
+        resetPasswordSettings.message,
+        {
+          URL: advancedSettings.email_reset_password,
+          SERVER_URL: getAbsoluteServerUrl(strapi.config),
+          ADMIN_URL: getAbsoluteAdminUrl(strapi.config),
+          USER: userInfo,
+          TOKEN: resetPasswordToken,
+        }
+      );
+  
+      const emailObject = await getService('users-permissions').template(
+        resetPasswordSettings.object,
+        {
+          USER: userInfo,
+        }
+      );
+  
+      const emailToSend = {
+        to: user.email,
+        from:
+          resetPasswordSettings.from.email || resetPasswordSettings.from.name
+            ? `${resetPasswordSettings.from.name} <${resetPasswordSettings.from.email}>`
+            : undefined,
+        replyTo: resetPasswordSettings.response_email,
+        subject: emailObject,
+        text: emailBody,
+        html: emailBody,
+        mail_settings:{
+          bypass_list_management:{enable:true},
+        },
+      };
+  
+      // NOTE: Update the user before sending the email so an Admin can generate the link if the email fails
+      await getService('user').edit(user.id, { resetPasswordToken });
+  
+      // Send an email to the user.
+      await strapi.plugin('email').service('email').send(emailToSend);
+  
+      ctx.send({ ok: true });
+    }
+
+    const resetPassword = plugin.controllers.auth.resetPassword;
+
+    plugin.controllers.auth.resetPassword = async(ctx) =>{
+      const { password, passwordConfirmation, code } = await validateResetPasswordBody(
+        ctx.request.body
+      );
+  
+      if (password !== passwordConfirmation) {
+        throw new ValidationError('Passwords do not match');
+      }
+  
+      const user = await strapi
+        .query('plugin::users-permissions.user')
+        .findOne({ where: { resetPasswordToken: code } });
+  
+      if (!user) {
+        throw new ValidationError('Incorrect code provided');
+      }
+  
+      await getService('user').edit(user.id, {
+        resetPasswordToken: null,
+        password,
+      });
+
+      try {
+        // console.log(updatedUser.email);
+        // Send the email to the user
+        await strapi.plugins['email'].services.email.send({
+          to: user.email,
+          from: `KAVI <${process.env.DEFAULT_FROM}>`,
+          subject: '[KAVI] Your password has been changed',
+          text: 'Your password has been successfully changed. If you did not request this change, please contact support.',
+          mail_settings:{
+            bypass_list_management:{enable:true},
+          },
+          html:`<html lang="en">
+
+          <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Password Change Notification</title>
+          <style>
+          @import url('https://fonts.googleapis.com/css2?family=Avenir:wght@300;400;600&display=swap');
+
+          body {
+            font-family: 'Avenir', Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+          }
+
+          .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            text-align: center;
+          }
+
+          .logo {
+            text-align: center;
+            margin-bottom: 20px;
+          }
+
+          .content {
+            color: #333333;
+            text-align: left;
+          }
+
+          .content h1 {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+          }
+
+          .content p {
+            font-size: 16px;
+            line-height: 1.5;
+            margin: 10px 0;
+          }
+
+          .content a {
+            color: #313D74;
+            text-decoration: underline;
+          }
+
+          .footer {
+            font-size: 14px;
+            color: #333333;
+            margin-top: 30px;
+            text-align: left;
+          }
+          </style>
+          </head>
+
+          <body>
+          <div class="container">
+          <div class="logo">
+            <img src="https://dazzling-butterfly-f3a6f1abbb.media.strapiapp.com/Reset_and_amp_Forgot_password_icon_1d17469a0c.png" width="120px"/>
+          </div>
+          <div class="content">
+            <h1>Your password has changed</h1>
+            <p>Hello ${user.first_name},</p>
+            <p>We wanted to inform you that your password has been recently changed.</p>
+            <p>You can now <a href=${process.env.FRONTEND_URL}>login</a> with your new password.</p>
+            <p>If you did not make this change, please contact our support team at <a href="mailto:support@joinkavi.com">support@joinkavi.com</a>.</p>
+          </div>
+          <div class="footer">
+            <p>Regards,</p>
+            <p>KAVI Team</p>
+          </div>
+          </div>
+          </body>
+
+          </html>
+`
+        });
+      } catch (err) {
+        strapi.log.error('Failed to send password change notification email:', err);
+      }
+  
+      // Update the user.
+      ctx.send({
+        jwt: getService('jwt').issue({ id: user.id }),
+        user: await sanitizeUser(user, ctx),
+      });
+    }
 
 
     return plugin;

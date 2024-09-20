@@ -1,12 +1,13 @@
 
 // async function sendEmail(to, emailContent) {
+//   console.log(process.env.GROUPID);
 //     await strapi.plugins['email'].services.email.send({
 //       to,
 //       subject: 'New Articles for Your Watchlisted Companies',
 //       html: emailContent,
 //       asm: {
-//         group_id: 26013, // Replace with your Unsubscribe Group ID
-//         groupsToDisplay:[26013],
+//         group_id: Number(process.env.GROUPID), // Replace with your Unsubscribe Group ID
+      
 //       },
 //       trackingSettings: {
 //         subscriptionTracking: {

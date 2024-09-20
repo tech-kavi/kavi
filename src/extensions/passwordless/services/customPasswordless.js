@@ -38,6 +38,9 @@ module.exports = {
         subject,
         text,
         html,
+        mail_settings:{
+          bypass_list_management:{enable:true},
+        },
         headers: {
           
           'Message-ID': `<${uuid.v4()}@yourdomain.com>`, 
