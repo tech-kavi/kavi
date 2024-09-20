@@ -360,7 +360,7 @@ module.exports = (plugin) => {
       if (linkedinurl==undefined) throw new ApplicationError('Please enter Linkedid');
 
       //linkedin url validation
-      const linkedInUrlPattern = /^https:\/\/www\.linkedin\.com\/in\/[a-zA-Z0-9-]+\/?$/;
+      const linkedInUrlPattern = /^https:\/\/(www|in)\.linkedin\.com\/in\/[a-zA-Z0-9-]+\/?$/;
 
       if(!linkedInUrlPattern.test(linkedinurl))
       {

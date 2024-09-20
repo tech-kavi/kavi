@@ -39,9 +39,11 @@ module.exports = {
         text,
         html,
         headers: {
-          'Message-ID': `<${uuid.v4()}@yourdomain.com>`, // Use uuid to generate unique IDs
-          'In-Reply-To': `<${uuid.v4()}@yourdomain.com>`,  // Ensure this is empty
-          'References':  `<${uuid.v4()}@yourdomain.com>`  // Ensure this is empty
+          
+          'Message-ID': `<${uuid.v4()}@yourdomain.com>`, 
+          'In-Reply-To': `<${uuid.v4()}@yourdomain.com>`,  
+          'References':  `<${uuid.v4()}@yourdomain.com>`,  
+
         }
       };
 
