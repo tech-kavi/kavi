@@ -3,6 +3,7 @@
 //   console.log(process.env.GROUPID);
 //     await strapi.plugins['email'].services.email.send({
 //       to,
+        // from: process.env.DEFAULT_FROM,
 //       subject: 'New Articles for Your Watchlisted Companies',
 //       html: emailContent,
 //       asm: {

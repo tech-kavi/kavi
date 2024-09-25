@@ -156,6 +156,7 @@ module.exports = createCoreController('api::article.article',{
 
     // Initial query for the current month's articles
     let articles = await getArticles(startOfCurrentMonth);
+    let source = "this_month";
 
     // let articles = await getArticles(startOfPreviousMonth);
 
@@ -163,6 +164,7 @@ module.exports = createCoreController('api::article.article',{
     if (articles.data.length === 0) {
         console.log("fetching articles from pervious month")
         articles = await getArticles(startOfPreviousMonth);
+        source = "last_month";
     }
 
 
@@ -189,6 +191,7 @@ module.exports = createCoreController('api::article.article',{
 
     return {
         data:articleWithBookmarkStatus,
+        source,
         meta:articles.meta
     };
        

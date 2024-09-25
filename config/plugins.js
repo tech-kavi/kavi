@@ -33,6 +33,7 @@ module.exports = ({ env }) => ({
               name:true,
             },
             expert_type:true,
+            tags:true,
             table_with_content:{
               tablePoint:true,
               populate:{
