@@ -196,7 +196,7 @@ module.exports = (plugin) =>{
         console.log(currentDateTime,expiryDateTime);
 
         if (currentDateTime > expiryDateTime) {
-          return ctx.badRequest('Your plan is expired. Please contact to KAVI Team');
+          return ctx.badRequest('Your plan has expired. Please contact us to renew your subscription');
         }
         
         //password check
