@@ -6,7 +6,7 @@ module.exports = () => {
   return async (ctx, next) => {
     // Check if the request path matches '/articles'
     //ctx.request.path === '/api/related-articles' || /^\/api\/related-articles\/\d+$/.test(ctx.request.path)
-    if (ctx.request.path === '/api/articles' || ctx.request.path === '/api/users' || ctx.request.path === '/api/articles' || /^\/api\/articles\/\d+$/.test(ctx.request.path)) {
+    if (ctx.request.path === '/api/articles' || ctx.request.path === '/api/users' || ctx.request.path === '/api/articles' || /^\/api\/articles\/\d+$/.test(ctx.request.path)|| ctx.request.path === '/api/related-articles' || /^\/api\/related-articles\/\d+$/.test(ctx.request.path)) {
       const authorization = ctx.request.header.authorization;
       if (!authorization) {
         return ctx.unauthorized('No authorization header found');
@@ -26,9 +26,9 @@ module.exports = () => {
       const user = await strapi.entityService.findOne('plugin::users-permissions.user', decoded.id);
 
       
-      if (!user || user.currentToken !== token) {
-        return ctx.badRequest('New device logged in');
-      }
+      // if (!user || user.currentToken !== token) {
+      //   return ctx.badRequest('New device logged in');
+      // }
       //check user expiry
 
       const currentDateTime = new Date();
