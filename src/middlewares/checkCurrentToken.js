@@ -5,7 +5,8 @@ const jwt = require('jsonwebtoken');
 module.exports = () => {
   return async (ctx, next) => {
     // Check if the request path matches '/articles'
-    if (ctx.request.path === '/api/articles' || ctx.request.path === '/api/users' || ctx.request.path === '/api/articles' || /^\/api\/articles\/\d+$/.test(ctx.request.path) || ctx.request.path === '/api/related-articles' || /^\/api\/related-articles\/\d+$/.test(ctx.request.path)) {
+    //ctx.request.path === '/api/related-articles' || /^\/api\/related-articles\/\d+$/.test(ctx.request.path)
+    if (ctx.request.path === '/api/articles' || ctx.request.path === '/api/users' || ctx.request.path === '/api/articles' || /^\/api\/articles\/\d+$/.test(ctx.request.path)) {
       const authorization = ctx.request.header.authorization;
       if (!authorization) {
         return ctx.unauthorized('No authorization header found');

@@ -230,7 +230,7 @@ module.exports = (plugin) =>{
 
           console.log(`${user.email} magic link sent`);
         } catch (err) {
-          return ctx.badRequest(err);
+          return ctx.badRequest("Please try again later");
         } 
     }
 

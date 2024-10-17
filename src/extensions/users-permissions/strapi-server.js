@@ -691,6 +691,16 @@ module.exports = (plugin) => {
       if (!user || user.blocked) {
         return ctx.send({ ok: true });
       }
+
+      // to check if user's plan is expired or not
+      const currentDateTime = new Date();
+      const expiryDateTime = new Date(user.expiry); 
+
+        console.log("from middleware",currentDateTime,expiryDateTime);
+
+        if (currentDateTime > expiryDateTime) {
+          return ctx.send({ok : true});
+        }
   
       // Generate random token.
       const userInfo = await sanitizeUser(user, ctx);
