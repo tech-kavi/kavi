@@ -20,15 +20,17 @@ module.exports = () => {
       try {
         decoded = jwt.verify(token, strapi.config.get('plugin.users-permissions.jwtSecret'));
       } catch (err) {
+        console.log("token expired ")
         return ctx.unauthorized('Invalid token');
       }
 
       const user = await strapi.entityService.findOne('plugin::users-permissions.user', decoded.id);
 
       
-      // if (!user || user.currentToken !== token) {
-      //   return ctx.badRequest('New device logged in');
-      // }
+      if (!user || user.currentToken !== token) {
+        console.log("New Device logged in ",user.email);
+        return ctx.unauthorized('Token Expired. New Token Generated');
+      }
       //check user expiry
 
       const currentDateTime = new Date();
@@ -37,21 +39,11 @@ module.exports = () => {
         console.log("from middleware",currentDateTime,expiryDateTime);
 
         if (currentDateTime > expiryDateTime) {
-          return ctx.badRequest('Your plan is expired. Please contact to KAVI Team');
+          console.log("Plan expired ",user.email);
+          return ctx.unauthorized('Your plan is expired. Please contact to KAVI Team');
         }
 
-      // if (user.expiry) {
-      //   const expiryDate = new Date(user.expiry); // Convert user.expiry to a Date object
       
-      //   // Reset the time part of both dates
-      //   expiryDate.setHours(0, 0, 0, 0);
-      //   const today = new Date();
-      //   today.setHours(0, 0, 0, 0);
-      
-      //   if (expiryDate < today) {
-      //     return ctx.badRequest('plan.expired');
-      //   }
-      // }
     }
 
     // Call the next middleware in the chain

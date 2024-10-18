@@ -204,6 +204,7 @@ module.exports = createCoreController('api::article.article',{
     async findOne(ctx) {
         const { user } = ctx.state;
         if (!user) {
+            console.log("logged out during fetching transcript ",user);
             return ctx.unauthorized("you must be logged in");
         }
     
