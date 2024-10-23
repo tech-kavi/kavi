@@ -11,8 +11,8 @@ function countWordsInFields(article){
   //count words in brief
 
   // console.log(article.data.attributes.brief);
-  console.log(article);
-  console.log('from function');
+  // console.log(article);
+  // console.log('from function');
   if(article.brief){
       article.brief.forEach(brief => {
           totalWordCount += brief.point.split(' ').length;
@@ -20,7 +20,7 @@ function countWordsInFields(article){
 
       delete article.brief;
   }
-  console.log(totalWordCount);
+  // console.log(totalWordCount);
 
 
 
@@ -41,7 +41,7 @@ function countWordsInFields(article){
       delete article?.table_with_content;
   }
 
-  console.log(totalWordCount);
+  // console.log(totalWordCount);
 
   const readTime = Math.ceil(totalWordCount/process.env.WPM);
   return readTime;
