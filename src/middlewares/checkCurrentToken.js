@@ -29,6 +29,8 @@ module.exports = () => {
       
       if (!user || user.currentToken !== token) {
         console.log("New Device logged in ",user.email);
+        console.log("Strapi Token", user.currentToken);
+        console.log("User Token",token);
         // return ctx.unauthorized('Token Expired. New Token Generated');
       }
       //check user expiry
