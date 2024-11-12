@@ -27,10 +27,10 @@ module.exports = () => {
       const user = await strapi.entityService.findOne('plugin::users-permissions.user', decoded.id);
 
       
-      // if (!user || user.currentToken !== token) {
-      //   console.log("New Device logged in ",user.email);
-      //   return ctx.unauthorized('Token Expired. New Token Generated');
-      // }
+      if (!user || user.currentToken !== token) {
+        console.log("New Device logged in ",user.email);
+        // return ctx.unauthorized('Token Expired. New Token Generated');
+      }
       //check user expiry
 
       const currentDateTime = new Date();
