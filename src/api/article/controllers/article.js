@@ -112,8 +112,8 @@ module.exports = createCoreController('api::article.article',{
     const startOfCurrentMonth = getISTStartOfMonth(currentDate.getFullYear(), currentDate.getMonth());
     const startOfPreviousMonth = getISTStartOfMonth(currentDate.getFullYear(), currentDate.getMonth() - 1);
 
-    console.log(startOfCurrentMonth);
-    console.log(startOfPreviousMonth);
+    // console.log(startOfCurrentMonth);
+    // console.log(startOfPreviousMonth);
 
     // Helper function to perform the article query
     const getArticles = async (startDate) => {
