@@ -32,7 +32,7 @@ module.exports = (plugin) =>{
         const {passwordless} = strapi.plugins['passwordless'].services;
         const {user: userService, jwt: jwtService} = strapi.plugins['users-permissions'].services;
         
-        
+        console.log(ctx);
         const isEnabled = await passwordless.isEnabled();
 
         if (!isEnabled) {
@@ -113,6 +113,7 @@ module.exports = (plugin) =>{
 
         // console.log("user newtoken updated");
 
+        console.log(`New token generated and saved for user ${user.email}: ${newToken}`);
 
         const userSchema = strapi.getModel('plugin::users-permissions.user');
         // Sanitize the template's user information
