@@ -9,7 +9,7 @@ module.exports = {
       const user = await strapi.plugin('passwordless').service('passwordless').fetchUser({ email: token.email });
         
 
-      console.log("from custom domain");
+      //console.log("from custom domain");
       const text = await this.template(settings.message_text, {
         URL: settings.confirmationUrl,
         CODE: token.body,
@@ -50,7 +50,7 @@ module.exports = {
         }
       };
 
-      console.log(uuid.v4());
+      // console.log(uuid.v4());
   
       // Send an email to the user.
       return await strapi.plugin('email').service('email').send(sendData);

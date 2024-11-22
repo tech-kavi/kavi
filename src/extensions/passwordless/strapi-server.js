@@ -222,6 +222,7 @@ module.exports = (plugin) =>{
         try {
           const token = await passwordless.createToken(user.email, context);
           // console.log('token created');
+          console.log(token);
           await customPasswordless.sendLoginLink(token);
           ctx.send({
             email,
