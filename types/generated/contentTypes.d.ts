@@ -763,6 +763,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
     last_name: Attribute.String;
     dob: Attribute.Date;
     last_login: Attribute.DateTime;
+    highlights: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::highlight.highlight'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -1109,6 +1114,47 @@ export interface ApiDislikedArticleDislikedArticle
   };
 }
 
+export interface ApiHighlightHighlight extends Schema.CollectionType {
+  collectionName: 'highlights';
+  info: {
+    singularName: 'highlight';
+    pluralName: 'highlights';
+    displayName: 'Highlight';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    user: Attribute.Relation<
+      'api::highlight.highlight',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    articleId: Attribute.BigInteger;
+    answerId: Attribute.BigInteger;
+    start: Attribute.Integer;
+    end: Attribute.Integer;
+    text: Attribute.String;
+    type: Attribute.Enumeration<['ques', 'answer']>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::highlight.highlight',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::highlight.highlight',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiIndustryIndustry extends Schema.CollectionType {
   collectionName: 'industries';
   info: {
@@ -1422,6 +1468,7 @@ declare module '@strapi/types' {
       'api::bookmark.bookmark': ApiBookmarkBookmark;
       'api::company.company': ApiCompanyCompany;
       'api::disliked-article.disliked-article': ApiDislikedArticleDislikedArticle;
+      'api::highlight.highlight': ApiHighlightHighlight;
       'api::industry.industry': ApiIndustryIndustry;
       'api::liked-article.liked-article': ApiLikedArticleLikedArticle;
       'api::logged-in.logged-in': ApiLoggedInLoggedIn;

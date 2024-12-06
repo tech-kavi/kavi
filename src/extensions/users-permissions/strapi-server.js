@@ -668,6 +668,7 @@ module.exports = (plugin) => {
         ...sanitizedQuery,
         populate:{role:true}
       });
+      console.log(user.id);
   
       ctx.body = await sanitizeOutput(user, ctx);
     }

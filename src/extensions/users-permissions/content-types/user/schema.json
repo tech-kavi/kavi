@@ -134,6 +134,12 @@
     },
     "last_login": {
       "type": "datetime"
+    },
+    "highlights": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::highlight.highlight",
+      "mappedBy": "user"
     }
   }
 }

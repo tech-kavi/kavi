@@ -95,7 +95,7 @@ module.exports = createCoreController('api::article.article',{
         const {user}=ctx.state;
         if(!user)
         {
-            return ctx.unauthorized("you must be logged in");
+            return ctx.unauthorized("Please login in");
         }
         
         
