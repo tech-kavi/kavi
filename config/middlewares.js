@@ -6,11 +6,11 @@ module.exports = [
   'strapi::logger',
   'strapi::query',
   {
-    name:'strapi::body',
+    name: 'strapi::body',
     config: {
-      jsonLimit: '10mb', // Adjust to a higher value if needed
-      formLimit: '10mb', // Adjust for form-urlencoded data
-      textLimit: '10mb', // Adjust for plain text data
+      jsonLimit: '256mb',
+      formLimit: '256mb',
+      textLimit: '256mb',
     },
   },
   'strapi::session',

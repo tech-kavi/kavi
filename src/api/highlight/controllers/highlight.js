@@ -36,6 +36,11 @@ module.exports = createCoreController('api::highlight.highlight',{
 
         try {
             const { data } = ctx.request.body;
+
+            const bodyString = JSON.stringify(ctx.request);
+            let payloadSize=Buffer.byteLength(bodyString,'utf8');
+
+            console.log(`Request payload size: ${(payloadSize / (1024 * 1024)).toFixed(2)} MB`);
     
             // Initialize variables
             const selectedAnswerData = data?.selectedAnswerData || null;
@@ -107,7 +112,7 @@ module.exports = createCoreController('api::highlight.highlight',{
                 ArticleHighlights,
             });
         } catch (err) {
-            return ctx.badRequest('Failed to Highlight');
+            return ctx.badRequest('Failed to Highlight',err);
         }
     },
 
