@@ -5,14 +5,7 @@ module.exports = [
   'strapi::poweredBy',
   'strapi::logger',
   'strapi::query',
-  {
-    name: 'strapi::body',
-    config: {
-      jsonLimit: '256mb',
-      formLimit: '256mb',
-      textLimit: '256mb',
-    },
-  },
+  'strapi::body',
   'strapi::session',
   'strapi::favicon',
   'strapi::public',

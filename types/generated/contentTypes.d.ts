@@ -1135,7 +1135,7 @@ export interface ApiHighlightHighlight extends Schema.CollectionType {
     answerId: Attribute.BigInteger;
     start: Attribute.Integer;
     end: Attribute.Integer;
-    text: Attribute.String;
+    text: Attribute.Text;
     type: Attribute.Enumeration<['ques', 'answer']>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
