@@ -1,5 +1,7 @@
 'use strict';
 
+
+
 /**
  * highlight controller
  */
@@ -9,21 +11,95 @@ const { createCoreController } = require('@strapi/strapi').factories;
 module.exports = createCoreController('api::highlight.highlight',{
     async find(ctx){
         const {user}=ctx.state;
-        if(!user)
-        {
-            return ctx.unauthorized("Please Log in");
+        if(!user){
+            return ctx.unauthorized('you should be logged in to bookmark');
         }
-        
-        ctx.query = {
-            ...ctx.query,
-            locale: 'en',
-            filters: {
-                ...ctx.request.query.filters,
-                user: user.id
-            },
-        };
+      const { pagination } = ctx.request.query;
+      const page = parseInt(pagination?.page) || 1;
+      const pageSize = parseInt(pagination?.pageSize) || 10;
 
-        return await super.find(ctx);
+    
+      const data = await strapi.service('api::highlight.highlight').find(user.id,page,pageSize,ctx);
+      
+      
+      ctx.body = data;
+    },
+
+    async findOne(ctx){
+        const {user}=ctx.state;
+        const articleId = ctx.params.id;
+        if(!user){
+            return ctx.unauthorized('you should be logged in to bookmark');
+        }
+
+        const highlights = await strapi.entityService.findMany(
+            "api::highlight.highlight",
+            {
+                filters:{
+                    user: user.id,
+                    articleId:articleId,
+                },
+                limit:-1,
+                sort:'answerId:asc',
+            }
+        );
+
+        const groupedHighlights = highlights.reduce((acc, highlight)=>{
+            const {answerId, type}=highlight;
+
+            if(!acc[answerId]){
+                acc[answerId]=[];
+            }
+
+            acc[answerId].push(highlight);
+            return acc;
+        },{});
+
+        const mergeRanges = (ranges) => {
+            if (!ranges.length) return [];
+            
+            // Sort ranges by starting position
+            ranges.sort((a, b) => a.start - b.start);
+        
+            const merged = [];
+        
+            for (let i = 0; i < ranges.length; i++) {
+                const current = ranges[i];
+                const last = merged[merged.length - 1];
+        
+                if (last && current.start <= last.end) {
+                    // Overlap detected: merge ranges
+                    if (current.end <= last.end) {
+                        // If the current range is completely inside the last range, do nothing
+                        continue;
+                    } else {
+                        // If the current range overlaps but is not completely inside, extend the end
+                        last.end = Math.max(last.end, current.end);
+                        last.text = `${last.text} ${current.text}`;
+                    }
+                } else {
+                    // No overlap, push the current range
+                    merged.push({ ...current });
+                }
+            }
+        
+            return merged;
+        };
+         // Convert grouped highlights into an ordered array
+         const mergedHighlights = Object.entries(groupedHighlights).map(([answerId, items]) => {
+            const questions = mergeRanges(items.filter(item => item.type === "ques"));
+            const answers = mergeRanges(items.filter(item => item.type === "answer"));
+
+            //const mergedQuestions = questions.map(q=>q.text).join("...");
+        
+            return {
+                answerId,
+                highlights: [...questions, ...answers], // Ensure questions come first
+            };
+        });
+
+
+        return ctx.send(mergedHighlights);
     },
 
     async create(ctx)

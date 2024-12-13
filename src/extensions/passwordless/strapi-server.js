@@ -130,6 +130,12 @@ module.exports = (plugin) =>{
         //jwtService.issue({id: user.id})
 
         console.log(sanitizedUserInfo);
+
+        ctx.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+        ctx.set('Pragma', 'no-cache');
+        ctx.set('Expires', '0');
+
+        console.log(ctx);
         ctx.send({
         jwt: newToken,
         user: sanitizedUserInfo,

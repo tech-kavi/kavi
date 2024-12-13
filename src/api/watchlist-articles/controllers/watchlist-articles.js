@@ -8,6 +8,9 @@ module.exports = {
   find: async (ctx, next) => {
     
       const {user}=ctx.state;
+      if(!user){
+        return ctx.unauthorized('you should be logged in to bookmark');
+    }
       const { pagination } = ctx.request.query;
       const page = parseInt(pagination?.page) || 1;
       const pageSize = parseInt(pagination?.pageSize) || 10;

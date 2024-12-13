@@ -8,7 +8,7 @@
 module.exports = {
     find:async(userId,page,pageSize,ctx)=>{
         try{
-            console.log("in service");
+           
             const watchlistEntries = await strapi.entityService.findMany(
                 "api::watchlist.watchlist",
                 {
@@ -19,7 +19,7 @@ module.exports = {
 
             // extract company IDs from the watchlist entries
             const companyIds = watchlistEntries.map(entry => entry.company.id);
-            console.log(companyIds);
+           
             if(companyIds.length===0)
                 {
                     return [];
