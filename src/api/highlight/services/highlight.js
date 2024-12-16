@@ -71,6 +71,7 @@ module.exports = createCoreService('api::highlight.highlight',{
                             },
     
                         },
+                        sort:[...ctx.request.query.sort,'publishedAt:desc'],
                        
                     }
                 );
