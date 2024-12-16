@@ -76,9 +76,15 @@ module.exports = createCoreService('api::highlight.highlight',{
                     }
                 );
 
-                const orderedArticles = articleIds.map(id=> entries.find(article => article.id === id))
-                                                  .filter(article => article!== undefined);
-
+                let orderedArticles=entries.filter(article => article!== undefined);
+                // console.log(ctx.request.query.sort[0]);
+                if(ctx.request.query.sort[0] !=='')
+                {
+                     orderedArticles = articleIds.map(id=> entries.find(article => article.id === id));
+                }
+                
+                
+            
                 const totalEntries = await strapi.entityService.count('api::article.article',{
                     filters:{
                         id:{$in:articleIds},
