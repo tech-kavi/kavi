@@ -12,7 +12,7 @@ module.exports = createCoreController('api::highlight.highlight',{
     async find(ctx){
         const {user}=ctx.state;
         if(!user){
-            return ctx.unauthorized('you should be logged in to bookmark');
+            return ctx.unauthorized('Please login to get highlight articles');
         }
       const { pagination } = ctx.request.query;
       const page = parseInt(pagination?.page) || 1;
@@ -29,7 +29,7 @@ module.exports = createCoreController('api::highlight.highlight',{
         const {user}=ctx.state;
         const articleId = ctx.params.id;
         if(!user){
-            return ctx.unauthorized('you should be logged in to bookmark');
+            return ctx.unauthorized('Please login to get highlight');
         }
 
         const highlights = await strapi.entityService.findMany(
@@ -107,7 +107,7 @@ module.exports = createCoreController('api::highlight.highlight',{
         const {user} = ctx.state;
 
         if(!user){
-            return ctx.unauthorized('you should be logged in to bookmark');
+            return ctx.unauthorized('Please login to highlight');
         }
 
         try {
@@ -197,7 +197,7 @@ module.exports = createCoreController('api::highlight.highlight',{
         const {user} = ctx.state;
 
         if(!user){
-            return ctx.unauthorized('you should be logged in to bookmark');
+            return ctx.unauthorized('Please login to remove highlight');
         }
 
         const { data } = ctx.request.body;
@@ -258,5 +258,51 @@ module.exports = createCoreController('api::highlight.highlight',{
           return ctx.badRequest('Failed to delete highlights');
         }
 
-    }
+    },
+    async delete(ctx){
+        try {
+            // Get the user from the context
+            const { user } = ctx.state;
+      
+            // Unauthorized response if the user is not logged in
+            if (!user) {
+              return ctx.unauthorized('Please login to delete highlights.');
+            }
+      
+            // Get the articleId from the request params
+            const articleId = ctx.params.id;
+      
+            // Log to confirm parameters
+            // console.log('Article ID:', articleId);
+            // console.log('User ID:', user.id);
+
+            const highlightsToDelete = await strapi.entityService.findMany('api::highlight.highlight',{
+                filters:{
+                    user: user.id,
+                    articleId:articleId,
+                },
+                limit:-1,
+              });
+      
+              const highlightIds = highlightsToDelete.map((highlight) => highlight.id);
+
+              // Step 2: Delete highlights using IDs
+              if (highlightIds.length > 0) {
+                await strapi.db.query('api::highlight.highlight').deleteMany({
+                  where: { id: { $in: highlightIds } },
+                });
+              }
+      
+            // Return success message with deleted count
+            return ctx.send({
+              message: 'Highlights deleted successfully',
+              deletedCount: highlightIds.length , // Return count of deleted records
+            });
+          } catch (err) {
+            console.error('Error deleting highlights:', err);
+      
+            // Handle any errors
+            return ctx.internalServerError('An error occurred while deleting highlights.');
+          }
+        },
 });
