@@ -83,7 +83,65 @@ module.exports = createCoreService('api::highlight.highlight',{
                      orderedArticles = articleIds.map(id=> entries.find(article => article.id === id));
                 }
                 
-                
+                   // Merge highlights into articles
+        for (const article of orderedArticles) {
+            const articleId = article.id;
+
+            // Fetch highlights for the article
+            const articleHighlights = await strapi.entityService.findMany(
+                "api::highlight.highlight",
+                {
+                    filters: {
+                        user: userId,
+                        articleId: articleId,
+                    },
+                    limit: -1,
+                    sort: 'answerId:asc',
+                }
+            );
+
+            // Group and merge highlights
+            const groupedHighlights = articleHighlights.reduce((acc, highlight) => {
+                const { answerId, type } = highlight;
+
+                if (!acc[answerId]) {
+                    acc[answerId] = [];
+                }
+
+                acc[answerId].push(highlight);
+                return acc;
+            }, {});
+
+            const mergeRanges = (ranges) => {
+                if (!ranges.length) return [];
+                ranges.sort((a, b) => a.start - b.start);
+
+                const merged = [];
+                for (const current of ranges) {
+                    const last = merged[merged.length - 1];
+                    if (last && current.start <= last.end) {
+                        last.end = Math.max(last.end, current.end);
+                        last.text = `${last.text} ${current.text}`;
+                    } else {
+                        merged.push({ ...current });
+                    }
+                }
+                return merged;
+            };
+
+            const mergedHighlights = Object.entries(groupedHighlights).map(([answerId, items]) => {
+                const questions = mergeRanges(items.filter(item => item.type === "ques"));
+                const answers = mergeRanges(items.filter(item => item.type === "answer"));
+
+                return {
+                    answerId,
+                    highlights: [...questions, ...answers],
+                };
+            });
+
+            // Attach merged highlights to the article
+            article.mergedHighlights = mergedHighlights;
+        }
             
                 const totalEntries = await strapi.entityService.count('api::article.article',{
                     filters:{
