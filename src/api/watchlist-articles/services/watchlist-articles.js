@@ -30,6 +30,24 @@ module.exports = {
                  
                 const start = (pageNumber-1)*pageSizeNumber;
             //fetch articles based on the extracted company IDs
+
+            const getDateThreeMonthsAgoIST = () => {
+                const currentDate = new Date();
+            
+                // Calculate the date 3 months prior
+                const threeMonthsAgo = new Date(currentDate);
+                threeMonthsAgo.setMonth(currentDate.getMonth() - 3);
+            
+                // Adjust for IST (UTC +5:30)
+                threeMonthsAgo.setHours(threeMonthsAgo.getHours() + 5);
+                threeMonthsAgo.setMinutes(threeMonthsAgo.getMinutes() + 30);
+            
+                return threeMonthsAgo;
+            };
+            
+            const dateThreeMonthsAgoIST = getDateThreeMonthsAgoIST();
+            console.log(dateThreeMonthsAgoIST);
+
             const entries = await strapi.entityService.findMany(
                 'api::article.article',
                 {
@@ -39,6 +57,7 @@ module.exports = {
                         primary_companies:{id:{$in:companyIds}},
                         publishedAt:{
                             $notNull:true,
+                            $gte: dateThreeMonthsAgoIST,
                           }
                     },
                     populate:{
@@ -66,11 +85,14 @@ module.exports = {
                 }
             );
 
+            // console.log(entries);
+                
             const totalEntries = await strapi.entityService.count('api::article.article',{
                 filters:{
                     primary_companies:{id:{$in:companyIds}},
                     publishedAt:{
                         $notNull:true,
+                        $gte: dateThreeMonthsAgoIST,
                       }
                 }
             });
@@ -78,11 +100,16 @@ module.exports = {
             const bookmarkedArticles = await strapi.entityService.findMany('api::bookmark.bookmark', {
                 filters: {
                     bookmarked_by: userId,
+                    article: {
+                        $notNull: true,
+                    },
                 },
                 populate:{
                     article:true,
                 }
             });
+
+           
 
             const BookmarkArticleIds = bookmarkedArticles.map(bookmark => bookmark.article.id);
 
