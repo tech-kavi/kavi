@@ -82,7 +82,9 @@ module.exports = createCoreService('api::highlight.highlight',{
                 // console.log(ctx.request.query.sort[0]);
                 if(ctx.request.query.sort[0] !=='')
                 {
-                     orderedArticles = articleIds.map(id=> entries.find(article => article.id === id));
+                    orderedArticles = articleIds
+                    .map(id => entries.find(article => article.id === id))
+                    .filter(article => article !== undefined);
                 }
 
                 console.log(orderedArticles);
