@@ -213,7 +213,10 @@ module.exports = createCoreController('api::highlight.highlight',{
         try {
           // Fetch all highlights for the article
           const highlights = await strapi.entityService.findMany('api::highlight.highlight', {
-            filters: { articleId },
+            filters: { 
+                articleId:articleId,
+                user:user.id
+            },
           });
 
         
