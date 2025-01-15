@@ -345,8 +345,8 @@ module.exports = (plugin) => {
              // Log the members field for debugging
             //  console.log('Requesting user members:', requestingUser.members);
          
-             // Check if the requesting user's "slotFilled" field has a value >= 1
-             if (requestingUser.slotFilled == requestingUser.slots) {
+             // Check if the requesting user's "slotFilled" field has a value is less than slots
+             if (requestingUser.slotFilled >= requestingUser.slots) {
                throw new ApplicationError('All seats occupied. Extend your plan to add members', 403);
              }
   
@@ -437,6 +437,7 @@ module.exports = (plugin) => {
         password:randomPassword,
         provider: 'local',
         slots:requestingUser.slots,
+        slotFilled:requestingUser.slotFilled,
         orgID:requestingUser.orgID,
         expiry:requestingUser.expiry,
       };
@@ -514,7 +515,7 @@ module.exports = (plugin) => {
         // Set the user to be promoted as admin
         await strapi.query('plugin::users-permissions.user').update({
         where: { id: userToPromote.id },
-        data: { role: adminRole.id, slotFilled:requestingUser.slotFilled },
+        data: { role: adminRole.id, slotFilled:requestingUser.slotFilled, slots:requestingUser.slots },
         });
 
         // Set the requesting user as member
@@ -524,10 +525,10 @@ module.exports = (plugin) => {
         });
 
         // Decrement the requesting user's members field by 1
-        requestingUser.slotFilled = 0;
+        requestingUser.slotFilled = 1;
         await strapi.query('plugin::users-permissions.user').update({
         where: { id: requestingUser.id },
-        data: { slotFilled: requestingUser.slotFilled },
+        data: { slotFilled: requestingUser.slotFilled, slots:requestingUser.slots },
         });
         await sendAdminEmail(userToPromote.email,userToPromote.first_name,userToPromote.slots,userToPromote.expiry);
         ctx.send('User promoted to admin successfully');
