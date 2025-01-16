@@ -140,6 +140,11 @@
       "relation": "oneToMany",
       "target": "api::highlight.highlight",
       "mappedBy": "user"
+    },
+    "loginKey": {
+      "type": "string",
+      "private": true,
+      "default": "0"
     }
   }
 }

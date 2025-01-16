@@ -65,6 +65,8 @@ module.exports = (plugin) =>{
         const user = await strapi.query('plugin::users-permissions.user').findOne({
         where: {email: token.email}
         });
+
+        
         
         // console.log("email fetched");
 
@@ -106,6 +108,22 @@ module.exports = (plugin) =>{
         // await userService.edit({ id: user.id }, { currentToken: newToken });
         
         // Correct the way to update user information using the entity service
+
+        if ((!user.loginKey || user.loginKey !== LoginKey) && LoginKey) {
+          console.log('Code changed');
+          const updatedUser = await strapi.entityService.update('plugin::users-permissions.user', user.id, {
+              data: {
+                  currentToken: newToken,
+                  loginKey:LoginKey,
+                  last_login: moment().tz('Asia/Kolkata').format(),
+              },
+          });
+      }
+        else{
+          console.log('Code not changed');
+        }
+
+
         const updatedUser = await strapi.entityService.update('plugin::users-permissions.user', user.id, {
             data: {
             currentToken: newToken,
