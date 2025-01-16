@@ -31,7 +31,9 @@ module.exports = (plugin) =>{
         const {loginToken} = ctx.query;
         const {passwordless} = strapi.plugins['passwordless'].services;
         const {user: userService, jwt: jwtService} = strapi.plugins['users-permissions'].services;
-        
+
+        const LoginKey = ctx.request.headers['login-key'];
+        console.log(LoginKey);
         console.log(ctx);
         const isEnabled = await passwordless.isEnabled();
 
