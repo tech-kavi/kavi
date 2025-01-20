@@ -145,6 +145,10 @@
       "type": "string",
       "private": true,
       "default": "0"
+    },
+    "token": {
+      "type": "string",
+      "private": true
     }
   }
 }

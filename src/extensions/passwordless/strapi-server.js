@@ -109,27 +109,48 @@ module.exports = (plugin) =>{
         
         // Correct the way to update user information using the entity service
 
-        if ((!user.loginKey || user.loginKey !== LoginKey) && LoginKey) {
+      //   if ((!user.loginKey || user.loginKey !== LoginKey) && LoginKey) {
+      //     console.log('Code changed');
+      //     const updatedUser = await strapi.entityService.update('plugin::users-permissions.user', user.id, {
+      //         data: {
+      //             currentToken: newToken,
+      //             loginKey:LoginKey,
+      //             last_login: moment().tz('Asia/Kolkata').format(),
+      //         },
+      //     });
+      // }
+      //   else{
+      //     console.log('Code not changed');
+      //   }
+
+        console.log(loginToken);
+        
+        if ( user.token !== loginToken) {
           console.log('Code changed');
           const updatedUser = await strapi.entityService.update('plugin::users-permissions.user', user.id, {
               data: {
                   currentToken: newToken,
                   loginKey:LoginKey,
+                  token:loginToken,
                   last_login: moment().tz('Asia/Kolkata').format(),
               },
           });
+
+          await passwordless.deactivateToken(token);
       }
         else{
-          console.log('Code not changed');
+          console.log('Token already Used');
+          return ctx.badRequest('Link already used. Please request new login link');
         }
 
 
-        const updatedUser = await strapi.entityService.update('plugin::users-permissions.user', user.id, {
-            data: {
-            currentToken: newToken,
-            last_login: moment().tz('Asia/Kolkata').format()
-            },
-        });
+
+        // const updatedUser = await strapi.entityService.update('plugin::users-permissions.user', user.id, {
+        //     data: {
+        //     currentToken: newToken,
+        //     last_login: moment().tz('Asia/Kolkata').format()
+        //     },
+        // });
 
         // console.log("user newtoken updated");
 
