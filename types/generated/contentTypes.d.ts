@@ -929,7 +929,14 @@ export interface ApiArticleArticle extends Schema.CollectionType {
       'api::bookmark.bookmark'
     >;
     expert_type: Attribute.Enumeration<
-      ['Competitor', 'Customer', 'Industry Expert', 'Former', 'Partner']
+      [
+        'Competitor',
+        'Customer',
+        'Industry Expert',
+        'Former',
+        'Partner',
+        'Reference'
+      ]
     > &
       Attribute.Required &
       Attribute.DefaultTo<'Industry Expert'>;

@@ -78,7 +78,8 @@
         "Customer",
         "Industry Expert",
         "Former",
-        "Partner"
+        "Partner",
+        "Reference"
       ],
       "default": "Industry Expert",
       "required": true
