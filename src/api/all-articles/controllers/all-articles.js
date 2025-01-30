@@ -56,7 +56,7 @@ module.exports = {
 
 
 // Initial query for the current month's articles
-  let articles = await strapi.entityService.findMany('api::article.article',ctx);
+  let articles = await strapi.entityService.findMany('api::article.article',ctx.query);
 
   const paginatedArticles = articles.slice((pageInt-1)* pageSizeInt, pageInt*pageSizeInt);
 
