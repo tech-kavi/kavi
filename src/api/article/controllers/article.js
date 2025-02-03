@@ -274,39 +274,67 @@ module.exports = createCoreController('api::article.article',{
                 // console.log('article already opened',isArticleAlreadyOpened);
 
                 let updatedEntries;
-    
-                if (!isArticleAlreadyOpened) 
-                {
-                // Add the new entry if it's not already in today's list
 
-                    if(TotalLimit<=0)
-                    {
+                let existingEntries = userDetails.articlesOpenedToday.map(entry => ({
+                    article: entry.article.id, 
+                    time: entry.time
+                }));
+
+                
+    
+                // if (!isArticleAlreadyOpened) 
+                // {
+                // // Add the new entry if it's not already in today's list
+
+                //     if(TotalLimit<=0)
+                //     {
+                //         console.log('Trial limit exceeded');
+                //         return ctx.badRequest('Trial access limit exceeded. Please contact KAVI Team for further assistance.');
+                //     }
+
+                //     // articlesOpenedToday.push({
+                //     //     article: ctx.params.id,
+                //     //     time: moment().tz('Asia/Kolkata').format(), // Current time
+                //     // });
+
+                //     const newEntry = {
+                //         article: ctx.params.id,
+                //         time: moment().tz('Asia/Kolkata').format(),
+                //     };
+                    
+                  
+                    
+                //     updatedEntries = [...existingEntries, newEntry];
+
+
+        
+                //     OpensToday = OpensToday+1;
+                //     TotalLimit = TotalLimit-1;
+    
+                // }
+
+
+                if (isArticleAlreadyOpened) {
+                    updatedEntries = existingEntries;
+                } else {
+                    // Check trial limit before adding a new entry
+                    if (TotalLimit <= 0) {
                         console.log('Trial limit exceeded');
                         return ctx.badRequest('Trial access limit exceeded. Please contact KAVI Team for further assistance.');
                     }
-
-                    // articlesOpenedToday.push({
-                    //     article: ctx.params.id,
-                    //     time: moment().tz('Asia/Kolkata').format(), // Current time
-                    // });
-
+                
+                    // Create new entry
                     const newEntry = {
                         article: ctx.params.id,
                         time: moment().tz('Asia/Kolkata').format(),
                     };
-                    
-                    const existingEntries = userDetails.articlesOpenedToday.map(entry => ({
-                        article: entry.article.id, 
-                        time: entry.time
-                    }));
-                    
+                
+                    // Append new entry while keeping existing ones
                     updatedEntries = [...existingEntries, newEntry];
-
-
-        
-                    OpensToday = OpensToday+1;
-                    TotalLimit = TotalLimit-1;
-    
+                
+                    // Update limits
+                    OpensToday += 1;
+                    TotalLimit -= 1;
                 }
     
                 // Update the user with the updated articlesOpenedToday
