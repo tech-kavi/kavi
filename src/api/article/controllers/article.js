@@ -286,6 +286,8 @@ module.exports = createCoreController('api::article.article',{
                         article: ctx.params.id,
                         time: moment().tz('Asia/Kolkata').format(), // Current time
                     });
+
+
         
                     OpensToday = OpensToday+1;
                     TotalLimit = TotalLimit-1;

@@ -153,8 +153,7 @@
     "articlesOpenedToday": {
       "type": "component",
       "repeatable": true,
-      "component": "open-details.open-details",
-      "private": true
+      "component": "open-details.open-details"
     },
     "DailyLimit": {
       "type": "integer",

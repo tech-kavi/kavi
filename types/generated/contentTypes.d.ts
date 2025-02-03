@@ -770,11 +770,7 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
     >;
     loginKey: Attribute.String & Attribute.Private & Attribute.DefaultTo<'0'>;
     token: Attribute.String & Attribute.Private;
-    articlesOpenedToday: Attribute.Component<
-      'open-details.open-details',
-      true
-    > &
-      Attribute.Private;
+    articlesOpenedToday: Attribute.Component<'open-details.open-details', true>;
     DailyLimit: Attribute.Integer & Attribute.DefaultTo<30>;
     Type: Attribute.Enumeration<['Trial', 'Subscriber']> &
       Attribute.Required &
