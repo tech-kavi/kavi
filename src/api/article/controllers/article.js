@@ -248,10 +248,11 @@ module.exports = createCoreController('api::article.article',{
 
                 // Filter articlesOpenedToday to keep only today's entries
                 let articlesOpenedToday = userDetails.articlesOpenedToday?.filter((entry) => {
-                const entryDate = moment(entry.time).startOf('day'); // Start of the day for the entry's date
+                const entryDate = moment(entry.time).tz('Asia/Kolkata').startOf('day'); // Start of the day for the entry's date
                 return entryDate.isSame(currentDate);
                 }) || [];
-    
+                
+                console.log(articlesOpenedToday);
     
                 if(articlesOpenedToday.length==0){
                     OpensToday=0;
@@ -271,6 +272,8 @@ module.exports = createCoreController('api::article.article',{
                 );
     
                 // console.log('article already opened',isArticleAlreadyOpened);
+
+                let updatedEntries;
     
                 if (!isArticleAlreadyOpened) 
                 {
@@ -282,10 +285,22 @@ module.exports = createCoreController('api::article.article',{
                         return ctx.badRequest('Trial access limit exceeded. Please contact KAVI Team for further assistance.');
                     }
 
-                    articlesOpenedToday.push({
+                    // articlesOpenedToday.push({
+                    //     article: ctx.params.id,
+                    //     time: moment().tz('Asia/Kolkata').format(), // Current time
+                    // });
+
+                    const newEntry = {
                         article: ctx.params.id,
-                        time: moment().tz('Asia/Kolkata').format(), // Current time
-                    });
+                        time: moment().tz('Asia/Kolkata').format(),
+                    };
+                    
+                    const existingEntries = userDetails.articlesOpenedToday.map(entry => ({
+                        article: entry.article.id, 
+                        time: entry.time
+                    }));
+                    
+                    updatedEntries = [...existingEntries, newEntry];
 
 
         
@@ -297,7 +312,7 @@ module.exports = createCoreController('api::article.article',{
                 // Update the user with the updated articlesOpenedToday
                 const updatedUser = await strapi.entityService.update('plugin::users-permissions.user', userDetails.id, {
                 data: {
-                    articlesOpenedToday:articlesOpenedToday,
+                    articlesOpenedToday:updatedEntries,
                     OpensToday:OpensToday,
                     TotalLimit:TotalLimit,
                     DailyLimit:DailyLimit,
