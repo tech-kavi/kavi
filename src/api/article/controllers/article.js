@@ -8,6 +8,7 @@ const likedArticle = require('../../liked-article/services/liked-article');
  */
 
 const { createCoreController } = require('@strapi/strapi').factories;
+const moment = require('moment-timezone');
 
 module.exports = createCoreController('api::article.article',{
 
@@ -207,8 +208,104 @@ module.exports = createCoreController('api::article.article',{
             console.log("logged out during fetching transcript ",user);
             return ctx.unauthorized("you must be logged in");
         }
+
+        const userDetails = await strapi.query('plugin::users-permissions.user').findOne({
+            where: {email: user.email},
+            populate:{articlesOpenedToday:{
+                populate:{
+                    article:true,
+                }
+            }}
+            });
+
+            console.log(userDetails);
+
+
+            if(userDetails.Type ==='Trial'){
+
+                let DailyLimit=userDetails.DailyLimit;
+                let TotalLimit=userDetails.TotalLimit;
+                let OpensToday=userDetails.OpensToday;
+
+                if(DailyLimit == null)
+                {
+                    DailyLimit = 30;
+                }
+                if(TotalLimit == null)
+                {
+                    TotalLimit = 100;
+                }
+                if(OpensToday == null)
+                {
+                    OpensToday = 0;
+                }
+
+
+
+
+                    // Get current date and time in Asia/Kolkata timezone
+                const currentDate = moment().tz('Asia/Kolkata').startOf('day'); // Start of the day (00:00:00)
+
+                // Filter articlesOpenedToday to keep only today's entries
+                let articlesOpenedToday = userDetails.articlesOpenedToday?.filter((entry) => {
+                const entryDate = moment(entry.time).startOf('day'); // Start of the day for the entry's date
+                return entryDate.isSame(currentDate);
+                }) || [];
     
-        const currentArticleId = ctx.params.id;
+    
+                if(articlesOpenedToday.length==0){
+                    OpensToday=0;
+                }
+    
+                if(OpensToday>=DailyLimit)
+                {
+                    console.log('Daily limit exceeded');
+                    return ctx.badRequest('Daily limit exceeded. Please contact KAVI Team for further assistance.');
+                }
+    
+                
+    
+                // Check if the article is already in today's list
+                const isArticleAlreadyOpened = articlesOpenedToday.some(
+                (entry) => entry.article.id == ctx.params.id
+                );
+    
+                // console.log('article already opened',isArticleAlreadyOpened);
+    
+                if (!isArticleAlreadyOpened) 
+                {
+                // Add the new entry if it's not already in today's list
+
+                    if(TotalLimit<=0)
+                    {
+                        console.log('Trial limit exceeded');
+                        return ctx.badRequest('Trial access limit exceeded. Please contact KAVI Team for further assistance.');
+                    }
+
+                    articlesOpenedToday.push({
+                        article: ctx.params.id,
+                        time: moment().tz('Asia/Kolkata').format(), // Current time
+                    });
+        
+                    OpensToday = OpensToday+1;
+                    TotalLimit = TotalLimit-1;
+    
+                }
+    
+                // Update the user with the updated articlesOpenedToday
+                const updatedUser = await strapi.entityService.update('plugin::users-permissions.user', userDetails.id, {
+                data: {
+                    articlesOpenedToday:articlesOpenedToday,
+                    OpensToday:OpensToday,
+                    TotalLimit:TotalLimit,
+                    DailyLimit:DailyLimit,
+                },
+                });
+
+            }
+
+    
+             
     
         ctx.query = {
             ...ctx.query,
@@ -265,6 +362,8 @@ module.exports = createCoreController('api::article.article',{
                 }
             }
         };
+
+
     
         const article = await super.findOne(ctx);
     
@@ -276,162 +375,8 @@ module.exports = createCoreController('api::article.article',{
 
        const read_time=this.countWordsInFields(article);
 
-    
-    //     const primaryCompanies = article.data.attributes.primary_companies.data.map(company => company.id);
-    
-    //     // Fetching articles & secondary articles for primary companies 
-    //     const primaryArticlesPromises = primaryCompanies.map(async (company) => {
-    //         const companyWithArticles = await strapi.entityService.findOne(
-    //             'api::company.company', company,
-    //             {
-    //                 populate: {
-    //                     articles: {
-    //                         populate: {
-    //                             primary_companies: {
-    //                                 fields: ['name'],
-    //                                 populate: {
-    //                                     logo: true,
-    //                                 },
-    //                                 filters:{
-    //                                     publishedAt:{
-    //                                         $notNull:true,
-    //                                     }
-    //                                 }
-    //                             },
-    //                             industry: {
-    //                                 filters:{
-    //                                     publishedAt:{
-    //                                         $notNull:true,
-    //                                     }
-    //                                 }
-    //                             },
-    //                             brief:true,
-    //                             table_with_content: {
-    //                             populate: {
-    //                                 ques: true,
-    //                             }
-    //                             }
-    //                         },
-    //                         filters: {
-    //                             publishedAt: {
-    //                                 $notNull: true,
-    //                             },
-    //                         },
-    
-    //                     },
-    //                     secondary_articles: {
-    //                         populate: {
-    //                             primary_companies: {
-    //                                 fields: ['name'],
-    //                                 populate: {
-    //                                     logo: true,
-    //                                 },
-    //                                 filters:{
-    //                                     publishedAt:{
-    //                                         $notNull:true,
-    //                                     }
-    //                                 }
-    //                             },
-    //                             industry: {
-    //                                 filters:{
-    //                                     publishedAt:{
-    //                                         $notNull:true,
-    //                                     }
-    //                                 }
-    //                             },
-    //                             brief:true,
-    //                             table_with_content: {
-    //                             populate: {
-    //                                 ques: true,
-    //                             }
-    //                         }
-    //                         },
-    //                         filters: {
-    //                             publishedAt: {
-    //                                 $notNull: true,
-    //                             }
-    //                         }
-    //                     },
-    //                 }
-    //             }
-    //         );
-    //         return {
-    //             articles: companyWithArticles.articles,
-    //             secondary_articles: companyWithArticles.secondary_articles,
-    //         };
-    //     });
-    
-    //     const primaryArticlesResults = await Promise.all(primaryArticlesPromises);
-    
-    //     let relatedArticles = primaryArticlesResults.flatMap(result => [...result.articles, ...result.secondary_articles]);
-    //     relatedArticles = relatedArticles.filter(x => x.id != currentArticleId);
-
-    //     // console.log(relatedArticles);
-    
-    //     // Fetch sub-industry and industry articles only if sub-industry is not "Miscellaneous"
-    //     const subIndustry = article.data.attributes.sub_industries.data[0]?.attributes.name;
-    //     if (subIndustry && subIndustry !== "Miscellaneous" && subIndustry !== "Marketplace" && subIndustry !== "Diversified") {
-    //         // If we don't have enough articles, fetch sub-industry articles
-    //         if (relatedArticles.length < 3) {
-    //             const subIndustryArticles = await strapi.entityService.findMany('api::article.article', {
-    //                 filters: {
-    //                     sub_industries: { name: subIndustry },
-    //                     publishedAt: { $notNull: true },
-    //                     id: { $ne: currentArticleId }
-    //                 },
-    //                 populate: {
-    //                     primary_companies: {
-    //                         fields: ['name'],
-    //                         populate: { logo: true },
-    //                         filters:{
-    //                             publishedAt:{
-    //                                 $notNull:true,
-    //                             }
-    //                         }
-    //                     },
-    //                     industry: {
-    //                         filters:{
-    //                             publishedAt:{
-    //                                 $notNull:true,
-    //                             }
-    //                         }
-    //                     },
-    //                     brief:true,
-    //                     table_with_content: {
-    //                             populate: {
-    //                                 ques: true,
-    //                             }
-    //                     }
-    //                 }
-    //             });
-    //             relatedArticles.push(...subIndustryArticles);
-    //         }
-    
-         
-    //     }
-
-       
-
-    //     // //remove duplicate articles by ID using a Set
-    //     relatedArticles = Array.from(new Set(relatedArticles.map(article => article.id)))
-    //     .map(id => relatedArticles.find(article => article.id === id));
-
-    //     // Sort related articles by latest publishedAt date
-    // relatedArticles = relatedArticles.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
-    
-    //     // Ensure only 3 related articles are returned
-    //     relatedArticles = relatedArticles.slice(0, 3);
-
-    //     //calculate read time for each article
-    // const RelatedArticlesWithReadTime = relatedArticles.map(article =>{
-      
-    //     const readTime = this.countWordsInFieldsOfRelatedArticles(article);
         
-    //     return{
-    //       ...article,
-    //       read_time:readTime,
-    //     };
-    //   })
+    
     
         // Fetching bookmarked, liked, and disliked articles for the user
         const [bookmarkedArticles, likedArticles, dislikedArticles] = await Promise.all([

@@ -49,6 +49,21 @@ export interface CompanyRelatedCompanies extends Schema.Component {
   };
 }
 
+export interface OpenDetailsOpenDetails extends Schema.Component {
+  collectionName: 'components_open_details_open_details';
+  info: {
+    displayName: 'Open-details';
+  };
+  attributes: {
+    article: Attribute.Relation<
+      'open-details.open-details',
+      'oneToOne',
+      'api::article.article'
+    >;
+    time: Attribute.DateTime;
+  };
+}
+
 export interface QuestionAnswerQues extends Schema.Component {
   collectionName: 'components_question_answer_ques';
   info: {
@@ -81,6 +96,7 @@ declare module '@strapi/types' {
       'articletags.local-tags': ArticletagsLocalTags;
       'brief.briefs': BriefBriefs;
       'company.related-companies': CompanyRelatedCompanies;
+      'open-details.open-details': OpenDetailsOpenDetails;
       'question-answer.ques': QuestionAnswerQues;
       'table-of-content.index': TableOfContentIndex;
     }

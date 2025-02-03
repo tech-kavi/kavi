@@ -149,6 +149,32 @@
     "token": {
       "type": "string",
       "private": true
+    },
+    "articlesOpenedToday": {
+      "type": "component",
+      "repeatable": true,
+      "component": "open-details.open-details",
+      "private": true
+    },
+    "DailyLimit": {
+      "type": "integer",
+      "default": 30
+    },
+    "Type": {
+      "type": "enumeration",
+      "enum": [
+        "Trial",
+        "Subscriber"
+      ],
+      "default": "Subscriber",
+      "required": true
+    },
+    "TotalLimit": {
+      "type": "integer",
+      "default": 100
+    },
+    "OpensToday": {
+      "type": "integer"
     }
   }
 }

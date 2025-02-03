@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_open_details_open_details",
+  "info": {
+    "displayName": "Open-details"
+  },
+  "options": {},
+  "attributes": {
+    "article": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::article.article"
+    },
+    "time": {
+      "type": "datetime"
+    }
+  }
+}
