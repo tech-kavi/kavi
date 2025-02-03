@@ -258,11 +258,11 @@ module.exports = createCoreController('api::article.article',{
                     OpensToday=0;
                 }
     
-                if(OpensToday>=DailyLimit)
-                {
-                    console.log('Daily limit exceeded');
-                    return ctx.badRequest('Daily limit exceeded. Please contact KAVI Team for further assistance.');
-                }
+                // if(OpensToday>=DailyLimit)
+                // {
+                //     console.log('Daily limit exceeded');
+                //     return ctx.badRequest('Daily limit exceeded. Please contact KAVI Team for further assistance.');
+                // }
     
                 
     
@@ -318,6 +318,14 @@ module.exports = createCoreController('api::article.article',{
                     updatedEntries = existingEntries;
                 } else {
                     // Check trial limit before adding a new entry
+
+                    if(OpensToday>=DailyLimit)
+                        {
+                            console.log('Daily limit exceeded');
+                            return ctx.badRequest('Daily limit exceeded. Please contact KAVI Team for further assistance.');
+                        }
+
+                        
                     if (TotalLimit <= 0) {
                         console.log('Trial limit exceeded');
                         return ctx.badRequest('Trial access limit exceeded. Please contact KAVI Team for further assistance.');
