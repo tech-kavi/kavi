@@ -16,69 +16,6 @@ module.exports = createCoreController('api::industry.industry',{
             return ctx.unauthorized("you must be logged in");
         }
         
-        // ctx.query = {
-        //     ...ctx.query,
-        //     locale:'en',
-        //     populate:{
-        //         companies:
-        //         {
-        //             populate:{
-        //                 logo:true,
-        //                 articles:{
-        //                     count:true,
-        //                     filters:{
-        //                         publishedAt:{
-        //                             $notNull:true,
-        //                         }
-        //                     }
-        //                 },
-        //                 ipo:true,
-        //             },
-        //             filters:{
-        //                 publishedAt:{
-        //                     $notNull:true,
-        //                 },
-        //             },
-        //         },
-        //         articles:{
-        //             filters:{
-        //                 publishedAt:{
-        //                     $notNull:true,
-        //                 }
-        //             }
-        //         },
-        //        top_companies:{
-                        
-        //                 populate:{
-        //                     logo:true,
-        //                     articles:true,
-        //                     ipo:true,
-        //                 },
-        //                 filters:{
-        //                     publishedAt:{
-        //                         $notNull:true,
-        //                     },
-        //                 },
-        //        },
-        //        sub_industries:{
-        //         fields:['name'],
-        //         filters:{
-        //             publishedAt:{
-        //                 $notNull:true,
-        //             },
-        //         },
-        //        }
-        //     },
-        //     filters:{
-        //         ...ctx.request.query.filters,
-        //         publishedAt:{
-        //             $notNull:true,
-        //         },
-        //     },
-        //     sort:['name']
-        // };
-
-
         ctx.query = {
             ...ctx.query,
             locale:'en',
@@ -97,7 +34,6 @@ module.exports = createCoreController('api::industry.industry',{
                         },
                         ipo:true,
                     },
-                    sort:['name'],
                     filters:{
                         publishedAt:{
                             $notNull:true,
@@ -105,8 +41,7 @@ module.exports = createCoreController('api::industry.industry',{
                     },
                 },
                 articles:{
-                    count:true,
-                    filters:{ 
+                    filters:{
                         publishedAt:{
                             $notNull:true,
                         }
@@ -116,14 +51,7 @@ module.exports = createCoreController('api::industry.industry',{
                         
                         populate:{
                             logo:true,
-                            articles:{
-                                count:true,
-                                filters:{
-                                    publishedAt:{
-                                        $notNull:true,
-                                    }
-                                }
-                            },
+                            articles:true,
                             ipo:true,
                         },
                         filters:{
@@ -150,6 +78,78 @@ module.exports = createCoreController('api::industry.industry',{
             sort:['name']
         };
 
+
+        // ctx.query = {
+        //     ...ctx.query,
+        //     locale:'en',
+        //     populate:{
+        //         companies:
+        //         {
+        //             populate:{
+        //                 logo:true,
+        //                 articles:{
+        //                     count:true,
+        //                     filters:{
+        //                         publishedAt:{
+        //                             $notNull:true,
+        //                         }
+        //                     }
+        //                 },
+        //                 ipo:true,
+        //             },
+        //             sort:['name'],
+        //             filters:{
+        //                 publishedAt:{
+        //                     $notNull:true,
+        //                 },
+        //             },
+        //         },
+        //         articles:{
+        //             count:true,
+        //             filters:{ 
+        //                 publishedAt:{
+        //                     $notNull:true,
+        //                 }
+        //             }
+        //         },
+        //        top_companies:{
+                        
+        //                 populate:{
+        //                     logo:true,
+        //                     articles:{
+        //                         count:true,
+        //                         filters:{
+        //                             publishedAt:{
+        //                                 $notNull:true,
+        //                             }
+        //                         }
+        //                     },
+        //                     ipo:true,
+        //                 },
+        //                 filters:{
+        //                     publishedAt:{
+        //                         $notNull:true,
+        //                     },
+        //                 },
+        //        },
+        //        sub_industries:{
+        //         fields:['name'],
+        //         filters:{
+        //             publishedAt:{
+        //                 $notNull:true,
+        //             },
+        //         },
+        //        }
+        //     },
+        //     filters:{
+        //         ...ctx.request.query.filters,
+        //         publishedAt:{
+        //             $notNull:true,
+        //         },
+        //     },
+        //     sort:['name']
+        // };
+
         const industries=await super.find(ctx);
 
         //to check watchlist status
@@ -173,7 +173,7 @@ module.exports = createCoreController('api::industry.industry',{
         const industriesWithArticleCounts = industries.data.map(industry =>{
             // const totalCompanies = industry.attributes.companies.data.length;
             // console.log(industry.attributes.articles);
-            const totalArticles = industry.attributes.articles.data.attributes.count;
+            const totalArticles = industry.attributes.articles.data.length;
 
             // Function to check if an article was published in the last 30 days
             // const isPublishedInLast30Days = (publishDate) => {
@@ -192,7 +192,7 @@ module.exports = createCoreController('api::industry.industry',{
 
             //counting articles of top companies
             const topcompaniesWithArticleCount = industry.attributes.top_companies.data.map(topcompany => {
-                const articleCount = topcompany.attributes.articles.data.attributes.count;
+                const articleCount = topcompany.attributes.articles.data.length;
 
                 const {articles, ...topcompanyAttributesWithoutArticles} = topcompany.attributes;
                 return {
