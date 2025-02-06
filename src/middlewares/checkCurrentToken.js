@@ -16,6 +16,15 @@ module.exports = () => {
     //   console.log(ctx.request);
 
       const token = authorization.split(' ')[1];
+
+          // Check if it's an API token (Strapi's default way)
+      // const isApiTokenValid = await strapi.service('admin::api-token').getBy({ accessKey: token });
+
+      // if (isApiTokenValid) {
+      //   return await next(); // Allow API tokens to work
+      // }
+
+
       let decoded;
       try {
         decoded = jwt.verify(token, strapi.config.get('plugin.users-permissions.jwtSecret'));

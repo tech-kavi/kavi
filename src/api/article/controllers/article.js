@@ -245,14 +245,16 @@ module.exports = createCoreController('api::article.article',{
 
                     // Get current date and time in Asia/Kolkata timezone
                 const currentDate = moment().tz('Asia/Kolkata').startOf('day'); // Start of the day (00:00:00)
+                // console.log(currentDate);
 
                 // Filter articlesOpenedToday to keep only today's entries
                 let articlesOpenedToday = userDetails.articlesOpenedToday?.filter((entry) => {
                 const entryDate = moment(entry.time).tz('Asia/Kolkata').startOf('day'); // Start of the day for the entry's date
+                // console.log(entryDate);
                 return entryDate.isSame(currentDate);
                 }) || [];
                 
-                console.log(articlesOpenedToday);
+                // console.log(articlesOpenedToday);
     
                 if(articlesOpenedToday.length==0){
                     OpensToday=0;
