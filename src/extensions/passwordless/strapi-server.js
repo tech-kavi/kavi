@@ -34,7 +34,7 @@ module.exports = (plugin) =>{
 
         const LoginKey = ctx.request.headers['login-key'];
         console.log(LoginKey);
-        console.log(ctx);
+        // console.log(ctx);
         const isEnabled = await passwordless.isEnabled();
 
         if (!isEnabled) {
@@ -176,7 +176,7 @@ module.exports = (plugin) =>{
         ctx.set('Pragma', 'no-cache');
         ctx.set('Expires', '0');
 
-        console.log(ctx);
+        // console.log(ctx);
         ctx.send({
         jwt: newToken,
         user: sanitizedUserInfo,

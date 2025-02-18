@@ -25,50 +25,97 @@ module.exports = createCoreController('api::read-article.read-article',{
                 }
             },
             populate:{
-                article:{
-                    fields:['title'],
-                }
+                article:
+                {
+                    fields:['id'],
+                },
+            },
+            pagination: {
+                limit: -1, 
             }
         };
 
-        const result = await super.find(ctx);
+        // const result = await super.find(ctx);
+        const result = await strapi.entityService.findMany('api::read-article.read-article',ctx.query);
         return result;
     },
 
     async create(ctx){
-        const user = ctx.state.user;
+        const {user} = ctx.state;
+ 
         if(!user){
-            return ctx.badRequest('User not authenticated');
+            return ctx.unauthorized('Please login');
         }
 
-        ctx.request.body.data.user.connect[0]=user.id;
-        ctx.request.body.data={
-            ...ctx.request.body.data,
-            read_time:new Date().toISOString(),
-        }
-        
-        const articleId=ctx.request.body.data.article.connect[0];
+        try{
 
-        const existingEntity = await strapi.entityService.findMany(
-            'api::read-article.read-article',
-            {
-                filters:{
-                    user:user.id,
-                    article:articleId,
+            const {data} = ctx.request.body;
+            const articleId = data?.article?.connect[0];
+            const userId = data?.user?.connect[0];
+            const timeSpent = data?.timeSpent;
+            const scroll = data?.scroll;
+           
+
+
+            
+            
+
+            if(!articleId || !userId){
+                return ctx.badRequest('article id and user id both needed');
+            }
+
+            //check if read already exists
+
+            const existingRead = await strapi.entityService.findMany(
+                'api::read-article.read-article',
+                {
+                    filters:{
+                        article:articleId,
+                        user:user.id,
+                    },
+                    limit:1,
                 }
-            }
-        );
-        
-        if(existingEntity && existingEntity.length==0)
-            {
-                const result = await super.create(ctx);
-                return result;
-            }else{
-                return "success";
-            }
-       
+            );
 
+            let newRead;
 
+          console.log(existingRead);
+
+            if(existingRead && existingRead.length >0)
+                {
+                   newRead = await strapi.entityService.update('api::read-article.read-article',existingRead[0].id,{
+                       data:{
+                           article: articleId,
+                           user: user.id,
+                           time_spent:timeSpent>0?existingRead[0].time_spent+timeSpent:existingRead[0].time_spent,
+                           scroll:existingRead[0].scroll>scroll?existingRead[0].scroll:scroll, 
+                           read_time:new Date().toISOString(),
+                       },
+                   });
+                    
+                }else{
+                    //if it not already read
+                     newRead = await strapi.entityService.create('api::read-article.read-article',{
+                        data:{
+                            article: articleId,
+                            user: user.id,
+                            scroll:scroll,
+                            time_spent:timeSpent,
+                            read_time:new Date().toISOString(),
+                            publishedAt: new Date(),
+                        },
+                    });
+
+                    
+                }
+
+                return ctx.send(newRead);
+
+        }
+        catch(err)
+        {
+            return ctx.badRequest('Failed to add in reads');
+        }
 
     }
 

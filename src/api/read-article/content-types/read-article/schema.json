@@ -4,7 +4,8 @@
   "info": {
     "singularName": "read-article",
     "pluralName": "read-articles",
-    "displayName": "ReadArticle"
+    "displayName": "ReadArticle",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -13,18 +14,23 @@
   "attributes": {
     "user": {
       "type": "relation",
-      "relation": "manyToOne",
-      "target": "plugin::users-permissions.user",
-      "inversedBy": "read_articles"
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
     },
     "article": {
       "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::article.article",
-      "inversedBy": "read_details"
+      "relation": "oneToOne",
+      "target": "api::article.article"
     },
     "read_time": {
       "type": "datetime"
+    },
+    "scroll": {
+      "type": "integer"
+    },
+    "time_spent": {
+      "type": "biginteger",
+      "default": "0"
     }
   }
 }

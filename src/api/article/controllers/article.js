@@ -218,7 +218,7 @@ module.exports = createCoreController('api::article.article',{
             }}
             });
 
-            console.log(userDetails);
+            // console.log(userDetails);
 
 
             if(userDetails.Type ==='Trial'){

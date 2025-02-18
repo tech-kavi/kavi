@@ -18,7 +18,7 @@ function countWordsInFieldsOfRelatedArticles(article){
 
       delete article.brief;
   }
-  console.log(totalWordCount);
+//   console.log(totalWordCount);
 
 
 
@@ -39,7 +39,7 @@ function countWordsInFieldsOfRelatedArticles(article){
       delete article?.table_with_content;
   }
 
-  console.log(totalWordCount);
+//   console.log(totalWordCount);
 
   const readTime = Math.ceil(totalWordCount/process.env.WPM);
   return readTime;

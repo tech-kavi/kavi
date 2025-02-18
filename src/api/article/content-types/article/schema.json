@@ -88,12 +88,6 @@
       "type": "integer",
       "required": true
     },
-    "read_details": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::read-article.read-article",
-      "mappedBy": "article"
-    },
     "like_details": {
       "type": "relation",
       "relation": "oneToMany",

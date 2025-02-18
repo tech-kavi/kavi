@@ -739,11 +739,6 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
     slotFilled: Attribute.Integer;
     expiry: Attribute.DateTime;
     currentToken: Attribute.Text & Attribute.Private;
-    read_articles: Attribute.Relation<
-      'plugin::users-permissions.user',
-      'oneToMany',
-      'api::read-article.read-article'
-    >;
     liked_articles: Attribute.Relation<
       'plugin::users-permissions.user',
       'oneToMany',
@@ -948,11 +943,6 @@ export interface ApiArticleArticle extends Schema.CollectionType {
       Attribute.Required &
       Attribute.DefaultTo<'Industry Expert'>;
     est_read: Attribute.Integer & Attribute.Required;
-    read_details: Attribute.Relation<
-      'api::article.article',
-      'oneToMany',
-      'api::read-article.read-article'
-    >;
     like_details: Attribute.Relation<
       'api::article.article',
       'oneToMany',
@@ -1308,6 +1298,7 @@ export interface ApiReadArticleReadArticle extends Schema.CollectionType {
     singularName: 'read-article';
     pluralName: 'read-articles';
     displayName: 'ReadArticle';
+    description: '';
   };
   options: {
     draftAndPublish: true;
@@ -1315,15 +1306,17 @@ export interface ApiReadArticleReadArticle extends Schema.CollectionType {
   attributes: {
     user: Attribute.Relation<
       'api::read-article.read-article',
-      'manyToOne',
+      'oneToOne',
       'plugin::users-permissions.user'
     >;
     article: Attribute.Relation<
       'api::read-article.read-article',
-      'manyToOne',
+      'oneToOne',
       'api::article.article'
     >;
     read_time: Attribute.DateTime;
+    scroll: Attribute.Integer;
+    time_spent: Attribute.BigInteger & Attribute.DefaultTo<'0'>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

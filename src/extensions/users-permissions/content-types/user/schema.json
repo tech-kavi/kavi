@@ -97,12 +97,6 @@
       "type": "text",
       "private": true
     },
-    "read_articles": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::read-article.read-article",
-      "mappedBy": "user"
-    },
     "liked_articles": {
       "type": "relation",
       "relation": "oneToMany",
