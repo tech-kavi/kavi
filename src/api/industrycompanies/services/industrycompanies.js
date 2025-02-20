@@ -99,7 +99,9 @@ module.exports = {
       },
       populate:{
           company:true,
-      }
+      },
+      limit:-1,
+
   });
 
   const WatchlistedCompanyIds = WatchlistedCompanies.map(watchlist => watchlist.company.id);

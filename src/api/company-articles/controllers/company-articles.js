@@ -138,7 +138,8 @@ module.exports = {
               }
             },
           },
-      }
+      },
+      limit:-1
   });
 
   const BookmarkArticleIds = bookmarkedArticles.map(bookmark => bookmark.article.id);

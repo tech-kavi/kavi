@@ -40,7 +40,7 @@ module.exports = createCoreController('api::logged-in.logged-in',{
                 }
             }
         );
-//get user data
+        //get user data
         const userData = await strapi.entityService.findOne('plugin::users-permissions.user',user.id);
         // console.log(userData);
         if(existingEntity && existingEntity.length==0){

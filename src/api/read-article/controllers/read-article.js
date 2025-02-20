@@ -52,10 +52,12 @@ module.exports = createCoreController('api::read-article.read-article',{
             const {data} = ctx.request.body;
             const articleId = data?.article?.connect[0];
             const userId = data?.user?.connect[0];
-            const timeSpent = data?.timeSpent;
+            let timeSpent = data?.timeSpent;
             const scroll = data?.scroll;
            
-
+           
+            timeSpent = Number(timeSpent);
+            
 
             
             
@@ -79,7 +81,7 @@ module.exports = createCoreController('api::read-article.read-article',{
 
             let newRead;
 
-          console.log(existingRead);
+        //   console.log(existingRead);
 
             if(existingRead && existingRead.length >0)
                 {
@@ -87,8 +89,10 @@ module.exports = createCoreController('api::read-article.read-article',{
                        data:{
                            article: articleId,
                            user: user.id,
-                           time_spent:timeSpent>0?existingRead[0].time_spent+timeSpent:existingRead[0].time_spent,
-                           scroll:existingRead[0].scroll>scroll?existingRead[0].scroll:scroll, 
+                           time_spent:timeSpent > 0 
+                           ? Number(existingRead[0].time_spent) + Number(timeSpent) 
+                           : Number(existingRead[0].time_spent),
+                           scroll:Math.max(Number(existingRead[0].scroll), Number(scroll)), 
                            read_time:new Date().toISOString(),
                        },
                    });
@@ -100,7 +104,8 @@ module.exports = createCoreController('api::read-article.read-article',{
                             article: articleId,
                             user: user.id,
                             scroll:scroll,
-                            time_spent:timeSpent,
+                            // time_spent:timeSpent,
+                            time_spent:timeSpent?timeSpent:0,
                             read_time:new Date().toISOString(),
                             publishedAt: new Date(),
                         },

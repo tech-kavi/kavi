@@ -251,12 +251,19 @@ const RelatedArticlesWithReadTime = relatedArticles.map(article =>{
 
 
   // Fetching bookmarked, liked, and disliked articles for the user
-  const [bookmarkedArticles, likedArticles, dislikedArticles] = await Promise.all([
-    strapi.entityService.findMany('api::bookmark.bookmark', {
-        filters: { bookmarked_by: user.id },
-        populate: { article: true }
-    }),
-]);
+//   const [bookmarkedArticles, likedArticles, dislikedArticles] = await Promise.all([
+//     strapi.entityService.findMany('api::bookmark.bookmark', {
+//         filters: { bookmarked_by: user.id },
+//         populate: { article: true },
+//         limit:-1,
+//     }),
+// ]);
+
+const bookmarkedArticles = await strapi.entityService.findMany('api::bookmark.bookmark',{
+    filters: { bookmarked_by: user.id },
+    populate: { article: true },
+    limit:-1,
+})
 
 const BookmarkArticleIds = bookmarkedArticles.map(bookmark => bookmark.article.id);
 

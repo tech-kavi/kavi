@@ -217,13 +217,14 @@ module.exports = createCoreController('api::highlight.highlight',{
                 articleId:articleId,
                 user:user.id
             },
+            limit:-1,
           });
 
         
     
           // Filter out highlights that match the conditions
           const filteredHighlights = highlights.filter(({ answerId, start, end, type }) => {
-            console.log(typeof(answerId));
+            // console.log(typeof(answerId));
             return (answerId == removeAnswerId && start >= removeStart && end <= removeEnd && type == typeOfText);
           });
 

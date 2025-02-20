@@ -162,7 +162,8 @@ module.exports = createCoreController('api::industry.industry',{
         },
         populate:{
             company:true,
-        }
+        },
+        limit:-1,
     });
   
     const WatchlistedCompanyIds = WatchlistedCompanies.map(watchlist => watchlist.company.id);

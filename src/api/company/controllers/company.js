@@ -175,10 +175,11 @@ module.exports = createCoreController('api::company.company',{
     const watchlistedCompanies = await strapi.entityService.findMany('api::watchlist.watchlist', {
         filters: {
             watchlisted_by: user.id,
+            company:company.data.id,
         },
         populate: {
             company: true,
-        }
+        },
     });
 
     const WatchlistCompanyIds = watchlistedCompanies.map(watchlist => watchlist.company.id);

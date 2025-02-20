@@ -82,7 +82,8 @@ module.exports = {
       },
       populate:{
           article:true,
-      }
+      },
+      limit:-1,
   });
 
   const BookmarkArticleIds = bookmarkedArticles.map(bookmark => bookmark.article.id);

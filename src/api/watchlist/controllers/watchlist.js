@@ -40,6 +40,9 @@ module.exports = createCoreController('api::watchlist.watchlist',{
                     },
                 }
             },
+            pagination:{
+                limit:-1,
+            },
             sort:{company:{name:'asc'}}
             
         };
@@ -52,7 +55,7 @@ module.exports = createCoreController('api::watchlist.watchlist',{
         const companiesWatclists = watchlists?.data?.map(watchlist => {
             
             const company = watchlist?.attributes?.company;
-            console.log(company.data.attributes.articles.data.attributes.count);
+            // console.log(company.data.attributes.articles.data.attributes.count);
             const articleCount = company.data?.attributes?.articles?.data.attributes.count;
 
             const { articles, ...companyAttributesWithoutArticles} = company.data?.attributes;

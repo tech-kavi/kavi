@@ -175,7 +175,8 @@ module.exports = createCoreController('api::article.article',{
         },
         populate:{
             article:true,
-        }
+        },
+        limit:-1,
     });
 
 
@@ -421,6 +422,8 @@ module.exports = createCoreController('api::article.article',{
 
     
         const article = await super.findOne(ctx);
+
+        console.log(article);
     
         if (article.data.attributes.publishedAt == null) {
             return ctx.badRequest("No article found");
@@ -436,18 +439,34 @@ module.exports = createCoreController('api::article.article',{
         // Fetching bookmarked, liked, and disliked articles for the user
         const [bookmarkedArticles, likedArticles, dislikedArticles] = await Promise.all([
             strapi.entityService.findMany('api::bookmark.bookmark', {
-                filters: { bookmarked_by: user.id },
+                filters: { bookmarked_by: user.id,article:article.data.id },
                 populate: { article: true }
             }),
             strapi.entityService.findMany('api::liked-article.liked-article', {
-                filters: { user: user.id, publishedAt: { $notNull: true } },
+                filters: { user: user.id, publishedAt: { $notNull: true },article:article.data.id },
                 populate: { article: true }
             }),
             strapi.entityService.findMany('api::disliked-article.disliked-article', {
-                filters: { user: user.id, publishedAt: { $notNull: true } },
+                filters: { user: user.id, publishedAt: { $notNull: true },article:article.data.id },
                 populate: { article: true }
             })
         ]);
+
+
+        // const [bookmarkedArticles, likedArticles, dislikedArticles] = await Promise.all([
+        //     strapi.entityService.findMany('api::bookmark.bookmark', {
+        //         filters: { bookmarked_by: user.id },
+        //         populate: { article: true }
+        //     }),
+        //     strapi.entityService.findMany('api::liked-article.liked-article', {
+        //         filters: { user: user.id, publishedAt: { $notNull: true } },
+        //         populate: { article: true }
+        //     }),
+        //     strapi.entityService.findMany('api::disliked-article.disliked-article', {
+        //         filters: { user: user.id, publishedAt: { $notNull: true } },
+        //         populate: { article: true }
+        //     })
+        // ]);
     
         const BookmarkArticleIds = bookmarkedArticles.map(bookmark => bookmark.article.id);
         const LikeArticleIds = likedArticles.map(likedArticle => likedArticle.article.id);
