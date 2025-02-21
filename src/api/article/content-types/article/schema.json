@@ -17,7 +17,8 @@
   },
   "attributes": {
     "article_id": {
-      "type": "uid"
+      "type": "uid",
+      "private": true
     },
     "title": {
       "type": "string"

@@ -895,7 +895,7 @@ export interface ApiArticleArticle extends Schema.CollectionType {
     };
   };
   attributes: {
-    article_id: Attribute.UID;
+    article_id: Attribute.UID & Attribute.Private;
     title: Attribute.String;
     published_date: Attribute.Date;
     primary_companies: Attribute.Relation<

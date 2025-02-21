@@ -115,7 +115,7 @@ module.exports = {
     
     const articles = await strapi.entityService.findMany('api::article.article',query);
 
-
+    
 
     const paginatedArticles = articles.slice((pageInt-1)* pageSizeInt, pageInt*pageSizeInt);
 
@@ -153,11 +153,30 @@ module.exports = {
       limit:-1,
   });
 
+
+  //fetch already read articles
+
+      // const readArticles = await strapi.entityService.findMany('api::read-article.read-article',{
+      //     filters:{
+      //         user: user.id,
+      //     },
+      //     populate:{
+      //         article:{
+      //             populate:['id'],
+      //         }
+      //     },
+      //     limit: -1
+      // });
+
+      // const readArticleIds = readArticles.map(item => item.article.id);
+
+
   const BookmarkArticleIds = bookmarkedArticles.map(bookmark => bookmark.article.id);
 
   const CompanyArticleWithBookmarkStatus = articlesWithReadTime.map(article =>({
     ...article,
     isBookmarked:BookmarkArticleIds.includes(article.id),
+    //isRead:readArticleIds.includes(article.id),
 }));
 
     const total = articles.length;

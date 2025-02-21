@@ -144,9 +144,28 @@ module.exports = {
 
   const BookmarkArticleIds = bookmarkedArticles.map(bookmark => bookmark.article.id);
 
+
+  //fetch already read articles
+
+  // const readArticles = await strapi.entityService.findMany('api::read-article.read-article',{
+  //     filters:{
+  //         user: user.id,
+  //     },
+  //     populate:{
+  //         article:{
+  //             populate:['id'],
+  //         }
+  //     },
+  //     limit: -1
+  // });
+
+  // const readArticleIds = readArticles.map(item => item.article.id);
+
+
   const CompanyArticleWithBookmarkStatus = articlesWithReadTime.map(article =>({
     ...article,
     isBookmarked:BookmarkArticleIds.includes(article.id),
+    //isRead:readArticleIds.includes(article.id),
     
 }));
 

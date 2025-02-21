@@ -185,9 +185,27 @@ module.exports = createCoreController('api::article.article',{
 
     // console.log(BookmarkArticleIds);
 
+    // fetch already read articles
+
+    // const readArticles = await strapi.entityService.findMany('api::read-article.read-article',{
+    //     filters:{
+    //         user: user.id,
+    //     },
+    //     populate:{
+    //         article:{
+    //             populate:['id'],
+    //         }
+    //     },
+    //     limit: -1
+    // });
+    
+    // const readArticleIds = readArticles.map(item => item.article.id);
+
+
     const articleWithBookmarkStatus = articles.data.map(article =>({
             ...article,
             isBookmarked:BookmarkArticleIds.includes(article.id),
+            //isRead:readArticleIds.includes(article.id),
     }));
 
 
@@ -218,6 +236,8 @@ module.exports = createCoreController('api::article.article',{
                 }
             }}
             });
+
+           
 
             // console.log(userDetails);
 
@@ -255,26 +275,33 @@ module.exports = createCoreController('api::article.article',{
                 return entryDate.isSame(currentDate);
                 }) || [];
                 
-                // console.log(articlesOpenedToday);
+                 //console.log(articlesOpenedToday);
     
                 if(articlesOpenedToday.length==0){
                     OpensToday=0;
                 }
+
+               
     
                 // if(OpensToday>=DailyLimit)
                 // {
                 //     console.log('Daily limit exceeded');
                 //     return ctx.badRequest('Daily limit exceeded. Please contact KAVI Team for further assistance.');
                 // }
-    
+                // console.log(userDetails.articlesOpenedToday[0].article);
                 
     
                 // Check if the article is already in today's list
-                const isArticleAlreadyOpened = articlesOpenedToday.some(
-                (entry) => entry.article.id == ctx.params.id
-                );
+                // const isArticleAlreadyOpened = articlesOpenedToday.some(
+                // (entry) => entry.article.id == ctx.params.id
+                // );
+
+                // console.log(userDetails.articlesOpenedToday);
+
+                const isArticleAlreadyOpened = userDetails.articlesOpenedToday?.some(entry => entry.article?.id == ctx.params.id);
+
     
-                // console.log('article already opened',isArticleAlreadyOpened);
+               // console.log('article already opened',isArticleAlreadyOpened);
 
                 let updatedEntries;
 
@@ -423,7 +450,7 @@ module.exports = createCoreController('api::article.article',{
     
         const article = await super.findOne(ctx);
 
-        console.log(article);
+        // console.log(article);
     
         if (article.data.attributes.publishedAt == null) {
             return ctx.badRequest("No article found");
