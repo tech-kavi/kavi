@@ -187,25 +187,25 @@ module.exports = createCoreController('api::article.article',{
 
     // fetch already read articles
 
-    // const readArticles = await strapi.entityService.findMany('api::read-article.read-article',{
-    //     filters:{
-    //         user: user.id,
-    //     },
-    //     populate:{
-    //         article:{
-    //             populate:['id'],
-    //         }
-    //     },
-    //     limit: -1
-    // });
+    const readArticles = await strapi.entityService.findMany('api::read-article.read-article',{
+        filters:{
+            user: user.id,
+        },
+        populate:{
+            article:{
+                populate:['id'],
+            }
+        },
+        limit: -1
+    });
     
-    // const readArticleIds = readArticles.map(item => item.article.id);
+    const readArticleIds = readArticles.map(item => item.article.id);
 
 
     const articleWithBookmarkStatus = articles.data.map(article =>({
             ...article,
             isBookmarked:BookmarkArticleIds.includes(article.id),
-            //isRead:readArticleIds.includes(article.id),
+            isRead:readArticleIds.includes(article.id),
     }));
 
 
@@ -464,7 +464,7 @@ module.exports = createCoreController('api::article.article',{
     
     
         // Fetching bookmarked, liked, and disliked articles for the user
-        const [bookmarkedArticles, likedArticles, dislikedArticles] = await Promise.all([
+        const [bookmarkedArticles, likedArticles, dislikedArticles,ReadArticles] = await Promise.all([
             strapi.entityService.findMany('api::bookmark.bookmark', {
                 filters: { bookmarked_by: user.id,article:article.data.id },
                 populate: { article: true }
@@ -476,9 +476,14 @@ module.exports = createCoreController('api::article.article',{
             strapi.entityService.findMany('api::disliked-article.disliked-article', {
                 filters: { user: user.id, publishedAt: { $notNull: true },article:article.data.id },
                 populate: { article: true }
+            }),
+            strapi.entityService.findMany('api::read-article.read-article', {
+                filters: { user: user.id, publishedAt: { $notNull: true },article:article.data.id },
+                populate: { article: true }
             })
         ]);
 
+        // console.log(ReadArticles);
 
         // const [bookmarkedArticles, likedArticles, dislikedArticles] = await Promise.all([
         //     strapi.entityService.findMany('api::bookmark.bookmark', {
@@ -498,6 +503,7 @@ module.exports = createCoreController('api::article.article',{
         const BookmarkArticleIds = bookmarkedArticles.map(bookmark => bookmark.article.id);
         const LikeArticleIds = likedArticles.map(likedArticle => likedArticle.article.id);
         const DisLikeArticleIds = dislikedArticles.map(dislikedArticle => dislikedArticle.article.id);
+        const ReadArticleIds = ReadArticles.map(readArticle => readArticle.article.id);
     
         // Adding bookmark status to related articles
         // const articleWithBookmarkStatus = RelatedArticlesWithReadTime.map(article => ({
@@ -512,6 +518,7 @@ module.exports = createCoreController('api::article.article',{
         article.data.attributes.isDisiked = DisLikeArticleIds.includes(article.data.id);
         article.data.attributes.isBookmarked = BookmarkArticleIds.includes(article.data.id);
         article.data.attributes.read_time = read_time;
+        article.data.attributes.isRead = ReadArticleIds.includes(article.data.id);;
     
         return article;
     }

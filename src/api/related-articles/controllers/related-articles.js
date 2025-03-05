@@ -270,25 +270,25 @@ const BookmarkArticleIds = bookmarkedArticles.map(bookmark => bookmark.article.i
 
 //fetch already read articles
 
-// const readArticles = await strapi.entityService.findMany('api::read-article.read-article',{
-//     filters:{
-//         user: user.id,
-//     },
-//     populate:{
-//         article:{
-//             populate:['id'],
-//         }
-//     },
-//     limit: -1
-// });
+const readArticles = await strapi.entityService.findMany('api::read-article.read-article',{
+    filters:{
+        user: user.id,
+    },
+    populate:{
+        article:{
+            populate:['id'],
+        }
+    },
+    limit: -1
+});
 
-// const readArticleIds = readArticles.map(item => item.article.id);
+const readArticleIds = readArticles.map(item => item.article.id);
 
 // Adding bookmark status to related articles
 const articleWithBookmarkStatus = RelatedArticlesWithReadTime.map(article => ({
   ...article,
   isBookmarked: BookmarkArticleIds.includes(article.id),
-  //isRead:readArticleIds.includes(article.id),
+  isRead:readArticleIds.includes(article.id),
 }));
 
   return articleWithBookmarkStatus;

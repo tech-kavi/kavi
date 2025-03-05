@@ -53,26 +53,26 @@ module.exports = createCoreController('api::bookmark.bookmark',{
 
         //fetch already read articles
 
-    //   const readArticles = await strapi.entityService.findMany('api::read-article.read-article',{
-    //       filters:{
-    //           user: user.id,
-    //       },
-    //       populate:{
-    //           article:{
-    //               populate:['id'],
-    //           }
-    //       },
-    //       limit: -1
-    //   });
+      const readArticles = await strapi.entityService.findMany('api::read-article.read-article',{
+          filters:{
+              user: user.id,
+          },
+          populate:{
+              article:{
+                  populate:['id'],
+              }
+          },
+          limit: -1
+      });
 
-    //   const readArticleIds = readArticles.map(item => item.article.id);
+      const readArticleIds = readArticles.map(item => item.article.id);
 
         
 
         const articlesWithBookmarkIds = bookmarks.data.map(bookmark => ({
             bookmarkId: bookmark.id,
             article: bookmark.attributes.article,
-            // isRead: readArticleIds.includes(bookmark.attributes.article.data.id),
+             isRead: readArticleIds.includes(bookmark.attributes.article.data.id),
         }));
 
         
