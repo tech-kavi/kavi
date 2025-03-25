@@ -42,12 +42,12 @@ module.exports = (plugin) =>{
         }
 
         if (_.isEmpty(loginToken)) {
-        return ctx.badRequest('token.invalid');
+        return ctx.badRequest('Invalid Token');
         }
         const token = await passwordless.fetchToken(loginToken);
 
         if (!token || !token.is_active) {
-        return ctx.badRequest('token.invalid');
+        return ctx.badRequest('Invalid Token');
         }
 
   
@@ -56,7 +56,7 @@ module.exports = (plugin) =>{
 
         if (!isValid) {
         await passwordless.deactivateToken(token);
-        return ctx.badRequest('token.invalid');
+        return ctx.badRequest('Invalie Token');
         }
         // console.log("token validated");
 
@@ -124,8 +124,11 @@ module.exports = (plugin) =>{
       //   }
 
         console.log(loginToken);
+
+        const allowedOrgIDs = process.env.ALLOWED_ORG_IDS ? process.env.ALLOWED_ORG_IDS.split(',').map(Number) : [];
+        console.log(allowedOrgIDs);
         
-        if ( user.token !== loginToken) {
+        if ( user.token !== loginToken ) {
           console.log('Code changed');
           const updatedUser = await strapi.entityService.update('plugin::users-permissions.user', user.id, {
               data: {
@@ -136,11 +139,33 @@ module.exports = (plugin) =>{
               },
           });
 
-          await passwordless.deactivateToken(token);
+          if(!allowedOrgIDs.includes(Number(user.orgID)))
+          {
+            console.log('Deactivating token for non-allowed orgID');
+            await passwordless.deactivateToken(token);
+          }
+          
       }
         else{
-          console.log('Token already Used');
-          return ctx.badRequest('Link already used. Please request new login link');
+          // console.log('Token already Used');
+          // return ctx.badRequest('Link already used. Please request new login link.');
+          if (allowedOrgIDs.includes(Number(user.orgID))) {
+            console.log('Allowing for multiple login link.');
+            
+            // Still update last_login for tracking
+            await strapi.entityService.update('plugin::users-permissions.user', user.id, {
+                data: {
+                  currentToken: newToken,
+                  loginKey:LoginKey,
+                  token:loginToken,
+                  last_login: moment().tz('Asia/Kolkata').format(),
+                },
+            });
+    
+        } else {
+            console.log('Token already used');
+            return ctx.badRequest('Link already used. Please request new login link.');
+          }
         }
 
 

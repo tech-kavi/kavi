@@ -318,7 +318,6 @@ const sendAdminEmail = async (userEmail,name,slots,expiry) => {
 
 
 
-
 module.exports = (plugin) => {
     const create = plugin.controllers.user.create;
 
@@ -391,13 +390,15 @@ module.exports = (plugin) => {
         return ctx.badRequest('New member must have the same email domain as the admin. If you still want to add user then contact KAVI team');
       }
   
+        
       
       const userWithSameUsername = await strapi
         .query('plugin::users-permissions.user')
         .findOne({ where: { username } });
   
       if (userWithSameUsername) {
-        if (!email) throw new ApplicationError('Username already taken');
+       
+        throw new ApplicationError('Username already taken');
       }
 
 
@@ -420,7 +421,7 @@ module.exports = (plugin) => {
           .findOne({ where: { email: email.toLowerCase() } });
   
         if (userWithSameEmail) {
-          throw new ApplicationError('Email already taken');
+          throw new ApplicationError('Email already exist');
         }
       }
 
@@ -586,7 +587,7 @@ module.exports = (plugin) => {
         data: { slotFilled: requestingUser.slotFilled },
     });
 
-
+   
   
     ctx.send(sanitizedUser);
         
