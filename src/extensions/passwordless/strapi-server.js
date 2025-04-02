@@ -42,21 +42,21 @@ module.exports = (plugin) =>{
         }
 
         if (_.isEmpty(loginToken)) {
-        return ctx.badRequest('Invalid Token');
+        return ctx.badRequest('Invalid token.');
         }
         const token = await passwordless.fetchToken(loginToken);
 
         if (!token || !token.is_active) {
-        return ctx.badRequest('Invalid Token');
+        return ctx.badRequest('Invalid token.');
         }
 
-  
+        console.log(ctx);
 
         const isValid = await passwordless.isTokenValid(token);
 
         if (!isValid) {
         await passwordless.deactivateToken(token);
-        return ctx.badRequest('Invalie Token');
+        return ctx.badRequest('Invalid token.');
         }
         // console.log("token validated");
 
@@ -71,13 +71,13 @@ module.exports = (plugin) =>{
         // console.log("email fetched");
 
         if (!user) {
-        return ctx.badRequest('No user found. Contact to KAVI Team');
+        return ctx.badRequest('No user found. Contact us to resolve this.');
         }
 
         // console.log("email checked");
 
         if (user.blocked) {
-        return ctx.badRequest('Unable to access. Contact to KAVI Team');
+        return ctx.badRequest('Your access is blocked. Please contact us to resolve this.');
         }
         // console.log("blocked checked");
 
@@ -86,7 +86,7 @@ module.exports = (plugin) =>{
         const expiryDateTime = new Date(user.expiry); // Assuming 'expiry' field holds the expiry date
 
         if (currentDateTime > expiryDateTime) {
-        return ctx.badRequest('Plan expired. Contact to KAVI Team');
+        return ctx.badRequest('Your plan has expired. Please contact us to renew your subscription.');
         }
 
         // console.log("not expired");
@@ -164,7 +164,7 @@ module.exports = (plugin) =>{
     
         } else {
             console.log('Token already used');
-            return ctx.badRequest('Link already used. Please request new login link.');
+            return ctx.badRequest('Link has been used already. Please request a new login link.');
           }
         }
 
@@ -235,7 +235,7 @@ module.exports = (plugin) =>{
         const isEmail = emailRegExp.test(email);
     
         if (email && !isEmail) {
-          return ctx.badRequest('No such user is registered. Please contact KAVI Team');
+          return ctx.badRequest('No such user is registered. Please contact us to get a subscription.');
         }
     
         let user;
@@ -245,21 +245,21 @@ module.exports = (plugin) =>{
             where: { email }
           });
         } catch (e) {
-          return ctx.badRequest('No such user is registered. Please contact KAVI Team')
+          return ctx.badRequest('No such user is registered. Please contact us to get a subscription.')
         }
     
         if (!user) {
-          return ctx.badRequest('No such user is registered. Please contact KAVI Team');
+          return ctx.badRequest('No such user is registered. Please contact us to get a subscription.');
         }
     
         if (email && user.email !== email) {
-          return ctx.badRequest('No such user is registered. Please contact to KAVI Team')
+          return ctx.badRequest('No such user is registered. Please contact us to get a subscription.')
         }
 
         // console.log(user);
     
         if (user.blocked) {
-          return ctx.badRequest('Unable to access. Contact to KAVI Team');
+          return ctx.badRequest('Your access is blocked. Please contact us to resolve this. ');
         }
     
         // Check if the user's plan expiry date has passed
@@ -269,13 +269,13 @@ module.exports = (plugin) =>{
         console.log(currentDateTime,expiryDateTime);
 
         if (currentDateTime > expiryDateTime) {
-          return ctx.badRequest('Your plan has expired. Please contact us to renew your subscription');
+          return ctx.badRequest('Your plan has expired. Please contact us to renew your subscription.');
         }
         
         //password check
 
         if (!password) {
-          return ctx.badRequest('Password is required');
+          return ctx.badRequest('Password is required.');
         }
         // console.log(password);
         // console.log(user.password);
@@ -286,9 +286,11 @@ module.exports = (plugin) =>{
         );
   
         if (!validPassword) {
-          throw new ValidationError('Invalid identifier or password');
+          throw new ValidationError('Invalid identifier or password.');
         }
         // console.log('password validated');
+
+        
 
     
         try {
@@ -304,7 +306,7 @@ module.exports = (plugin) =>{
 
           console.log(`${user.email} magic link sent`);
         } catch (err) {
-          return ctx.badRequest("Please try again later");
+          return ctx.badRequest("Failed to send magic link email. Please try again later.");
         } 
     }
 

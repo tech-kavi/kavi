@@ -43,9 +43,9 @@ module.exports = {
         },
         headers: {
           
-          'Message-ID': `<${uuid.v4()}@yourdomain.com>`, 
-          'In-Reply-To': `<${uuid.v4()}@yourdomain.com>`,  
-          'References':  `<${uuid.v4()}@yourdomain.com>`,  
+          'Message-ID': `<${uuid.v4()}@joinkavi.com>`, 
+          'In-Reply-To': `<${uuid.v4()}@joinkavi.com>`,  
+          'References':  `<${uuid.v4()}@joinkavi.com>`,  
 
         }
       };
@@ -53,6 +53,7 @@ module.exports = {
       // console.log(uuid.v4());
   
       // Send an email to the user.
+      console.log(sendData);
       return await strapi.plugin('email').service('email').send(sendData);
     },
     template(layout, data) {

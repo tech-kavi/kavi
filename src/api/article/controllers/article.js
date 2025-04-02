@@ -352,13 +352,13 @@ module.exports = createCoreController('api::article.article',{
                     if(OpensToday>=DailyLimit)
                         {
                             console.log('Daily limit exceeded');
-                            return ctx.badRequest('Daily limit exceeded. Please contact KAVI Team for further assistance.');
+                            return ctx.badRequest('Daily limit exceeded. Please contact us for further assistance.');
                         }
 
                         
                     if (TotalLimit <= 0) {
                         console.log('Trial limit exceeded');
-                        return ctx.badRequest('Trial access limit exceeded. Please contact KAVI Team for further assistance.');
+                        return ctx.badRequest('Trial access limit exceeded. Please contact us for further assistance.');
                     }
                 
                     // Create new entry
@@ -453,7 +453,7 @@ module.exports = createCoreController('api::article.article',{
         // console.log(article);
     
         if (article.data.attributes.publishedAt == null) {
-            return ctx.badRequest("No article found");
+            return ctx.badRequest("No Transcript found");
         }
 
         // console.log(article);
