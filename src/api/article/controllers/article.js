@@ -156,8 +156,11 @@ module.exports = createCoreController('api::article.article',{
     };
 
     // Initial query for the current month's articles
-    let articles = await getArticles(startOfCurrentMonth);
-    let source = "this_month";
+    // let articles = await getArticles(startOfCurrentMonth);
+    // let source = "this_month";
+
+    let articles = await getArticles(startOfPreviousMonth);
+    let source = "last_month";
 
     // let articles = await getArticles(startOfPreviousMonth);
 
