@@ -42,8 +42,6 @@ module.exports = createCoreService('api::highlight.highlight',{
                 const entries = await strapi.entityService.findMany(
                     'api::article.article',
                     {
-                        start:start,
-                        limit:pageSizeNumber,
                         filters:{
                             id:{$in:articleIds},
                             publishedAt:{
@@ -71,7 +69,7 @@ module.exports = createCoreService('api::highlight.highlight',{
                             },
     
                         },
-                        sort:[...ctx.request.query.sort,'publishedAt:desc'],
+                        sort:[...ctx.request.query.sort],
                        
                     }
                 );
@@ -80,17 +78,23 @@ module.exports = createCoreService('api::highlight.highlight',{
 
                 // console.log(orderedArticles);
                 // console.log(ctx.request.query.sort[0]);
-                if(ctx.request.query.sort[0] !=='')
+                if(ctx.request.query.sort[0] =='')
                 {
-                    orderedArticles = articleIds
-                    .map(id => entries.find(article => article.id === id))
-                    .filter(article => article !== undefined);
+
+                    // Create a map of articles with their ID as the key
+                     const articleMap = new Map(entries.map(article => [article.id, article]));
+
+                     console.log(articleMap);
+                     orderedArticles = articleIds
+                     .map(id => articleMap.get(id))
+                     .filter(article => article !== undefined);
                 }
 
-                // console.log(orderedArticles);
+                //  console.log(orderedArticles);
+                const paginatedArticles = orderedArticles.slice(start, start + pageSizeNumber);
                 
                    // Merge highlights into articles
-        for (const article of orderedArticles) {
+        for (const article of paginatedArticles) {
             const articleId = article.id;
 
             // Fetch highlights for the article
@@ -166,7 +170,7 @@ module.exports = createCoreService('api::highlight.highlight',{
                 total:totalEntries,
               }
 
-        return {data:orderedArticles,meta:meta};
+        return {data:paginatedArticles,meta:meta};
         } catch(err){
             return err;
         }
