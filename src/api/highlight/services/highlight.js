@@ -20,7 +20,7 @@ module.exports = createCoreService('api::highlight.highlight',{
                 }
             );
 
-            console.log('inside service');
+            console.log('inside highlight service');
             
               // extract article IDs from the watchlist entries
               let articleIds = highlights.map(entry => parseInt(entry.articleId));
@@ -78,7 +78,7 @@ module.exports = createCoreService('api::highlight.highlight',{
 
                 let orderedArticles=entries.filter(article => article!== undefined);
 
-                console.log(orderedArticles);
+                // console.log(orderedArticles);
                 // console.log(ctx.request.query.sort[0]);
                 if(ctx.request.query.sort[0] !=='')
                 {
@@ -87,7 +87,7 @@ module.exports = createCoreService('api::highlight.highlight',{
                     .filter(article => article !== undefined);
                 }
 
-                console.log(orderedArticles);
+                // console.log(orderedArticles);
                 
                    // Merge highlights into articles
         for (const article of orderedArticles) {
