@@ -156,11 +156,11 @@ module.exports = createCoreController('api::article.article',{
     };
 
     // Initial query for the current month's articles
-    // let articles = await getArticles(startOfCurrentMonth);
-    // let source = "this_month";
+    let articles = await getArticles(startOfCurrentMonth);
+    let source = "this_month";
 
-    let articles = await getArticles(startOfPreviousMonth);
-    let source = "last_month";
+    // let articles = await getArticles(startOfPreviousMonth);
+    // let source = "last_month";
 
     // let articles = await getArticles(startOfPreviousMonth);
 
@@ -284,22 +284,6 @@ module.exports = createCoreController('api::article.article',{
                     OpensToday=0;
                 }
 
-               
-    
-                // if(OpensToday>=DailyLimit)
-                // {
-                //     console.log('Daily limit exceeded');
-                //     return ctx.badRequest('Daily limit exceeded. Please contact KAVI Team for further assistance.');
-                // }
-                // console.log(userDetails.articlesOpenedToday[0].article);
-                
-    
-                // Check if the article is already in today's list
-                // const isArticleAlreadyOpened = articlesOpenedToday.some(
-                // (entry) => entry.article.id == ctx.params.id
-                // );
-
-                // console.log(userDetails.articlesOpenedToday);
 
                 const isArticleAlreadyOpened = userDetails.articlesOpenedToday?.some(entry => entry.article?.id == ctx.params.id);
 
@@ -314,37 +298,7 @@ module.exports = createCoreController('api::article.article',{
                 }));
 
                 
-    
-                // if (!isArticleAlreadyOpened) 
-                // {
-                // // Add the new entry if it's not already in today's list
 
-                //     if(TotalLimit<=0)
-                //     {
-                //         console.log('Trial limit exceeded');
-                //         return ctx.badRequest('Trial access limit exceeded. Please contact KAVI Team for further assistance.');
-                //     }
-
-                //     // articlesOpenedToday.push({
-                //     //     article: ctx.params.id,
-                //     //     time: moment().tz('Asia/Kolkata').format(), // Current time
-                //     // });
-
-                //     const newEntry = {
-                //         article: ctx.params.id,
-                //         time: moment().tz('Asia/Kolkata').format(),
-                //     };
-                    
-                  
-                    
-                //     updatedEntries = [...existingEntries, newEntry];
-
-
-        
-                //     OpensToday = OpensToday+1;
-                //     TotalLimit = TotalLimit-1;
-    
-                // }
 
 
                 if (isArticleAlreadyOpened) {
