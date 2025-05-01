@@ -6,6 +6,7 @@
  * highlight controller
  */
 
+// @ts-ignore
 const { createCoreController } = require('@strapi/strapi').factories;
 
 module.exports = createCoreController('api::highlight.highlight',{
@@ -197,7 +198,7 @@ module.exports = createCoreController('api::highlight.highlight',{
         const {user} = ctx.state;
 
         if(!user){
-            return ctx.unauthorized('Please login to remove highlight');
+            return ctx.unauthorized('Please login to remove highlight.');
         }
 
         const { data } = ctx.request.body;

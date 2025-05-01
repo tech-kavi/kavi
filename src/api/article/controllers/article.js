@@ -156,17 +156,18 @@ module.exports = createCoreController('api::article.article',{
     };
 
     // Initial query for the current month's articles
-    let articles = await getArticles(startOfCurrentMonth);
-    let source = "this_month";
+    // let articles = await getArticles(startOfCurrentMonth);
+    // let source = "this_month";
 
-    // let articles = await getArticles(startOfPreviousMonth);
-    // let source = "last_month";
+    console.log("fetching articles from pervious month");
+    let articles = await getArticles(startOfPreviousMonth);
+    let source = "last_month";
 
     // let articles = await getArticles(startOfPreviousMonth);
 
     // If no articles are found, query for the previous month's articles
     if (articles.data.length === 0) {
-        console.log("fetching articles from pervious month")
+        console.log("fetching articles from pervious month");
         articles = await getArticles(startOfPreviousMonth);
         source = "last_month";
     }
@@ -272,7 +273,7 @@ module.exports = createCoreController('api::article.article',{
                 // console.log(currentDate);
 
                 // Filter articlesOpenedToday to keep only today's entries
-                let articlesOpenedToday = userDetails.articlesOpenedToday?.filter((entry) => {
+                let hasOpenedAnyToday = userDetails.articlesOpenedToday?.filter((entry) => {
                 const entryDate = moment(entry.time).tz('Asia/Kolkata').startOf('day'); // Start of the day for the entry's date
                 // console.log(entryDate);
                 return entryDate.isSame(currentDate);
@@ -280,7 +281,7 @@ module.exports = createCoreController('api::article.article',{
                 
                  //console.log(articlesOpenedToday);
     
-                if(articlesOpenedToday.length==0){
+                if(hasOpenedAnyToday.length==0){
                     OpensToday=0;
                 }
 

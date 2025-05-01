@@ -53,7 +53,7 @@ module.exports = {
       // console.log(uuid.v4());
   
       // Send an email to the user.
-      console.log(sendData);
+      // console.log(sendData);
       return await strapi.plugin('email').service('email').send(sendData);
     },
     template(layout, data) {

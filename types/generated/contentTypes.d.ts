@@ -1335,6 +1335,53 @@ export interface ApiReadArticleReadArticle extends Schema.CollectionType {
   };
 }
 
+export interface ApiSharedHighlightSharedHighlight
+  extends Schema.CollectionType {
+  collectionName: 'shared_highlights';
+  info: {
+    singularName: 'shared-highlight';
+    pluralName: 'shared-highlights';
+    displayName: 'SharedHighlight';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    recipient: Attribute.Relation<
+      'api::shared-highlight.shared-highlight',
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    sender: Attribute.Relation<
+      'api::shared-highlight.shared-highlight',
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    articleId: Attribute.BigInteger;
+    answerId: Attribute.BigInteger;
+    start: Attribute.Integer;
+    end: Attribute.Integer;
+    text: Attribute.Text;
+    type: Attribute.Enumeration<['ques', 'answer']>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::shared-highlight.shared-highlight',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::shared-highlight.shared-highlight',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiSubIndustrySubIndustry extends Schema.CollectionType {
   collectionName: 'sub_industries';
   info: {
@@ -1482,6 +1529,7 @@ declare module '@strapi/types' {
       'api::liked-article.liked-article': ApiLikedArticleLikedArticle;
       'api::logged-in.logged-in': ApiLoggedInLoggedIn;
       'api::read-article.read-article': ApiReadArticleReadArticle;
+      'api::shared-highlight.shared-highlight': ApiSharedHighlightSharedHighlight;
       'api::sub-industry.sub-industry': ApiSubIndustrySubIndustry;
       'api::tag.tag': ApiTagTag;
       'api::watchlist.watchlist': ApiWatchlistWatchlist;

@@ -608,7 +608,8 @@ module.exports = (plugin) => {
         const requestingUser = ctx.state.user;
 
         //only admins can fetch all users
-        if (!requestingUser || requestingUser.role.name.toLowerCase() !== 'admin') {
+        //!requestingUser || requestingUser.role.name.toLowerCase() !== 'admin'
+        if (!requestingUser) {
             throw new ApplicationError('You are not authorized to fetch the members of organization', 403);
           }
 

@@ -1,0 +1,48 @@
+{
+  "kind": "collectionType",
+  "collectionName": "shared_highlights",
+  "info": {
+    "singularName": "shared-highlight",
+    "pluralName": "shared-highlights",
+    "displayName": "SharedHighlight",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "recipient": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "sender": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "articleId": {
+      "type": "biginteger"
+    },
+    "answerId": {
+      "type": "biginteger"
+    },
+    "start": {
+      "type": "integer"
+    },
+    "end": {
+      "type": "integer"
+    },
+    "text": {
+      "type": "text"
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "ques",
+        "answer"
+      ]
+    }
+  }
+}
