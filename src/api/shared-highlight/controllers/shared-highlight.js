@@ -15,10 +15,13 @@ module.exports = createCoreController('api::shared-highlight.shared-highlight',{
         }
 
         
+        
         try{
             const {data} = ctx.request.body;
             const articleId = data?.articleId;
             const recipients = data?.recipient?.connect || [];
+
+            
 
             if (!articleId) {
                 return ctx.badRequest('Article ID is required.');
@@ -28,16 +31,16 @@ module.exports = createCoreController('api::shared-highlight.shared-highlight',{
                 return ctx.badRequest('At least one recipient is required.');
             }
 
-             //  Delete existing shared highlights for each recipient
-                for (const recipient of recipients) {
-                    await strapi.entityService.deleteMany('api::shared-highlight.shared-highlight', {
-                        where: {
-                            sender: user.id,
-                            recipient: recipient,
-                            articleId: articleId,
-                        },
-                    });
-                }
+             // Step 1: Find shared highlights matching sender, articleId, and recipient list
+            const highlightsToDelete = await strapi.entityService.findMany('api::shared-highlight.shared-highlight', {
+                filters: {
+                sender: { id: user.id },
+                articleId,
+                recipient: { id: { $in: recipients } },
+                },
+                fields: ['id'],
+                limit: -1,
+            });
            
             //  Fetch highlights of the current user for the given articleId
             const sharedHighlights = await strapi.entityService.findMany('api::highlight.highlight', {
@@ -48,7 +51,15 @@ module.exports = createCoreController('api::shared-highlight.shared-highlight',{
                 limit:-1,
             });
 
-            console.log(sharedHighlights);
+            // Step 2: Extract highlight IDs
+            const highlightIds = highlightsToDelete.map(h => h.id);
+
+            // Step 3: Delete only the fetched highlights
+            if (highlightIds.length > 0) {
+                await strapi.db.query('api::shared-highlight.shared-highlight').deleteMany({
+                where: { id: { $in: highlightIds } },
+                });
+            }
 
              //  Share each highlight with each recipient
         for (const recipient of recipients) {
@@ -197,7 +208,7 @@ module.exports = createCoreController('api::shared-highlight.shared-highlight',{
 
             const sharedHighlightsToDelete = await strapi.entityService.findMany('api::shared-highlight.shared-highlight',{
                 filters:{
-                    recipient: user.id,
+                    recipient: { id: user.id },
                     articleId:articleId,
                 },
                 limit:-1,
