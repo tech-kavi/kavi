@@ -156,17 +156,17 @@ module.exports = createCoreController('api::article.article',{
     };
 
     // Initial query for the current month's articles
-    // let articles = await getArticles(startOfCurrentMonth);
-    // let source = "this_month";
+    let articles = await getArticles(startOfCurrentMonth);
+    let source = "this_month";
 
-    console.log("fetching articles from pervious month");
-    let articles = await getArticles(startOfPreviousMonth);
-    let source = "last_month";
+    // console.log("fetching articles from pervious month");
+    // let articles = await getArticles(startOfPreviousMonth);
+    // let source = "last_month";
 
     // let articles = await getArticles(startOfPreviousMonth);
 
-    // If no articles are found, query for the previous month's articles
-    if (articles.data.length === 0) {
+    // If articles of current month is less than 5, query for the previous month's articles
+    if (!articles.data || articles.data.length < 5) {
         console.log("fetching articles from pervious month");
         articles = await getArticles(startOfPreviousMonth);
         source = "last_month";
