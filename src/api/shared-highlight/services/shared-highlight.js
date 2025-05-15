@@ -107,6 +107,9 @@ module.exports = createCoreService('api::shared-highlight.shared-highlight',{
                     filters: {
                         recipient: userId,
                         articleId: articleId,
+                        sender: {
+                            $notNull: true,  // Only include entries where sender is defined
+                          },
                     },
                     populate:['sender'],
                     limit: -1,

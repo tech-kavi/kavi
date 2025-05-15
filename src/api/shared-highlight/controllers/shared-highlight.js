@@ -21,14 +21,37 @@ module.exports = createCoreController('api::shared-highlight.shared-highlight',{
             const articleId = data?.articleId;
             const recipients = data?.recipient?.connect || [];
 
-            
+
 
             if (!articleId) {
                 return ctx.badRequest('Article ID is required.');
             }
 
+            //fetch all users of same organisation
+           // console.log(user);
+            const sameOrgUsers = await strapi.entityService.findMany('plugin::users-permissions.user',{
+                filters:{
+                    orgID:user.orgID,
+                },
+                fields: ['id', 'email'],
+            });
+
+            
+            
+
             if (!Array.isArray(recipients) || recipients.length === 0) {
                 return ctx.badRequest('At least one recipient is required.');
+            }
+            else{
+                const sameOrgUserIds = sameOrgUsers.map(user => user.id);
+
+                const allRecipientsAreInSameOrg = recipients.every(recipient => sameOrgUserIds.includes(recipient));
+
+                if(!allRecipientsAreInSameOrg)
+                {
+                    return ctx.badRequest("One or more recipients are not part of your organization.");
+                }
+
             }
 
              // Step 1: Find shared highlights matching sender, articleId, and recipient list
@@ -50,6 +73,10 @@ module.exports = createCoreController('api::shared-highlight.shared-highlight',{
                 },
                 limit:-1,
             });
+
+            if (!sharedHighlights || sharedHighlights.length === 0) {
+                return ctx.badRequest("No highlights to share for this transcript.");
+            }
 
             // Step 2: Extract highlight IDs
             const highlightIds = highlightsToDelete.map(h => h.id);
@@ -108,7 +135,10 @@ module.exports = createCoreController('api::shared-highlight.shared-highlight',{
             {
                 filters:{
                     recipient: user.id,
-                    articleId:articleId
+                    articleId:articleId,
+                    sender: {
+                        $notNull: true,  // Only include entries where sender is defined
+                      },
                 },
                 populate:['sender'],
                 limit:-1,

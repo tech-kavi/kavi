@@ -68,16 +68,26 @@ module.exports = createCoreController('api::highlight.highlight',{
                 const current = ranges[i];
                 const last = merged[merged.length - 1];
         
+                // if (last && current.start <= last.end) {
+                //     // Overlap detected: merge ranges
+                //     if (current.end <= last.end) {
+                //         // If the current range is completely inside the last range, do nothing
+                //         continue;
+                //     } else {
+                //         // If the current range overlaps but is not completely inside, extend the end
+                //         last.end = Math.max(last.end, current.end);
+                //         last.text = `${last.text} ${current.text}`;
+                //     }
+                // } else {
+                //     // No overlap, push the current range
+                //     merged.push({ ...current });
+                // }
+
                 if (last && current.start <= last.end) {
-                    // Overlap detected: merge ranges
-                    if (current.end <= last.end) {
-                        // If the current range is completely inside the last range, do nothing
-                        continue;
-                    } else {
-                        // If the current range overlaps but is not completely inside, extend the end
+                    
                         last.end = Math.max(last.end, current.end);
                         last.text = `${last.text} ${current.text}`;
-                    }
+                    
                 } else {
                     // No overlap, push the current range
                     merged.push({ ...current });
