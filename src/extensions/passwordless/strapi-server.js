@@ -33,6 +33,7 @@ module.exports = (plugin) =>{
         const {user: userService, jwt: jwtService} = strapi.plugins['users-permissions'].services;
 
         const LoginKey = ctx.request.headers['login-key'];
+        console.log(ctx);
         console.log(LoginKey);
         // console.log(ctx);
         const isEnabled = await passwordless.isEnabled();
@@ -42,15 +43,16 @@ module.exports = (plugin) =>{
         }
 
         if (_.isEmpty(loginToken)) {
+          console.log('No Token.');
         return ctx.badRequest('Invalid token.');
         }
         const token = await passwordless.fetchToken(loginToken);
 
         if (!token || !token.is_active) {
+          console.log('Invalid Deactivated.');
         return ctx.badRequest('Invalid token.');
         }
 
-        console.log(ctx);
 
         const isValid = await passwordless.isTokenValid(token);
 
@@ -235,6 +237,7 @@ module.exports = (plugin) =>{
         const isEmail = emailRegExp.test(email);
     
         if (email && !isEmail) {
+          console.log('Email not found.');
           return ctx.badRequest('No such user is registered. Please contact us to get a subscription.');
         }
     
@@ -245,20 +248,24 @@ module.exports = (plugin) =>{
             where: { email }
           });
         } catch (e) {
+          console.log('No such user exists.');
           return ctx.badRequest('No such user is registered. Please contact us to get a subscription.')
         }
     
         if (!user) {
+          console.log('No such user exists.');
           return ctx.badRequest('No such user is registered. Please contact us to get a subscription.');
         }
     
         if (email && user.email !== email) {
+          console.log('Email not found.');
           return ctx.badRequest('No such user is registered. Please contact us to get a subscription.')
         }
 
         // console.log(user);
     
         if (user.blocked) {
+          console.log('User is blocked');
           return ctx.badRequest('Your access is blocked. Please contact us to resolve this. ');
         }
     
@@ -269,12 +276,14 @@ module.exports = (plugin) =>{
         console.log(currentDateTime,expiryDateTime);
 
         if (currentDateTime > expiryDateTime) {
+          console.log('Plan Expired.');
           return ctx.badRequest('Your plan has expired. Please contact us to renew your subscription.');
         }
         
         //password check
 
         if (!password) {
+          console.log("No password found.");
           return ctx.badRequest('Password is required.');
         }
         // console.log(password);
@@ -286,6 +295,7 @@ module.exports = (plugin) =>{
         );
   
         if (!validPassword) {
+          console.log("Invalid Password.");
           throw new ValidationError('Invalid identifier or password.');
         }
         // console.log('password validated');
@@ -306,6 +316,7 @@ module.exports = (plugin) =>{
 
           console.log(`${user.email} magic link sent`);
         } catch (err) {
+          console.log('Error occured during mail sent.');
           return ctx.badRequest("Failed to send magic link email. Please try again later.");
         } 
     }
