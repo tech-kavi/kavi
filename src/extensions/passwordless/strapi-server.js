@@ -44,13 +44,13 @@ module.exports = (plugin) =>{
 
         if (_.isEmpty(loginToken)) {
           console.log('No Token.');
-        return ctx.badRequest('Invalid token.');
+        return ctx.badRequest('Please enter the code.');
         }
         const token = await passwordless.fetchToken(loginToken);
 
         if (!token || !token.is_active) {
-          console.log('Invalid Deactivated.');
-        return ctx.badRequest('Invalid token.');
+          console.log('Code Deactivated.');
+        return ctx.badRequest('Code expired.');
         }
 
 
@@ -58,7 +58,7 @@ module.exports = (plugin) =>{
 
         if (!isValid) {
         await passwordless.deactivateToken(token);
-        return ctx.badRequest('Invalid token.');
+        return ctx.badRequest('Code expired.');
         }
         // console.log("token validated");
 
@@ -73,7 +73,7 @@ module.exports = (plugin) =>{
         // console.log("email fetched");
 
         if (!user) {
-        return ctx.badRequest('No user found. Contact us to resolve this.');
+        return ctx.badRequest('You are not a user anymore. Please contact us to resolve this.');
         }
 
         // console.log("email checked");
@@ -166,7 +166,7 @@ module.exports = (plugin) =>{
     
         } else {
             console.log('Token already used');
-            return ctx.badRequest('Link has been used already. Please request a new login link.');
+            return ctx.badRequest('Code has already been used. Please request a new code again.');
           }
         }
 
@@ -317,7 +317,7 @@ module.exports = (plugin) =>{
           console.log(`${user.email} magic link sent`);
         } catch (err) {
           console.log('Error occured during mail sent.');
-          return ctx.badRequest("Failed to send magic link email. Please try again later.");
+          return ctx.badRequest("Failed to send verification code. Please try again later.");
         } 
     }
 

@@ -15,6 +15,8 @@ module.exports = {
         CODE: token.body,
         USER: user,
       });
+
+     
   
       const html = await this.template(settings.message_html, {
         URL: settings.confirmationUrl,
