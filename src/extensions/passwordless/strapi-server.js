@@ -32,9 +32,8 @@ module.exports = (plugin) =>{
         const {passwordless} = strapi.plugins['passwordless'].services;
         const {user: userService, jwt: jwtService} = strapi.plugins['users-permissions'].services;
 
-        const LoginKey = ctx.request.headers['login-key'];
+        
         console.log(ctx);
-        console.log(LoginKey);
         // console.log(ctx);
         const isEnabled = await passwordless.isEnabled();
 
@@ -135,7 +134,6 @@ module.exports = (plugin) =>{
           const updatedUser = await strapi.entityService.update('plugin::users-permissions.user', user.id, {
               data: {
                   currentToken: newToken,
-                  loginKey:LoginKey,
                   token:loginToken,
                   last_login: moment().tz('Asia/Kolkata').format(),
               },
@@ -158,7 +156,6 @@ module.exports = (plugin) =>{
             await strapi.entityService.update('plugin::users-permissions.user', user.id, {
                 data: {
                   currentToken: newToken,
-                  loginKey:LoginKey,
                   token:loginToken,
                   last_login: moment().tz('Asia/Kolkata').format(),
                 },
