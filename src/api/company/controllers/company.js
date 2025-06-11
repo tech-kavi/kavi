@@ -172,14 +172,28 @@ module.exports = createCoreController('api::company.company',{
     });
 
     // To check watchlist status
+    // const watchlistedCompanies = await strapi.entityService.findMany('api::watchlist.watchlist', {
+    //     filters: {
+    //         watchlisted_by: user.id,
+    //         company:company.data.id,
+    //     },
+    //     populate: {
+    //         company: true,
+    //     },
+    //     limit:-1,
+    // });
+
     const watchlistedCompanies = await strapi.entityService.findMany('api::watchlist.watchlist', {
         filters: {
             watchlisted_by: user.id,
-            company:company.data.id,
+            publishedAt:{
+                $notNull:true,
+            },
         },
-        populate: {
-            company: true,
+        populate:{
+            company:true,
         },
+        limit:-1,
     });
 
     const WatchlistCompanyIds = watchlistedCompanies.map(watchlist => watchlist.company.id);

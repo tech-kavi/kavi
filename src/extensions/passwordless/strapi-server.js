@@ -162,7 +162,7 @@ module.exports = (plugin) =>{
             });
     
         } else {
-            console.log('Token already used');
+            console.log('Code already used');
             return ctx.badRequest('Code has already been used. Please request a new code again.');
           }
         }
