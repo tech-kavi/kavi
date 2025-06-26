@@ -80,6 +80,7 @@ module.exports = {
                           }
                       }
                   },
+            industry:true,
       },
 
       filters:{
@@ -184,12 +185,16 @@ module.exports = {
 
    // Fetch sub-industry and industry articles only if sub-industry is not "Miscellaneous"
    const subIndustry = article.sub_industries[0]?.name;
+   const industry= article.industry.id;
+
+   console.log(industry);
    if (subIndustry && subIndustry !== "Miscellaneous" && subIndustry !== "Marketplace" && subIndustry !== "Diversified") {
        // If we don't have enough articles, fetch sub-industry articles
        if (relatedArticles.length < 3) {
            const subIndustryArticles = await strapi.entityService.findMany('api::article.article', {
                filters: {
                    sub_industries: { name: subIndustry },
+                   industry:{id:industry},
                    publishedAt: { $notNull: true },
                    id: { $ne: id }
                },

@@ -104,6 +104,10 @@ module.exports = createCoreController('api::company.company',{
         return ctx.badRequest("No Company found");
     }
 
+    //for getting related companies
+    const industries = company.data.attributes.industries.data;
+    const industryIds = industries.map(industry => industry.id);
+
     const sub_industries = company.data.attributes.sub_industries.data;
     const subIndustryNames = sub_industries.filter(subIndustry => subIndustry.attributes.name !== "Miscellaneous" && subIndustry.attributes.name !== "Marketplace" && subIndustry.attributes.name !== "Diversified").map(subIndustry => subIndustry.attributes.name);
 
@@ -122,6 +126,11 @@ module.exports = createCoreController('api::company.company',{
                     },
                     publishedAt: {
                         $notNull: true,
+                    },
+                    industries:{
+                        id:{
+                            $in:industryIds,
+                        }
                     }
                 },
                 populate: {
