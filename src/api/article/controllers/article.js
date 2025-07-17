@@ -166,7 +166,7 @@ module.exports = createCoreController('api::article.article',{
     // let articles = await getArticles(startOfPreviousMonth);
 
     // If articles of current month is less than 5, query for the previous month's articles
-    if (!articles.data || articles.data.length < 5) {
+    if (!articles.data || articles.data.length === 0) {
         console.log("fetching articles from pervious month");
         articles = await getArticles(startOfPreviousMonth);
         source = "last_month";

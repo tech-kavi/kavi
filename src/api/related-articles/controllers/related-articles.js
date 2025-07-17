@@ -187,7 +187,7 @@ module.exports = {
    const subIndustry = article.sub_industries[0]?.name;
    const industry= article.industry.id;
 
-   console.log(industry);
+  // console.log(industry);
    if (subIndustry && subIndustry !== "Miscellaneous" && subIndustry !== "Marketplace" && subIndustry !== "Diversified") {
        // If we don't have enough articles, fetch sub-industry articles
        if (relatedArticles.length < 3) {
