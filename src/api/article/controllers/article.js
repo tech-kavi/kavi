@@ -172,10 +172,17 @@ module.exports = createCoreController('api::article.article',{
         source = "last_month";
     }
 
+        const articleIds = articles.data.map(a=>a.id);
+
 
         const bookmarkedArticles = await strapi.entityService.findMany('api::bookmark.bookmark', {
         filters: {
             bookmarked_by: user.id,
+            article:{
+                id:{
+                    $in:articleIds,
+                }
+            }
         },
         populate:{
             article:true,
@@ -194,6 +201,11 @@ module.exports = createCoreController('api::article.article',{
     const readArticles = await strapi.entityService.findMany('api::read-article.read-article',{
         filters:{
             user: user.id,
+            article:{
+                id:{
+                    $in:articleIds,
+                }
+            }
         },
         populate:{
             article:{
