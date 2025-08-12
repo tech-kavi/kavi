@@ -37,25 +37,6 @@ module.exports = createCoreController('api::company.company',{
                 }
             },
             articles: {
-                // populate: {
-                //     industry: {
-                //         filters:{
-                //             publishedAt:{
-                //                 $notNull:true,
-                //             }
-                //         }
-                //     },
-                //     primary_companies: {
-                //         populate: {
-                //             logo: true,
-                //         },
-                //         filters:{
-                //             publishedAt:{
-                //                 $notNull:true,
-                //             }
-                //         }
-                //     },
-                // },
                 count:true,
                 filters: {
                     publishedAt: {
@@ -63,32 +44,6 @@ module.exports = createCoreController('api::company.company',{
                     },
                 },
             },
-            // secondary_articles: {
-            //     populate: {
-            //         industry: {
-            //             filters:{
-            //                 publishedAt:{
-            //                     $notNull:true,
-            //                 }
-            //             }
-            //         },
-            //         primary_companies: {
-            //             populate: {
-            //                 logo: true,
-            //             },
-            //             filters:{
-            //                 publishedAt:{
-            //                     $notNull:true,
-            //                 }
-            //             }
-            //         },
-            //     },
-            //     filters: {
-            //         publishedAt: {
-            //             $notNull: true,
-            //         },
-            //     },
-            // },
         },
         sort: { publishedAt: 'desc' },
         filters: {
@@ -180,17 +135,7 @@ module.exports = createCoreController('api::company.company',{
         };
     });
 
-    // To check watchlist status
-    // const watchlistedCompanies = await strapi.entityService.findMany('api::watchlist.watchlist', {
-    //     filters: {
-    //         watchlisted_by: user.id,
-    //         company:company.data.id,
-    //     },
-    //     populate: {
-    //         company: true,
-    //     },
-    //     limit:-1,
-    // });
+    
 
     const watchlistedCompanies = await strapi.entityService.findMany('api::watchlist.watchlist', {
         filters: {

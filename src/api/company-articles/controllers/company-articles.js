@@ -5,47 +5,47 @@
  * A set of functions called "actions" for `company-articles`
  */
 
-function countWordsInFields(article){
-  let totalWordCount = 0;
+// function countWordsInFields(article){
+//   let totalWordCount = 0;
 
-  //count words in brief
+//   //count words in brief
 
-  // console.log(article.data.attributes.brief);
-  // console.log(article);
-  // console.log('from function');
-  if(article.brief){
-      article.brief.forEach(brief => {
-          totalWordCount += brief.point.split(' ').length;
-      });
+//   // console.log(article.data.attributes.brief);
+//   // console.log(article);
+//   // console.log('from function');
+//   if(article.brief){
+//       article.brief.forEach(brief => {
+//           totalWordCount += brief.point.split(' ').length;
+//       });
 
-      delete article.brief;
-  }
-  // console.log(totalWordCount);
+//       delete article.brief;
+//   }
+//   // console.log(totalWordCount);
 
 
 
-  //count words table-with_content
-  if(article?.table_with_content){
-      article?.table_with_content?.forEach(toc =>{
-          totalWordCount += toc?.tablePoint.split(' ').length;
+//   //count words table-with_content
+//   if(article?.table_with_content){
+//       article?.table_with_content?.forEach(toc =>{
+//           totalWordCount += toc?.tablePoint.split(' ').length;
 
           
 
-          toc?.ques?.forEach(ques=>{
-              // console.log(ques);
-              totalWordCount += ques?.question.split(' ').length;
-              totalWordCount += ques?.answer.split(' ').length;
-          })
-      });
+//           toc?.ques?.forEach(ques=>{
+//               // console.log(ques);
+//               totalWordCount += ques?.question.split(' ').length;
+//               totalWordCount += ques?.answer.split(' ').length;
+//           })
+//       });
 
-      delete article?.table_with_content;
-  }
+//       delete article?.table_with_content;
+//   }
 
-  // console.log(totalWordCount);
+//   // console.log(totalWordCount);
 
-  const readTime = Math.ceil(totalWordCount/process.env.WPM);
-  return readTime;
-}
+//   const readTime = Math.ceil(totalWordCount/process.env.WPM);
+//   return readTime;
+// }
 
 
 module.exports = {
@@ -65,121 +65,71 @@ module.exports = {
 
       
 
-        const { page = 1, pageSize = 10, ...filters } = ctx.query.pagination;
-        // console.log(ctx.query.pagination);
-        // Convert page and pageSize to integers
-        const pageInt = parseInt(page, 10);
-        const pageSizeInt = parseInt(pageSize, 10);
-        // console.log(pageSize);
-        // Build query parameters
+       // 1. Pagination values
+const pageInt = parseInt(ctx.query.pagination?.page || 1, 10);
+const pageSizeInt = parseInt(ctx.query.pagination?.pageSize || 10, 10);
 
-    const query = {
-      filters:{
-        ...ctx.request.query.filters,
-        primary_companies:{
-          id:{
-            $in:[id],
-          },
-          publishedAt:{
-            $notNull:true,
-          }
-        },
-        publishedAt:{
-          $notNull:true,
-        }
-      },
-      populate:{
-        industry:{
-          filters:{
-            publishedAt:{
-              $notNull:true,
-            }
-          }
-        },
-        brief:true,
-        table_with_content: {
-          populate: {
-              ques: true,
-          }
-        }
-      },
-      sort:[...ctx.request.query.sort],
-      
-      
-    };
-    
-    const articles = await strapi.entityService.findMany('api::article.article',query);
+const queryFilters = {
+  ...ctx.request.query.filters,
+  primary_companies: {
+    id: { $in: [id] },
+    publishedAt: { $notNull: true },
+  },
+  publishedAt: { $notNull: true },
+};
 
-    
+// 2. Fetch articles for the current page
+const paginatedArticles = await strapi.entityService.findMany('api::article.article', {
+  filters: queryFilters,
+  populate: {
+    industry: true,
+  },
+  sort: [...ctx.request.query.sort],
+  start: (pageInt - 1) * pageSizeInt,
+  limit: pageSizeInt,
+});
 
-    const paginatedArticles = articles.slice((pageInt-1)* pageSizeInt, pageInt*pageSizeInt);
+// 3. Get total count without loading all records
+const total = await strapi.entityService.count('api::article.article', {
+  filters: queryFilters,
+});
 
-    //calculate read time for each article
-    const articlesWithReadTime = paginatedArticles.map(article =>{
-      
-      const readTime = countWordsInFields(article);
-      
-      return{
-        ...article,
-        read_time:readTime,
-      };
-    })
+// 4. Extract IDs for bookmark & read-article queries
+const articleIds = paginatedArticles.map(a => a.id);
 
-    //to check bookmark status
-    const bookmarkedArticles = await strapi.entityService.findMany('api::bookmark.bookmark', {
-      filters: {
-          bookmarked_by: user.id,
-      },
-      populate:{
-          article:{
-            filters:{
-              publishedAt:{
-                $notNull:true,
-              }
-            },
-          },
-      },
-      limit:-1
-  });
+const [bookmarkedArticles, readArticles] = await Promise.all([
+  strapi.entityService.findMany('api::bookmark.bookmark', {
+    filters: { bookmarked_by: user.id, article: { id: { $in: articleIds } } },
+    populate: { article: { fields: ['id'] } },
+    limit: -1
+  }),
+  strapi.entityService.findMany('api::read-article.read-article', {
+    filters: { user: user.id, article: { id: { $in: articleIds } } },
+    populate: { article: { fields: ['id'] } },
+    limit: -1
+  })
+]);
 
-  const BookmarkArticleIds = bookmarkedArticles.map(bookmark => bookmark.article.id);
+const BookmarkArticleIds = bookmarkedArticles.map(b => b.article.id);
+const ReadArticleIds = readArticles.map(r => r.article.id);
 
-
-  //fetch already read articles
-
-  const readArticles = await strapi.entityService.findMany('api::read-article.read-article',{
-      filters:{
-          user: user.id,
-      },
-      populate:{
-          article:{
-              populate:['id'],
-          }
-      },
-      limit: -1
-  });
-
-  const readArticleIds = readArticles.map(item => item.article.id);
-
-
-  const CompanyArticleWithBookmarkStatus = articlesWithReadTime.map(article =>({
-    ...article,
-    isBookmarked:BookmarkArticleIds.includes(article.id),
-    isRead:readArticleIds.includes(article.id),
-    
+const CompanyArticleWithBookmarkStatus = paginatedArticles.map(article => ({
+  ...article,
+  isBookmarked: BookmarkArticleIds.includes(article.id),
+  isRead: ReadArticleIds.includes(article.id),
 }));
 
-    const total = articles.length;
+// 5. Response with meta
+return {
+  data: CompanyArticleWithBookmarkStatus,
+  meta: {
+    page: pageInt,
+    pageSize: pageSizeInt,
+    pageCount: Math.ceil(total / pageSizeInt),
+    total,
+  },
+};
 
-    return {
-      data:CompanyArticleWithBookmarkStatus,
-      meta:{
-        page:pageInt,
-        pageSize:pageSizeInt,
-        pageCount:Math.ceil(total/pageSizeInt),
-        total,
-      },
-    };
 
 
     } catch (err) {

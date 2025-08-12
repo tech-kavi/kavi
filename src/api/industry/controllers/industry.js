@@ -16,67 +16,7 @@ module.exports = createCoreController('api::industry.industry',{
             return ctx.unauthorized("you must be logged in");
         }
         
-        // ctx.query = {
-        //     ...ctx.query,
-        //     locale:'en',
-        //     populate:{
-        //         companies:
-        //         {
-        //             populate:{
-        //                 logo:true,
-        //                 articles:{
-        //                     count:true,
-        //                     filters:{
-        //                         publishedAt:{
-        //                             $notNull:true,
-        //                         }
-        //                     }
-        //                 },
-        //                 ipo:true,
-        //             },
-        //             filters:{
-        //                 publishedAt:{
-        //                     $notNull:true,
-        //                 },
-        //             },
-        //         },
-        //         articles:{
-        //             filters:{
-        //                 publishedAt:{
-        //                     $notNull:true,
-        //                 }
-        //             }
-        //         },
-        //        top_companies:{
-                        
-        //                 populate:{
-        //                     logo:true,
-        //                     articles:true,
-        //                     ipo:true,
-        //                 },
-        //                 filters:{
-        //                     publishedAt:{
-        //                         $notNull:true,
-        //                     },
-        //                 },
-        //        },
-        //        sub_industries:{
-        //         fields:['name'],
-        //         filters:{
-        //             publishedAt:{
-        //                 $notNull:true,
-        //             },
-        //         },
-        //        }
-        //     },
-        //     filters:{
-        //         ...ctx.request.query.filters,
-        //         publishedAt:{
-        //             $notNull:true,
-        //         },
-        //     },
-        //     sort:['name']
-        // };
+        
 
 
         ctx.query = {
@@ -176,19 +116,7 @@ module.exports = createCoreController('api::industry.industry',{
             // console.log(industry.attributes.articles);
             const totalArticles = industry.attributes.articles.data.attributes.count;
           
-            // Function to check if an article was published in the last 30 days
-            // const isPublishedInLast30Days = (publishDate) => {
-               
-            //     const articleDate = new Date(publishDate);
-            //     const today = new Date();
-            //     const thirtyDaysAgo = new Date(today.setDate(today.getDate() - 30));
-            //     return articleDate >= thirtyDaysAgo;
-            // };
-
-            // // Count recent articles of the industry
-            // const recentArticlesCount = industry.attributes.articles.data.filter(article => 
-            //     isPublishedInLast30Days(article.attributes.publishedAt)
-            // ).length;
+           
 
 
             //counting articles of top companies
@@ -226,9 +154,7 @@ module.exports = createCoreController('api::industry.industry',{
                 };
             });
 
-            // companiesWithArticleCount = companiesWithArticleCount.sort((a,b)=>{
-            //     return a.attributes.name.localeCompare(b.attributes.name);
-            // });
+            
 
             //return the industry with updated top_companies
             const {companies, articles, ...industryAttributesWithoutCompanies}=industry.attributes;
@@ -270,26 +196,7 @@ module.exports = createCoreController('api::industry.industry',{
             locale:'en',
             populate:{
                 articles:{
-                    // populate:{
-                    //     industry:{
-                    //         filters:{
-                    //             publishedAt:{
-                    //                 $notNull:true,
-                    //             }
-                    //         }
-                    //     },
-                    //     primary_companies:{
-                    //         populate:{
-                    //             logo:true
-                    //         },
-                    //         filters:{
-                    //             publishedAt:{
-                    //                 $notNull:true,
-                    //             }
-                    //         }
-                    //     },
-                        
-                    // },
+                    
                     count:true,
                     filters:{
                         publishedAt:{
@@ -298,24 +205,7 @@ module.exports = createCoreController('api::industry.industry',{
                     }
 
                 },
-                // companies:{
-                //     populate:{
-                //         logo:true,
-                //         articles:
-                //         {
-                //             filters:{
-                //                 publishedAt:{
-                //                     $notNull:true,
-                //                 }
-                //             }
-                //         },
-                //     },
-                //     filters:{
-                //         publishedAt:{
-                //             $notNull:true,
-                //         },
-                //     }
-                // },
+               
                 sub_industries:{
                     filters:{
                         publishedAt:{
@@ -339,24 +229,7 @@ module.exports = createCoreController('api::industry.industry',{
             return ctx.badRequest("No industry found");
         }
 
-        // industry.data.attributes.articleCounts = industry.data.attributes.articles.data.length;
-
-        //counting articles of companies
-        // const companiesWithArticleCount = industry.data.attributes.companies.data.map(company => {
-        //     const articleCount = company.attributes.articles.data.length;
-
-        //     const {articles, ...companyAttributesWithoutArticles} = company.attributes;
-        //     return {
-        //         ...company,
-        //         attributes:{
-        //             ...companyAttributesWithoutArticles,
-        //             articleCount,
-        //         }
-
-        //     };
-        // });
         
-        // industry.data.attributes.companies=companiesWithArticleCount;
 
         return industry;
     }
