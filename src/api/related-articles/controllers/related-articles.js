@@ -244,15 +244,15 @@ relatedArticles = relatedArticles.sort((a, b) => new Date(b.publishedAt) - new D
   // console.log(relatedArticles);
 
   //calculate read time for each article
-const RelatedArticlesWithReadTime = relatedArticles.map(article =>{
+// const RelatedArticlesWithReadTime = relatedArticles.map(article =>{
 
-  const readTime = countWordsInFieldsOfRelatedArticles(article);
+//   const readTime = countWordsInFieldsOfRelatedArticles(article);
   
-  return{
-    ...article,
-    read_time:readTime,
-  };
-});
+//   return{
+//     ...article,
+//     read_time:readTime,
+//   };
+// });
 
 
   // Fetching bookmarked, liked, and disliked articles for the user
@@ -264,8 +264,13 @@ const RelatedArticlesWithReadTime = relatedArticles.map(article =>{
 //     }),
 // ]);
 
+const articleIds = relatedArticles.map(a => a.id);
+
 const bookmarkedArticles = await strapi.entityService.findMany('api::bookmark.bookmark',{
-    filters: { bookmarked_by: user.id },
+    filters: { 
+        bookmarked_by: user.id,
+        article: { id: { $in: articleIds } }
+    },
     populate: { article: true },
     limit:-1,
 })
@@ -278,6 +283,7 @@ const BookmarkArticleIds = bookmarkedArticles.map(bookmark => bookmark.article.i
 const readArticles = await strapi.entityService.findMany('api::read-article.read-article',{
     filters:{
         user: user.id,
+        article: { id: { $in: articleIds } }
     },
     populate:{
         article:{
@@ -290,7 +296,7 @@ const readArticles = await strapi.entityService.findMany('api::read-article.read
 const readArticleIds = readArticles.map(item => item.article.id);
 
 // Adding bookmark status to related articles
-const articleWithBookmarkStatus = RelatedArticlesWithReadTime.map(article => ({
+const articleWithBookmarkStatus = relatedArticles.map(article => ({
   ...article,
   isBookmarked: BookmarkArticleIds.includes(article.id),
   isRead:readArticleIds.includes(article.id),

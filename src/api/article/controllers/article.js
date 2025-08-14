@@ -428,7 +428,7 @@ module.exports = createCoreController('api::article.article',{
 
         // console.log(article);
 
-       const read_time=this.countWordsInFields(article);
+    //    const read_time=this.countWordsInFields(article);
 
         
     
@@ -487,7 +487,7 @@ module.exports = createCoreController('api::article.article',{
         article.data.attributes.isLiked = LikeArticleIds.includes(article.data.id);
         article.data.attributes.isDisiked = DisLikeArticleIds.includes(article.data.id);
         article.data.attributes.isBookmarked = BookmarkArticleIds.includes(article.data.id);
-        article.data.attributes.read_time = read_time;
+        // article.data.attributes.read_time = read_time;
         article.data.attributes.isRead = ReadArticleIds.includes(article.data.id);;
     
         return article;
