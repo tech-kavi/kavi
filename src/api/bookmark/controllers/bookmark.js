@@ -53,9 +53,21 @@ module.exports = createCoreController('api::bookmark.bookmark',{
 
         //fetch already read articles
 
+        const bookmarkedArticleIds = bookmarks.data.map(
+            b => b.attributes.article.data.id
+            );
+
+
       const readArticles = await strapi.entityService.findMany('api::read-article.read-article',{
           filters:{
               user: user.id,
+              article:
+              {
+                id:
+                {
+                    $in: bookmarkedArticleIds
+                }
+              }
           },
           populate:{
               article:{

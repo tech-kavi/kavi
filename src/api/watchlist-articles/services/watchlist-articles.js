@@ -99,12 +99,20 @@ module.exports = {
 
             // console.log(totalEntries);
 
+            const articleIds = entries.map(a=>a.id);
+
             const bookmarkedArticles = await strapi.entityService.findMany('api::bookmark.bookmark', {
                 filters: {
                     bookmarked_by: userId,
-                    article: {
-                        $notNull: true,
-                    },
+                    article:
+                        {
+                            id:{
+                            $in:articleIds,
+                            },
+                             publishedAt:{
+                                    $notNull:true,
+                                }
+                        },
                 },
                 populate:{
                     article:true,
@@ -121,6 +129,11 @@ module.exports = {
       const readArticles = await strapi.entityService.findMany('api::read-article.read-article',{
           filters:{
               user: userId,
+               article: {
+                    id:{
+                            $in:articleIds,
+                        }    
+                }
           },
           populate:{
               article:{

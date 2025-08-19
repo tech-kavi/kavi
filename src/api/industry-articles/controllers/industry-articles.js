@@ -75,10 +75,19 @@ module.exports = {
 
     const paginatedArticles = articles.slice((pageInt-1)* pageSizeInt, pageInt*pageSizeInt);
 
+    const articleIds = paginatedArticles.map(a=>a.id);
+
+
     //to check bookmark status
     const bookmarkedArticles = await strapi.entityService.findMany('api::bookmark.bookmark', {
       filters: {
           bookmarked_by: user.id,
+          article:
+          {
+            id:{
+              $in:articleIds,
+            }
+          }
       },
       populate:{
           article:true,
@@ -87,12 +96,19 @@ module.exports = {
   });
 
   const BookmarkArticleIds = bookmarkedArticles.map(bookmark => bookmark.article.id);
+ console.log(BookmarkArticleIds);
 
   //fetch already read articles
 
       const readArticles = await strapi.entityService.findMany('api::read-article.read-article',{
           filters:{
               user: user.id,
+              article:
+              {
+                id:{
+                  $in:articleIds,
+                }
+              }
           },
           populate:{
               article:{
