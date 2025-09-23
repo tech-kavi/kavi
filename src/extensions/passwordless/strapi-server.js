@@ -293,7 +293,7 @@ module.exports = (plugin) =>{
   
         if (!validPassword) {
           console.log("Invalid Password.");
-          throw new ValidationError('Invalid identifier or password.');
+          throw new ValidationError('Invalid Password.');
         }
         // console.log('password validated');
 

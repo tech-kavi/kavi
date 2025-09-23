@@ -155,9 +155,26 @@ module.exports = createCoreController('api::article.article',{
         return await super.find(ctx);
     };
 
+    let articles;
+    let source;
+
+    const month_details = process.env.month_details;
+    //console.log(month_details);
+
+    if(month_details == 'startOfCurrentMonth')
+    {
+        console.log('from current month');
+        articles = await getArticles(startOfCurrentMonth);
+        source = "this_month";
+    }
+    else{
+        articles = await getArticles(startOfPreviousMonth);
+        source = "last_month";
+    }
+
     // Initial query for the current month's articles
-    let articles = await getArticles(startOfCurrentMonth);
-    let source = "this_month";
+    //let articles = await getArticles(startOfCurrentMonth);
+    //let source = "this_month";
 
     // console.log("fetching articles from pervious month");
     // let articles = await getArticles(startOfPreviousMonth);
