@@ -159,7 +159,7 @@ module.exports = createCoreController('api::article.article',{
     let source;
 
     const month_details = process.env.month_details;
-    //console.log(month_details);
+    console.log(month_details);
 
     if(month_details == 'startOfCurrentMonth')
     {
