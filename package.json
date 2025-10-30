@@ -10,12 +10,12 @@
     "strapi": "strapi"
   },
   "dependencies": {
-    "@strapi/plugin-cloud": "4.24.2",
-    "@strapi/plugin-i18n": "4.24.2",
-    "@strapi/plugin-users-permissions": "4.24.2",
+    "@strapi/plugin-cloud": "4.25.24",
+    "@strapi/plugin-i18n": "4.25.24",
+    "@strapi/plugin-users-permissions": "4.25.24",
     "@strapi/provider-email-mailgun": "^5.12.1",
-    "@strapi/provider-email-sendgrid": "^4.24.3",
-    "@strapi/strapi": "4.24.2",
+    "@strapi/provider-email-sendgrid": "^4.25.24",
+    "@strapi/strapi": "4.25.24",
     "axios": "^1.7.2",
     "better-sqlite3": "8.6.0",
     "moment-timezone": "^0.5.45",

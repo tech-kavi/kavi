@@ -1,4 +1,4 @@
-import type { Schema, Attribute } from '@strapi/strapi';
+import type { Attribute, Schema } from '@strapi/strapi';
 
 export interface ArticlesRelatedArticles extends Schema.Component {
   collectionName: 'components_articles_related_articles';
@@ -27,8 +27,8 @@ export interface ArticletagsLocalTags extends Schema.Component {
 export interface BriefBriefs extends Schema.Component {
   collectionName: 'components_brief_briefs';
   info: {
-    displayName: 'Briefs';
     description: '';
+    displayName: 'Briefs';
   };
   attributes: {
     point: Attribute.RichText & Attribute.Required;
@@ -67,25 +67,25 @@ export interface OpenDetailsOpenDetails extends Schema.Component {
 export interface QuestionAnswerQues extends Schema.Component {
   collectionName: 'components_question_answer_ques';
   info: {
-    displayName: 'Ques';
     description: '';
+    displayName: 'Ques';
   };
   attributes: {
-    question: Attribute.RichText & Attribute.Required;
     answer: Attribute.RichText & Attribute.Required;
+    question: Attribute.RichText & Attribute.Required;
   };
 }
 
 export interface TableOfContentIndex extends Schema.Component {
   collectionName: 'components_table_of_content_indices';
   info: {
-    displayName: 'Index';
     description: '';
+    displayName: 'Index';
   };
   attributes: {
-    tablePoint: Attribute.RichText & Attribute.Required;
     ques: Attribute.Component<'question-answer.ques', true> &
       Attribute.Required;
+    tablePoint: Attribute.RichText & Attribute.Required;
   };
 }
 
