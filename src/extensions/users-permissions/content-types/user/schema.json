@@ -163,6 +163,12 @@
     },
     "OpensToday": {
       "type": "integer"
+    },
+    "special_articles": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::article.article",
+      "inversedBy": "allowed_users"
     }
   }
 }

@@ -108,6 +108,7 @@ module.exports = {
             }
           },
         },
+        allowed_users:{fields:['id']},
       },
       sort:['publishedAt:desc'],
       limit:-1,
@@ -173,11 +174,32 @@ module.exports = {
 
   const BookmarkArticleIds = bookmarkedArticles.map(bookmark => bookmark.article.id);
 
-  const CompanyArticleWithBookmarkStatus = articlesWithReadTime.map(article =>({
-    ...article,
+//   const CompanyArticleWithBookmarkStatus = articlesWithReadTime.map(article =>({
+//     ...article,
+//     isBookmarked:BookmarkArticleIds.includes(article.id),
+//     isRead:readArticleIds.includes(article.id),
+// }));
+
+  const CompanyArticleWithBookmarkStatus = articlesWithReadTime.map(article =>{
+
+   // console.log(article);
+
+        const allowed_users = article.allowed_users || [];
+        console.log(allowed_users)
+
+        const canAccess = allowed_users.length===0 || allowed_users.some(u => u.id == user.id);
+
+        delete article.allowed_users;
+
+    return{
+      ...article,
     isBookmarked:BookmarkArticleIds.includes(article.id),
     isRead:readArticleIds.includes(article.id),
-}));
+    canAccess,
+
+    }
+    
+});
 
     const total = articles.length;
 

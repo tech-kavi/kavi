@@ -64,7 +64,7 @@ module.exports = () => {
         .map(id => id.trim())
         .filter(Boolean);
 
-        console.log(bypassUserIds);
+       // console.log(bypassUserIds);
 
             // ✅ Skip the currentToken check if user's email matches env variable
       if (!bypassUserIds.includes(String(user.id))) {

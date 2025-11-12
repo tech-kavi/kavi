@@ -43,7 +43,8 @@ module.exports = {
                         $notNull:true,
                     }
                 }
-            }
+            },
+            allowed_users:{fields:['id']},
         },
         sort: [...(ctx.request.query.sort || []),'publishedAt:desc','id:desc'],
         filters: {
@@ -91,11 +92,27 @@ const readArticles = await strapi.entityService.findMany('api::read-article.read
 const readArticleIds = readArticles.map(item => item.article.id);
 
 
-const articleWithBookmarkStatus = paginatedArticles.map(article =>({
-  ...article,
-  isBookmarked:BookmarkArticleIds.includes(article.id),
-  isRead:readArticleIds.includes(article.id),
-}));
+// const articleWithBookmarkStatus = paginatedArticles.map(article =>({
+//   ...article,
+//   isBookmarked:BookmarkArticleIds.includes(article.id),
+//   isRead:readArticleIds.includes(article.id),
+// }));
+
+const articleWithBookmarkStatus = paginatedArticles.map(article =>{
+
+
+        const allowed_users = article.allowed_users || [];
+
+        const canAccess = allowed_users.length===0 || allowed_users.some(u => u.id == user.id);
+
+        delete article.allowed_users;
+    
+    return {
+        ...article,
+        isBookmarked:BookmarkArticleIds.includes(article.id),
+        isRead:readArticleIds.includes(article.id),
+        canAccess,
+}});
 
 
 const total = articles.length;

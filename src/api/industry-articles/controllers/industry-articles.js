@@ -64,6 +64,8 @@ module.exports = {
             },
           },
       },
+
+      allowed_users:{fields:['id']},
       },
       sort:[...ctx.request.query.sort],
       
@@ -96,7 +98,7 @@ module.exports = {
   });
 
   const BookmarkArticleIds = bookmarkedArticles.map(bookmark => bookmark.article.id);
- console.log(BookmarkArticleIds);
+ //console.log(BookmarkArticleIds);
 
   //fetch already read articles
 
@@ -121,11 +123,29 @@ module.exports = {
       const readArticleIds = readArticles.map(item => item.article.id);
 
 
-  const CompanyArticleWithBookmarkStatus = paginatedArticles.map(article =>({
-    ...article,
+//   const CompanyArticleWithBookmarkStatus = paginatedArticles.map(article =>({
+//     ...article,
+//     isBookmarked:BookmarkArticleIds.includes(article.id),
+//      isRead:readArticleIds.includes(article.id),
+// }));
+
+  const CompanyArticleWithBookmarkStatus = paginatedArticles.map(article =>{
+
+        const allowed_users = article.allowed_users || [];
+      //  console.log(allowed_users)
+
+        const canAccess = allowed_users.length===0 || allowed_users.some(u => u.id == user.id);
+
+        delete article.allowed_users;
+
+    return {
+          ...article,
     isBookmarked:BookmarkArticleIds.includes(article.id),
      isRead:readArticleIds.includes(article.id),
-}));
+     canAccess,
+    }
+
+});
 
     const total = articles.length;
 

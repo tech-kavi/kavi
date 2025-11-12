@@ -379,6 +379,11 @@ export interface ApiArticleArticle extends Schema.CollectionType {
     };
   };
   attributes: {
+    allowed_users: Attribute.Relation<
+      'api::article.article',
+      'manyToMany',
+      'plugin::users-permissions.user'
+    >;
     article_id: Attribute.UID & Attribute.Private;
     bookmarks: Attribute.Relation<
       'api::article.article',
@@ -1474,6 +1479,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
     >;
     slotFilled: Attribute.Integer;
     slots: Attribute.Integer;
+    special_articles: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'manyToMany',
+      'api::article.article'
+    >;
     token: Attribute.String & Attribute.Private;
     TotalLimit: Attribute.Integer & Attribute.DefaultTo<100>;
     Type: Attribute.Enumeration<['Trial', 'Subscriber']> &

@@ -79,6 +79,7 @@ module.exports = {
                                 }
                             }
                         },
+                        allowed_users:{fields:['id']},
 
                     },
                     sort:[...ctx.request.query.sort,'publishedAt:desc'],
@@ -147,12 +148,32 @@ module.exports = {
 
       
 
-        const watchlistArticlesWithBookmarkStatus = entries.map(article =>({
+        // const watchlistArticlesWithBookmarkStatus = entries.map(article =>({
+        //         ...article,
+        //         isBookmarked:BookmarkArticleIds.includes(article.id),
+        //         isRead:readArticleIds.includes(article.id),
+        // }));
+
+        const watchlistArticlesWithBookmarkStatus = entries.map(article =>{
+
+            
+        const allowed_users = article.allowed_users || [];
+        //console.log(allowed_users)
+
+        const canAccess = allowed_users.length===0 || allowed_users.some(u => u.id == userId);
+
+        delete article.allowed_users;
+
+            return{
                 ...article,
                 isBookmarked:BookmarkArticleIds.includes(article.id),
                 isRead:readArticleIds.includes(article.id),
-        }));
-        
+                canAccess,
+            }
+
+        });
+
+                
 
             const meta={
                 page:pageNumber,

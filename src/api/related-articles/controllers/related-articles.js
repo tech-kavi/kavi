@@ -122,12 +122,7 @@ module.exports = {
                                   }
                               }
                           },
-                          brief:true,
-                          table_with_content: {
-                          populate: {
-                              ques: true,
-                          }
-                          }
+                          allowed_users:{fields:['id']},
                       },
                       filters: {
                           publishedAt: {
@@ -156,12 +151,8 @@ module.exports = {
                                   }
                               }
                           },
-                          brief:true,
-                          table_with_content: {
-                          populate: {
-                              ques: true,
-                          }
-                      }
+                          allowed_users:{fields:['id']},
+                        
                       },
                       filters: {
                           publishedAt: {
@@ -215,12 +206,8 @@ module.exports = {
                            }
                        }
                    },
-                   brief:true,
-                   table_with_content: {
-                           populate: {
-                               ques: true,
-                           }
-                   }
+                   allowed_users:{fields:['id']},
+                  
                }
            });
            relatedArticles.push(...subIndustryArticles);
@@ -241,28 +228,7 @@ relatedArticles = relatedArticles.sort((a, b) => new Date(b.publishedAt) - new D
   // Ensure only 3 related articles are returned
   relatedArticles = relatedArticles.slice(0, 3);
 
-  // console.log(relatedArticles);
 
-  //calculate read time for each article
-// const RelatedArticlesWithReadTime = relatedArticles.map(article =>{
-
-//   const readTime = countWordsInFieldsOfRelatedArticles(article);
-  
-//   return{
-//     ...article,
-//     read_time:readTime,
-//   };
-// });
-
-
-  // Fetching bookmarked, liked, and disliked articles for the user
-//   const [bookmarkedArticles, likedArticles, dislikedArticles] = await Promise.all([
-//     strapi.entityService.findMany('api::bookmark.bookmark', {
-//         filters: { bookmarked_by: user.id },
-//         populate: { article: true },
-//         limit:-1,
-//     }),
-// ]);
 
 const articleIds = relatedArticles.map(a => a.id);
 
@@ -296,11 +262,29 @@ const readArticles = await strapi.entityService.findMany('api::read-article.read
 const readArticleIds = readArticles.map(item => item.article.id);
 
 // Adding bookmark status to related articles
-const articleWithBookmarkStatus = relatedArticles.map(article => ({
-  ...article,
-  isBookmarked: BookmarkArticleIds.includes(article.id),
-  isRead:readArticleIds.includes(article.id),
-}));
+// const articleWithBookmarkStatus = relatedArticles.map(article => ({
+//   ...article,
+//   isBookmarked: BookmarkArticleIds.includes(article.id),
+//   isRead:readArticleIds.includes(article.id),
+// }));
+
+const articleWithBookmarkStatus = relatedArticles.map(article => {
+
+     const allowed_users = article.allowed_users || [];
+        console.log(allowed_users)
+
+        const canAccess = allowed_users.length===0 || allowed_users.some(u => u.id == user.id);
+
+        delete article.allowed_users;
+
+    return{
+          ...article,
+    isBookmarked: BookmarkArticleIds.includes(article.id),
+    isRead:readArticleIds.includes(article.id),
+    canAccess,
+    }
+
+});
 
   return articleWithBookmarkStatus;
 

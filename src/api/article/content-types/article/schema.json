@@ -100,6 +100,12 @@
       "relation": "oneToMany",
       "target": "api::disliked-article.disliked-article",
       "mappedBy": "article"
+    },
+    "allowed_users": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "special_articles"
     }
   }
 }

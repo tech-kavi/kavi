@@ -83,6 +83,7 @@ const paginatedArticles = await strapi.entityService.findMany('api::article.arti
   filters: queryFilters,
   populate: {
     industry: true,
+    allowed_users:{fields:['id']},
   },
   sort: [...ctx.request.query.sort],
   start: (pageInt - 1) * pageSizeInt,
@@ -113,11 +114,28 @@ const [bookmarkedArticles, readArticles] = await Promise.all([
 const BookmarkArticleIds = bookmarkedArticles.map(b => b.article.id);
 const ReadArticleIds = readArticles.map(r => r.article.id);
 
-const CompanyArticleWithBookmarkStatus = paginatedArticles.map(article => ({
+// const CompanyArticleWithBookmarkStatus = paginatedArticles.map(article => ({
+//   ...article,
+//   isBookmarked: BookmarkArticleIds.includes(article.id),
+//   isRead: ReadArticleIds.includes(article.id),
+// }));
+
+const CompanyArticleWithBookmarkStatus = paginatedArticles.map(article => {
+
+        const allowed_users = article.allowed_users || [];
+        //console.log(allowed_users)
+
+        const canAccess = allowed_users.length===0 || allowed_users.some(u => u.id == user.id);
+
+        delete article.allowed_users;
+
+  return{
   ...article,
   isBookmarked: BookmarkArticleIds.includes(article.id),
   isRead: ReadArticleIds.includes(article.id),
-}));
+  canAccess,
+  }
+});
 
 // 5. Response with meta
 return {

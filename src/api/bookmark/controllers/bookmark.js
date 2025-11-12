@@ -37,6 +37,7 @@ module.exports = createCoreController('api::bookmark.bookmark',{
                                 }
                             }
                         },
+                        allowed_users:{fields:['id']},
                         
                     },
 
@@ -81,11 +82,30 @@ module.exports = createCoreController('api::bookmark.bookmark',{
 
         
 
-        const articlesWithBookmarkIds = bookmarks.data.map(bookmark => ({
+        // const articlesWithBookmarkIds = bookmarks.data.map(bookmark => ({
+        //     bookmarkId: bookmark.id,
+        //     article: bookmark.attributes.article,
+        //      isRead: readArticleIds.includes(bookmark.attributes.article.data.id),
+        // }));
+
+        const articlesWithBookmarkIds = bookmarks.data.map(bookmark => {
+
+         //   console.log(bookmark?.attributes?.article?.data?.attributes?.allowed_users);
+
+        const allowed_users = bookmark?.attributes?.article?.data?.attributes?.allowed_users?.data || [];
+
+        const canAccess = allowed_users.length===0 || allowed_users.some(u => u.id == user.id);
+
+        delete bookmark.attributes.allowed_users;
+
+            return {
             bookmarkId: bookmark.id,
             article: bookmark.attributes.article,
              isRead: readArticleIds.includes(bookmark.attributes.article.data.id),
-        }));
+             canAccess,
+            }
+        });
+
 
         
        

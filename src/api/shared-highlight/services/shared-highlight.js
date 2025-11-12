@@ -23,7 +23,7 @@ module.exports = createCoreService('api::shared-highlight.shared-highlight',{
 
             
 
-            console.log(sharedHighlights);
+            //console.log(sharedHighlights);
             
               // extract article IDs from the watchlist entries
               let articleIds = sharedHighlights.map(entry => parseInt(entry.articleId));
@@ -70,6 +70,7 @@ module.exports = createCoreService('api::shared-highlight.shared-highlight',{
                                     }
                                 }
                             },
+                             allowed_users:{fields:['id']},
     
                         },
                         sort:[...ctx.request.query.sort],
@@ -95,6 +96,15 @@ module.exports = createCoreService('api::shared-highlight.shared-highlight',{
 
                 //  console.log(orderedArticles);
                 const paginatedArticles = orderedArticles.slice(start, start + pageSizeNumber);
+
+                // Add canAccess to each article
+                    for (const article of paginatedArticles) {
+                    const allowed_users = article.allowed_users || [];
+                    article.canAccess = allowed_users.length === 0 || allowed_users.some(u => u.id == userId);
+
+                    // Optional: remove allowed_users to reduce payload size
+                    delete article.allowed_users;
+                    }
                 
                    // Merge highlights into articles
         for (const article of paginatedArticles) {
