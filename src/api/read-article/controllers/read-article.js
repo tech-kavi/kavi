@@ -37,7 +37,11 @@ module.exports = createCoreController('api::read-article.read-article',{
 
         // const result = await super.find(ctx);
         const result = await strapi.entityService.findMany('api::read-article.read-article',ctx.query);
-        return result;
+        const articleIds = result
+            .map(r => r.article?.id)
+            .filter(Boolean);
+
+        return articleIds;
     },
 
     async create(ctx){
