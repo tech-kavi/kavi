@@ -85,10 +85,12 @@
       "required": true
     },
     "slots": {
-      "type": "integer"
+      "type": "integer",
+      "default": 1
     },
     "slotFilled": {
-      "type": "integer"
+      "type": "integer",
+      "default": 1
     },
     "expiry": {
       "type": "datetime"
@@ -146,7 +148,7 @@
     },
     "DailyLimit": {
       "type": "integer",
-      "default": 30
+      "default": 50
     },
     "Type": {
       "type": "enumeration",

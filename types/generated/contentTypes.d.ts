@@ -1431,7 +1431,7 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
     > &
       Attribute.Private;
     currentToken: Attribute.Text & Attribute.Private;
-    DailyLimit: Attribute.Integer & Attribute.DefaultTo<30>;
+    DailyLimit: Attribute.Integer & Attribute.DefaultTo<50>;
     disliked_articles: Attribute.Relation<
       'plugin::users-permissions.user',
       'oneToMany',
@@ -1477,8 +1477,8 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'manyToOne',
       'plugin::users-permissions.role'
     >;
-    slotFilled: Attribute.Integer;
-    slots: Attribute.Integer;
+    slotFilled: Attribute.Integer & Attribute.DefaultTo<1>;
+    slots: Attribute.Integer & Attribute.DefaultTo<1>;
     special_articles: Attribute.Relation<
       'plugin::users-permissions.user',
       'manyToMany',
