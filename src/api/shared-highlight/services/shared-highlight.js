@@ -16,6 +16,9 @@ module.exports = createCoreService('api::shared-highlight.shared-highlight',{
                 {
                     filters:{
                         recipient: userId,
+                        sender:{
+                            $notNull:true,
+                        }
                     },
                    sort:'publishedAt:desc',
                 }
@@ -97,10 +100,31 @@ module.exports = createCoreService('api::shared-highlight.shared-highlight',{
                 //  console.log(orderedArticles);
                 const paginatedArticles = orderedArticles.slice(start, start + pageSizeNumber);
 
+                                 const readArticles = await strapi.entityService.findMany('api::read-article.read-article',{
+                    filters:{
+                        user: userId,
+                        article: {
+                                id:{
+                                        $in:articleIds,
+                                    }    
+                            }
+                    },
+                    populate:{
+                        article:{
+                            populate:['id'],
+                        }
+                    },
+                    limit: -1
+                });
+
+                const readArticleIds = readArticles.map(item => item.article.id);
+
                 // Add canAccess to each article
                     for (const article of paginatedArticles) {
                     const allowed_users = article.allowed_users || [];
                     article.canAccess = allowed_users.length === 0 || allowed_users.some(u => u.id == userId);
+
+                    article.isRead = readArticleIds.includes(article.id);
 
                     // Optional: remove allowed_users to reduce payload size
                     delete article.allowed_users;
