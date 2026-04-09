@@ -270,7 +270,7 @@ module.exports = createCoreController('api::shared-highlight.shared-highlight', 
 
             const transcriptId = articleId;
 
-            const highlightLink = `${process.env.FRONTEND_URL}/highlights2?highlight_type=Shared&shared_id=${articleId}`;
+            const highlightLink = `${process.env.FRONTEND_URL}/highlights?highlight_type=Shared&shared_id=${articleId}`;
             const transcriptLink = `${process.env.FRONTEND_URL}/transcript/${articleId}`;
 
             const article = await strapi.entityService.findOne(
@@ -345,10 +345,10 @@ module.exports = createCoreController('api::shared-highlight.shared-highlight', 
                                               <!-- Title + Date -->
                                 <tr>
                                     <td style="padding-bottom:20px; font-size:16px; color:#555; line-height:1.6;">
-                                    <a href="${transcriptLink}" style="color:#2a5bd7; text-decoration:none; font-weight:bold; font-size:16px;">
+                                    <a href="${transcriptLink}" style="color:#313D74; text-decoration:none; font-weight:bold; font-size:16px;">
                                         ${articleTitle}
                                     </a><br/>
-                                    <span style="font-size:16px;">Published on ${formattedDate}</span>
+                                    <span style="font-size:14px;">Published on ${formattedDate}</span>
                                     </td>
                                 </tr>
                                 </table>
