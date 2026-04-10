@@ -270,7 +270,7 @@ module.exports = createCoreController('api::shared-highlight.shared-highlight', 
 
             const transcriptId = articleId;
 
-            const highlightLink = `${process.env.FRONTEND_URL}/highlights?highlight_type=Shared&shared_id=${articleId}`;
+            const highlightLink = `${process.env.FRONTEND_URL}/highlights?highlight_type=received&shared_id=${articleId}`;
             const transcriptLink = `${process.env.FRONTEND_URL}/transcript/${articleId}`;
 
             const article = await strapi.entityService.findOne(
