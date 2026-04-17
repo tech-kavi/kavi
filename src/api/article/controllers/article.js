@@ -260,6 +260,7 @@ module.exports = createCoreController('api::article.article',{
 
     },
 
+   
     // async findOne(ctx) {
     //     const { user } = ctx.state;
     //     if (!user) {
@@ -365,104 +366,93 @@ module.exports = createCoreController('api::article.article',{
        
 
 
-    //         if(userDetails.Type ==='Trial'){
+    //        // ✅ HANDLE BOTH TRIAL & SUBSCRIBER
+    // if (userDetails.Type === 'Trial' || userDetails.Type === 'Subscriber') {
 
-    //             let DailyLimit=userDetails.DailyLimit;
-    //             let TotalLimit=userDetails.TotalLimit;
-    //             let OpensToday=userDetails.OpensToday;
+    //     let DailyLimit = userDetails.DailyLimit;
+    //     let TotalLimit = userDetails.TotalLimit;
+    //     let OpensToday = userDetails.OpensToday;
 
-    //             if(DailyLimit == null)
-    //             {
-    //                 DailyLimit = 30;
-    //             }
-    //             if(TotalLimit == null)
-    //             {
-    //                 TotalLimit = 100;
-    //             }
-    //             if(OpensToday == null)
-    //             {
-    //                 OpensToday = 0;
-    //             }
+    //     // ✅ Default limits
+    //     if (userDetails.Type === 'Trial') {
+    //         if (DailyLimit == null) DailyLimit = 30;
+    //         if (TotalLimit == null) TotalLimit = 100;
+    //     } else if (userDetails.Type === 'Subscriber') {
+    //         if (DailyLimit == null || DailyLimit == 30 ) DailyLimit = 50;
+    //         TotalLimit = null; // No total limit
+    //     }
 
+    //     if (OpensToday == null) OpensToday = 0;
 
+    //     const currentDate = moment().tz('Asia/Kolkata').startOf('day');
 
+    //     let hasOpenedAnyToday = userDetails.articlesOpenedToday?.filter((entry) => {
+    //         const entryDate = moment(entry.time).tz('Asia/Kolkata').startOf('day');
+    //         return entryDate.isSame(currentDate);
+    //     }) || [];
 
-    //                 // Get current date and time in Asia/Kolkata timezone
-    //             const currentDate = moment().tz('Asia/Kolkata').startOf('day'); // Start of the day (00:00:00)
-    //             // console.log(currentDate);
+    //     if (hasOpenedAnyToday.length == 0) {
+    //         OpensToday = 0;
 
-    //             // Filter articlesOpenedToday to keep only today's entries
-    //             let hasOpenedAnyToday = userDetails.articlesOpenedToday?.filter((entry) => {
-    //             const entryDate = moment(entry.time).tz('Asia/Kolkata').startOf('day'); // Start of the day for the entry's date
-    //             // console.log(entryDate);
-    //             return entryDate.isSame(currentDate);
-    //             }) || [];
-                
-    //              //console.log(articlesOpenedToday);
-    
-    //             if(hasOpenedAnyToday.length==0){
-    //                 OpensToday=0;
-    //             }
-
-
-    //             const isArticleAlreadyOpened = userDetails.articlesOpenedToday?.some(entry => entry.article?.id == ctx.params.id);
-
-    
-    //            // console.log('article already opened',isArticleAlreadyOpened);
-
-    //             let updatedEntries;
-
-    //             let existingEntries = userDetails.articlesOpenedToday.map(entry => ({
-    //                 article: entry.article.id, 
-    //                 time: entry.time
-    //             }));
-
-                
-
-
-
-    //             if (isArticleAlreadyOpened) {
-    //                 updatedEntries = existingEntries;
-    //             } else {
-    //                 // Check trial limit before adding a new entry
-
-    //                 if(OpensToday>=DailyLimit)
-    //                     {
-    //                         console.log('Daily limit exceeded');
-    //                         return ctx.badRequest('Daily limit exceeded. Please contact us for further assistance.');
-    //                     }
-
-                        
-    //                 if (TotalLimit <= 0) {
-    //                     console.log('Trial limit exceeded');
-    //                     return ctx.badRequest('Trial access limit exceeded. Please contact us for further assistance.');
-    //                 }
-                
-    //                 // Create new entry
-    //                 const newEntry = {
-    //                     article: ctx.params.id,
-    //                     time: moment().tz('Asia/Kolkata').format(),
-    //                 };
-                
-    //                 // Append new entry while keeping existing ones
-    //                 updatedEntries = [...existingEntries, newEntry];
-                
-    //                 // Update limits
-    //                 OpensToday += 1;
-    //                 TotalLimit -= 1;
-    //             }
-    
-    //             // Update the user with the updated articlesOpenedToday
-    //             const updatedUser = await strapi.entityService.update('plugin::users-permissions.user', userDetails.id, {
-    //             data: {
-    //                 articlesOpenedToday:updatedEntries,
-    //                 OpensToday:OpensToday,
-    //                 TotalLimit:TotalLimit,
-    //                 DailyLimit:DailyLimit,
-    //             },
-    //             });
-
+    //         // ✅previous entries ONLY for Subscriber
+    //         if (userDetails.Type === 'Subscriber') {
+    //             userDetails.articlesOpenedToday = [];
     //         }
+    //     }
+
+    //     const isArticleAlreadyOpened = userDetails.articlesOpenedToday?.some(
+    //         entry => entry.article?.id == ctx.params.id
+    //     );
+
+    //     let baseEntries = userDetails.articlesOpenedToday || [];
+
+    //     let existingEntries = baseEntries.map(entry => ({
+    //         article: entry.article.id,
+    //         time: entry.time
+    //     }));
+
+    //     let updatedEntries;
+
+    //     if (isArticleAlreadyOpened) {
+    //         updatedEntries = existingEntries;
+    //     } else {
+
+    //         // ✅ Daily limit (for both)
+    //         if (OpensToday >= DailyLimit) {
+    //             console.log('Daily limit exceeded');
+    //             return ctx.badRequest('Daily limit exceeded.');
+    //         }
+
+    //         // ✅ Total limit (ONLY Trial)
+    //         if (userDetails.Type === 'Trial' && TotalLimit <= 0) {
+    //             console.log('Trial limit exceeded');
+    //             return ctx.badRequest('Trial access limit exceeded.');
+    //         }
+
+    //         const newEntry = {
+    //             article: ctx.params.id,
+    //             time: moment().tz('Asia/Kolkata').format(),
+    //         };
+
+    //         updatedEntries = [...existingEntries, newEntry];
+
+    //         OpensToday += 1;
+
+    //         // ✅ Decrement ONLY for Trial
+    //         if (userDetails.Type === 'Trial') {
+    //             TotalLimit -= 1;
+    //         }
+    //     }
+
+    //     await strapi.entityService.update('plugin::users-permissions.user', userDetails.id, {
+    //         data: {
+    //             articlesOpenedToday: updatedEntries,
+    //             OpensToday,
+    //             TotalLimit,
+    //             DailyLimit,
+    //         },
+    //     });
+    // }
 
     
     
@@ -621,6 +611,20 @@ module.exports = createCoreController('api::article.article',{
         let DailyLimit = userDetails.DailyLimit;
         let TotalLimit = userDetails.TotalLimit;
         let OpensToday = userDetails.OpensToday;
+        let WeeklyLimit = userDetails.WeeklyLimit || 75;
+        let OpensThisWeek = userDetails.OpensThisWeek || 0;
+        const WeekStartDate = userDetails.WeekStartDate
+        ? moment.tz(userDetails.WeekStartDate, 'YYYY-MM-DD', 'Asia/Kolkata')
+        : null;
+
+    const now = moment().tz('Asia/Kolkata');
+    const currentWeekStart = now.clone().startOf('isoWeek'); // Monday
+    // Format as YYYY-MM-DD for Strapi Date field
+    const formattedWeekStart = currentWeekStart.format('YYYY-MM-DD');
+
+    if (!WeekStartDate || !WeekStartDate.isSame(currentWeekStart, 'isoWeek')) {
+        OpensThisWeek = 0;
+    }
 
         // ✅ Default limits
         if (userDetails.Type === 'Trial') {
@@ -634,6 +638,7 @@ module.exports = createCoreController('api::article.article',{
         if (OpensToday == null) OpensToday = 0;
 
         const currentDate = moment().tz('Asia/Kolkata').startOf('day');
+        
 
         let hasOpenedAnyToday = userDetails.articlesOpenedToday?.filter((entry) => {
             const entryDate = moment(entry.time).tz('Asia/Kolkata').startOf('day');
@@ -669,8 +674,14 @@ module.exports = createCoreController('api::article.article',{
             // ✅ Daily limit (for both)
             if (OpensToday >= DailyLimit) {
                 console.log('Daily limit exceeded');
-                return ctx.badRequest('Daily limit exceeded.');
+                return ctx.badRequest('Daily access limit exceeded.');
             }
+
+            // ✅ Weekly limit check
+            if (OpensThisWeek >= WeeklyLimit) {
+                return ctx.badRequest('Weekly access limit exceeded.');
+            }
+
 
             // ✅ Total limit (ONLY Trial)
             if (userDetails.Type === 'Trial' && TotalLimit <= 0) {
@@ -686,6 +697,7 @@ module.exports = createCoreController('api::article.article',{
             updatedEntries = [...existingEntries, newEntry];
 
             OpensToday += 1;
+            OpensThisWeek +=1;
 
             // ✅ Decrement ONLY for Trial
             if (userDetails.Type === 'Trial') {
@@ -697,8 +709,11 @@ module.exports = createCoreController('api::article.article',{
             data: {
                 articlesOpenedToday: updatedEntries,
                 OpensToday,
+                OpensThisWeek,
+                WeekStartDate:formattedWeekStart,
                 TotalLimit,
                 DailyLimit,
+                WeeklyLimit,
             },
         });
     }
@@ -748,7 +763,6 @@ module.exports = createCoreController('api::article.article',{
     
         return article;
     },
-
 
 
         

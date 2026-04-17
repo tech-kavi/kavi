@@ -171,6 +171,17 @@
       "relation": "manyToMany",
       "target": "api::article.article",
       "inversedBy": "allowed_users"
+    },
+    "WeeklyLimit": {
+      "type": "integer",
+      "default": 75
+    },
+    "OpensThisWeek": {
+      "default": 0,
+      "type": "integer"
+    },
+    "WeekStartDate": {
+      "type": "date"
     }
   }
 }

@@ -1463,6 +1463,7 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'oneToOne',
       'api::logged-in.logged-in'
     >;
+    OpensThisWeek: Attribute.Integer & Attribute.DefaultTo<0>;
     OpensToday: Attribute.Integer;
     orgID: Attribute.BigInteger & Attribute.Required;
     password: Attribute.Password &
@@ -1507,6 +1508,8 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'oneToMany',
       'api::watchlist.watchlist'
     >;
+    WeeklyLimit: Attribute.Integer & Attribute.DefaultTo<75>;
+    WeekStartDate: Attribute.Date;
   };
 }
 
