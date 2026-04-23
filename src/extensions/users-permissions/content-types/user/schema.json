@@ -182,6 +182,12 @@
     },
     "WeekStartDate": {
       "type": "date"
+    },
+    "articlesOpenedThisWeek": {
+      "displayName": "articlesOpenedThisWeek",
+      "type": "component",
+      "repeatable": true,
+      "component": "articles-opened-this-week.articles-opened-this-week"
     }
   }
 }

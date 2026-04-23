@@ -1414,6 +1414,10 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
     draftAndPublish: false;
   };
   attributes: {
+    articlesOpenedThisWeek: Attribute.Component<
+      'articles-opened-this-week.articles-opened-this-week',
+      true
+    >;
     articlesOpenedToday: Attribute.Component<'open-details.open-details', true>;
     blocked: Attribute.Boolean & Attribute.DefaultTo<false>;
     bookmarks: Attribute.Relation<

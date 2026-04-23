@@ -1,5 +1,21 @@
 import type { Attribute, Schema } from '@strapi/strapi';
 
+export interface ArticlesOpenedThisWeekArticlesOpenedThisWeek
+  extends Schema.Component {
+  collectionName: 'components_articles_opened_this_week_articles_opened_this_weeks';
+  info: {
+    displayName: 'articlesOpenedThisWeek';
+  };
+  attributes: {
+    article: Attribute.Relation<
+      'articles-opened-this-week.articles-opened-this-week',
+      'oneToOne',
+      'api::article.article'
+    >;
+    time: Attribute.DateTime;
+  };
+}
+
 export interface ArticlesRelatedArticles extends Schema.Component {
   collectionName: 'components_articles_related_articles';
   info: {
@@ -92,6 +108,7 @@ export interface TableOfContentIndex extends Schema.Component {
 declare module '@strapi/types' {
   export module Shared {
     export interface Components {
+      'articles-opened-this-week.articles-opened-this-week': ArticlesOpenedThisWeekArticlesOpenedThisWeek;
       'articles.related-articles': ArticlesRelatedArticles;
       'articletags.local-tags': ArticletagsLocalTags;
       'brief.briefs': BriefBriefs;
