@@ -1,0 +1,18 @@
+{
+  "collectionName": "components_weeklyopendetails_articles_opened_this_weeks",
+  "info": {
+    "displayName": "articlesOpenedThisWeek",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "article": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::article.article"
+    },
+    "time": {
+      "type": "datetime"
+    }
+  }
+}

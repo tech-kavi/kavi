@@ -187,7 +187,7 @@
       "displayName": "articlesOpenedThisWeek",
       "type": "component",
       "repeatable": true,
-      "component": "articles-opened-this-week.articles-opened-this-week"
+      "component": "weeklyopendetails.articles-opened-this-week"
     }
   }
 }

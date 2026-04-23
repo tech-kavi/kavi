@@ -105,6 +105,23 @@ export interface TableOfContentIndex extends Schema.Component {
   };
 }
 
+export interface WeeklyopendetailsArticlesOpenedThisWeek
+  extends Schema.Component {
+  collectionName: 'components_weeklyopendetails_articles_opened_this_weeks';
+  info: {
+    description: '';
+    displayName: 'articlesOpenedThisWeek';
+  };
+  attributes: {
+    article: Attribute.Relation<
+      'weeklyopendetails.articles-opened-this-week',
+      'oneToOne',
+      'api::article.article'
+    >;
+    time: Attribute.DateTime;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface Components {
@@ -116,6 +133,7 @@ declare module '@strapi/types' {
       'open-details.open-details': OpenDetailsOpenDetails;
       'question-answer.ques': QuestionAnswerQues;
       'table-of-content.index': TableOfContentIndex;
+      'weeklyopendetails.articles-opened-this-week': WeeklyopendetailsArticlesOpenedThisWeek;
     }
   }
 }

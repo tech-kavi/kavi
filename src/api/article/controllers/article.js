@@ -964,9 +964,8 @@ module.exports = createCoreController('api::article.article',{
 
         let updatedEntries;
         
-        console.log(existingEntries);
 
-        if (isArticleAlreadyOpened) {
+        if (isArticleAlreadyOpened || isArticleOpenedThisWeek) {
             updatedEntries = existingEntries;
             if(!isArticleOpenedThisWeek){
                     const alreadyInWeekly = weeklyEntries?.some(
@@ -1031,7 +1030,7 @@ module.exports = createCoreController('api::article.article',{
 
             updatedEntries = [...existingEntries, newEntry];
 
-            console.log(updatedEntries);
+        
 
             OpensToday += 1;
            
