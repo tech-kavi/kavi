@@ -1414,10 +1414,6 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
     draftAndPublish: false;
   };
   attributes: {
-    articlesOpenedThisWeek: Attribute.Component<
-      'weeklyopendetails.articles-opened-this-week',
-      true
-    >;
     articlesOpenedToday: Attribute.Component<'open-details.open-details', true>;
     blocked: Attribute.Boolean & Attribute.DefaultTo<false>;
     bookmarks: Attribute.Relation<
@@ -1513,6 +1509,7 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'api::watchlist.watchlist'
     >;
     WeeklyLimit: Attribute.Integer & Attribute.DefaultTo<75>;
+    weeklyOpenDetails: Attribute.Component<'open-articles.weekly-opens', true>;
     WeekStartDate: Attribute.Date;
   };
 }

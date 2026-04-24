@@ -183,11 +183,11 @@
     "WeekStartDate": {
       "type": "date"
     },
-    "articlesOpenedThisWeek": {
-      "displayName": "articlesOpenedThisWeek",
+    "weeklyOpenDetails": {
+      "displayName": "weeklyOpens",
       "type": "component",
       "repeatable": true,
-      "component": "weeklyopendetails.articles-opened-this-week"
+      "component": "open-articles.weekly-opens"
     }
   }
 }

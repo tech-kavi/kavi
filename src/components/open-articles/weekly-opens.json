@@ -1,8 +1,7 @@
 {
-  "collectionName": "components_weeklyopendetails_articles_opened_this_weeks",
+  "collectionName": "components_open_articles_weekly_opens",
   "info": {
-    "displayName": "articlesOpenedThisWeek",
-    "description": ""
+    "displayName": "weeklyOpens"
   },
   "options": {},
   "attributes": {

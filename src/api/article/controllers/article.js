@@ -866,7 +866,7 @@ module.exports = createCoreController('api::article.article',{
                     article:true,
                 }
             },
-            articlesOpenedThisWeek:{
+            weeklyOpenDetails:{
                 populate:{
                     article:true,
                 }
@@ -897,7 +897,7 @@ module.exports = createCoreController('api::article.article',{
     // Format as YYYY-MM-DD for Strapi Date field
     const formattedWeekStart = currentWeekStart.format('YYYY-MM-DD');
 
-    let articlesOpenedThisWeek = userDetails?.articlesOpenedThisWeek||[];
+    let articlesOpenedThisWeek = userDetails?.weeklyOpenDetails||[];
 
     if (!WeekStartDate || !WeekStartDate.isSame(currentWeekStart, 'isoWeek')) {
         OpensThisWeek = 0;
@@ -1045,7 +1045,7 @@ module.exports = createCoreController('api::article.article',{
         await strapi.entityService.update('plugin::users-permissions.user', userDetails.id, {
             data: {
                 articlesOpenedToday: updatedEntries,
-                articlesOpenedThisWeek:weeklyEntries,
+                weeklyOpenDetails:weeklyEntries,
                 OpensToday,
                 OpensThisWeek,
                 WeekStartDate:formattedWeekStart,
