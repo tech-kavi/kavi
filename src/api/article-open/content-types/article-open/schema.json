@@ -1,0 +1,40 @@
+{
+  "kind": "collectionType",
+  "collectionName": "article_opens",
+  "info": {
+    "singularName": "article-open",
+    "pluralName": "article-opens",
+    "displayName": "article-open",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "article": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::article.article"
+    },
+    "date": {
+      "type": "date"
+    },
+    "weekStart": {
+      "type": "date"
+    },
+    "uniqueKey": {
+      "type": "string",
+      "unique": true
+    },
+    "uniqueWeekKey": {
+      "type": "string",
+      "unique": true
+    }
+  }
+}

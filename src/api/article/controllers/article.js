@@ -261,6 +261,7 @@ module.exports = createCoreController('api::article.article',{
     },
 
    
+ 
     // async findOne(ctx) {
     //     const { user } = ctx.state;
     //     if (!user) {
@@ -356,251 +357,22 @@ module.exports = createCoreController('api::article.article',{
 
     //     const userDetails = await strapi.query('plugin::users-permissions.user').findOne({
     //         where: {email: user.email},
-    //         populate:{articlesOpenedToday:{
+    //         populate:{
+    //             articlesOpenedToday:{
     //             populate:{
     //                 article:true,
     //             }
-    //         }}
-    //         });
-
-       
-
-
-    //        // ✅ HANDLE BOTH TRIAL & SUBSCRIBER
-    // if (userDetails.Type === 'Trial' || userDetails.Type === 'Subscriber') {
-
-    //     let DailyLimit = userDetails.DailyLimit;
-    //     let TotalLimit = userDetails.TotalLimit;
-    //     let OpensToday = userDetails.OpensToday;
-
-    //     // ✅ Default limits
-    //     if (userDetails.Type === 'Trial') {
-    //         if (DailyLimit == null) DailyLimit = 30;
-    //         if (TotalLimit == null) TotalLimit = 100;
-    //     } else if (userDetails.Type === 'Subscriber') {
-    //         if (DailyLimit == null || DailyLimit == 30 ) DailyLimit = 50;
-    //         TotalLimit = null; // No total limit
-    //     }
-
-    //     if (OpensToday == null) OpensToday = 0;
-
-    //     const currentDate = moment().tz('Asia/Kolkata').startOf('day');
-
-    //     let hasOpenedAnyToday = userDetails.articlesOpenedToday?.filter((entry) => {
-    //         const entryDate = moment(entry.time).tz('Asia/Kolkata').startOf('day');
-    //         return entryDate.isSame(currentDate);
-    //     }) || [];
-
-    //     if (hasOpenedAnyToday.length == 0) {
-    //         OpensToday = 0;
-
-    //         // ✅previous entries ONLY for Subscriber
-    //         if (userDetails.Type === 'Subscriber') {
-    //             userDetails.articlesOpenedToday = [];
-    //         }
-    //     }
-
-    //     const isArticleAlreadyOpened = userDetails.articlesOpenedToday?.some(
-    //         entry => entry.article?.id == ctx.params.id
-    //     );
-
-    //     let baseEntries = userDetails.articlesOpenedToday || [];
-
-    //     let existingEntries = baseEntries.map(entry => ({
-    //         article: entry.article.id,
-    //         time: entry.time
-    //     }));
-
-    //     let updatedEntries;
-
-    //     if (isArticleAlreadyOpened) {
-    //         updatedEntries = existingEntries;
-    //     } else {
-
-    //         // ✅ Daily limit (for both)
-    //         if (OpensToday >= DailyLimit) {
-    //             console.log('Daily limit exceeded');
-    //             return ctx.badRequest('Daily limit exceeded.');
-    //         }
-
-    //         // ✅ Total limit (ONLY Trial)
-    //         if (userDetails.Type === 'Trial' && TotalLimit <= 0) {
-    //             console.log('Trial limit exceeded');
-    //             return ctx.badRequest('Trial access limit exceeded.');
-    //         }
-
-    //         const newEntry = {
-    //             article: ctx.params.id,
-    //             time: moment().tz('Asia/Kolkata').format(),
-    //         };
-
-    //         updatedEntries = [...existingEntries, newEntry];
-
-    //         OpensToday += 1;
-
-    //         // ✅ Decrement ONLY for Trial
-    //         if (userDetails.Type === 'Trial') {
-    //             TotalLimit -= 1;
-    //         }
-    //     }
-
-    //     await strapi.entityService.update('plugin::users-permissions.user', userDetails.id, {
-    //         data: {
-    //             articlesOpenedToday: updatedEntries,
-    //             OpensToday,
-    //             TotalLimit,
-    //             DailyLimit,
     //         },
-    //     });
-    // }
-
-    
-    
-    //     // Fetching bookmarked, liked, and disliked articles for the user
-    //     const [bookmarkedArticles, likedArticles, dislikedArticles,ReadArticles] = await Promise.all([
-    //         strapi.entityService.findMany('api::bookmark.bookmark', {
-    //             filters: { bookmarked_by: user.id,article:article.data.id },
-    //             populate: { article: true }
-    //         }),
-    //         strapi.entityService.findMany('api::liked-article.liked-article', {
-    //             filters: { user: user.id, publishedAt: { $notNull: true },article:article.data.id },
-    //             populate: { article: true }
-    //         }),
-    //         strapi.entityService.findMany('api::disliked-article.disliked-article', {
-    //             filters: { user: user.id, publishedAt: { $notNull: true },article:article.data.id },
-    //             populate: { article: true }
-    //         }),
-    //         strapi.entityService.findMany('api::read-article.read-article', {
-    //             filters: { user: user.id, publishedAt: { $notNull: true },article:article.data.id },
-    //             populate: { article: true }
-    //         })
-    //     ]);
-
-     
-    
-    //     const BookmarkArticleIds = bookmarkedArticles.map(bookmark => bookmark.article.id);
-    //     const LikeArticleIds = likedArticles.map(likedArticle => likedArticle.article.id);
-    //     const DisLikeArticleIds = dislikedArticles.map(dislikedArticle => dislikedArticle.article.id);
-    //     const ReadArticleIds = ReadArticles.map(readArticle => readArticle.article.id);
-
-    
-    //     // Adding like/dislike/bookmark status to the current article
-    //     article.data.attributes.isLiked = LikeArticleIds.includes(article.data.id);
-    //     article.data.attributes.isDisiked = DisLikeArticleIds.includes(article.data.id);
-    //     article.data.attributes.isBookmarked = BookmarkArticleIds.includes(article.data.id);
-    //     // article.data.attributes.read_time = read_time;
-    //     article.data.attributes.isRead = ReadArticleIds.includes(article.data.id);
-
-       
-    //     delete article.data.attributes.allowed_users;
-        
-
-
-    
-    //     return article;
-    // },
-
-    // async findOne(ctx) {
-    //     const { user } = ctx.state;
-    //     if (!user) {
-    //         console.log("logged out during fetching transcript ",user);
-    //         return ctx.unauthorized("you must be logged in");
-    //     }
-
-        
-    
-             
-    
-    //     ctx.query = {
-    //         ...ctx.query,
-    //         locale: 'en',
-    //         populate: {
-    //             brief: true,
-    //             industry: {
-    //                 fields: ['name'],
-    //                 filters:{
-    //                     publishedAt:{
-    //                         $notNull:true,
-    //                     }
-    //                 }
-    //             },
-    //             sub_industries: {
-    //                 fields: ['name'],
-    //                 filters:{
-    //                     publishedAt:{
-    //                         $notNull:true,
-    //                     }
-    //                 }
-    //             },
-    //             primary_companies: {
-    //                 fields: ['name'],
-    //                 populate: {
-    //                     logo: true,
-    //                 },
-    //                 filters:{
-    //                     publishedAt:{
-    //                         $notNull:true,
-    //                     }
-    //                 }
-    //             },
-    //             secondary_companies: {
-    //                 fields: ['name'],
-    //                 populate: {
-    //                     logo: true,
-    //                 },
-    //                 filters:{
-    //                     publishedAt:{
-    //                         $notNull:true,
-    //                     }
-    //                 }
-    //             },
-    //             table_with_content: {
-    //                 populate: {
-    //                     ques: true,
-    //                 }
-    //             },
-    //             allowed_users:true,
-    //         },
-
-    //         filters: {
-    //             publishedAt: {
-    //                 $notNull: true,
-    //             }
-    //         }
-    //     };
-
-
-    
-    //     const article = await super.findOne(ctx);
-
-    //     // console.log(article);
-    
-    //     if (article.data.attributes.publishedAt == null) {
-    //         return ctx.badRequest("No Transcript found");
-    //     }
-
-        
-    //     // ✅ Restrict access if special_users are defined
-    //    const allowedUsersData = article.data.attributes.allowed_users?.data || [];
-    //     // console.log('Allowed Users:', allowedUsersData);
-    //     // console.log('Current User ID:', user.id);
-
-    //     if (allowedUsersData.length > 0) {
-    //     const isAllowed = allowedUsersData.some(u => u.id === user.id);
-    //     if (!isAllowed) {
-    //         return ctx.badRequest('You do not have permission to access this transcript. Please contact us for further assistance.');
-    //     }
-    //     }
-
-
-    //     const userDetails = await strapi.query('plugin::users-permissions.user').findOne({
-    //         where: {email: user.email},
-    //         populate:{articlesOpenedToday:{
+    //         weeklyOpenDetails:{
     //             populate:{
     //                 article:true,
     //             }
-    //         }}
+    //         }
+        
+    //     }
     //         });
+
+    //     //    console.log(userDetails.articlesOpenedToday);
 
        
 
@@ -622,8 +394,11 @@ module.exports = createCoreController('api::article.article',{
     // // Format as YYYY-MM-DD for Strapi Date field
     // const formattedWeekStart = currentWeekStart.format('YYYY-MM-DD');
 
+    // let articlesOpenedThisWeek = userDetails?.weeklyOpenDetails||[];
+
     // if (!WeekStartDate || !WeekStartDate.isSame(currentWeekStart, 'isoWeek')) {
     //     OpensThisWeek = 0;
+    //     articlesOpenedThisWeek=[];
     // }
 
     //     // ✅ Default limits
@@ -655,59 +430,119 @@ module.exports = createCoreController('api::article.article',{
     //     }
 
     //     const isArticleAlreadyOpened = userDetails.articlesOpenedToday?.some(
-    //         entry => entry.article?.id == ctx.params.id
+    //         entry => entry.article?.id == Number(ctx.params.id)
     //     );
 
+        
+
+    //     const isArticleOpenedThisWeek = articlesOpenedThisWeek?.some(
+    //         entry => entry?.article?.id == Number(ctx.params.id)
+    //     );
+
+
     //     let baseEntries = userDetails.articlesOpenedToday || [];
+        
 
     //     let existingEntries = baseEntries.map(entry => ({
-    //         article: entry.article.id,
+    //         article:{
+    //             id:entry.article.id,
+    //         } ,
     //         time: entry.time
     //     }));
 
-    //     let updatedEntries;
 
-    //     if (isArticleAlreadyOpened) {
+    //     let weeklyEntries = articlesOpenedThisWeek.map(entry => ({
+    //         article: {
+    //             id:entry.article.id,
+    //         } ,
+    //         time: entry.time
+    //     }));
+
+
+    //     let updatedEntries;
+        
+
+    //     if (isArticleAlreadyOpened || isArticleOpenedThisWeek) {
     //         updatedEntries = existingEntries;
+    //         if(!isArticleOpenedThisWeek){
+    //                 const alreadyInWeekly = weeklyEntries?.some(
+    //                     entry => entry.article?.id == Number(ctx.params.id)
+    //                 );
+
+    //                 if (!alreadyInWeekly) {
+    //                 weeklyEntries.push({
+    //                     article: {
+    //                 id:Number(ctx.params.id),
+    //             },
+    //                     time: moment().tz('Asia/Kolkata').format(),
+    //                 });
+    //                 OpensThisWeek += 1;
+    //             }
+    //         }
     //     } else {
 
     //         // ✅ Daily limit (for both)
     //         if (OpensToday >= DailyLimit) {
     //             console.log('Daily limit exceeded');
-    //             return ctx.badRequest('Daily access limit exceeded.');
+    //             return ctx.badRequest('You’ve reached the daily limit for opening transcripts. Please try again tomorrow.');
     //         }
 
     //         // ✅ Weekly limit check
     //         if (OpensThisWeek >= WeeklyLimit) {
-    //             return ctx.badRequest('Weekly access limit exceeded.');
+    //             return ctx.badRequest('You’ve reached the weekly limit for opening transcripts. You can access more starting Monday.');
     //         }
 
 
     //         // ✅ Total limit (ONLY Trial)
     //         if (userDetails.Type === 'Trial' && TotalLimit <= 0) {
     //             console.log('Trial limit exceeded');
-    //             return ctx.badRequest('Trial access limit exceeded.');
+    //             return ctx.badRequest('Trial limit reached. Upgrade to continue.');
+    //         }
+
+           
+
+    //         if(!isArticleOpenedThisWeek){
+    //                 const alreadyInWeekly = weeklyEntries?.some(
+    //                     entry => entry.article?.id == ctx.params.id
+    //                 );
+
+    //                 if (!alreadyInWeekly) {
+    //                 weeklyEntries.push({
+    //                     article: {
+    //                         id:Number(ctx.params.id),
+    //                     },
+    //                     time: moment().tz('Asia/Kolkata').format(),
+    //                 });
+
+    //                 OpensThisWeek += 1;
+    //             }
     //         }
 
     //         const newEntry = {
-    //             article: ctx.params.id,
+    //             article:{
+    //                 id:Number(ctx.params.id),
+    //             },
     //             time: moment().tz('Asia/Kolkata').format(),
     //         };
 
     //         updatedEntries = [...existingEntries, newEntry];
 
+        
+
     //         OpensToday += 1;
-    //         OpensThisWeek +=1;
+           
 
     //         // ✅ Decrement ONLY for Trial
     //         if (userDetails.Type === 'Trial') {
     //             TotalLimit -= 1;
     //         }
+            
     //     }
 
     //     await strapi.entityService.update('plugin::users-permissions.user', userDetails.id, {
     //         data: {
     //             articlesOpenedToday: updatedEntries,
+    //             weeklyOpenDetails:weeklyEntries,
     //             OpensToday,
     //             OpensThisWeek,
     //             WeekStartDate:formattedWeekStart,
@@ -763,7 +598,6 @@ module.exports = createCoreController('api::article.article',{
     
     //     return article;
     // },
-
 
     async findOne(ctx) {
         const { user } = ctx.state;
@@ -845,216 +679,164 @@ module.exports = createCoreController('api::article.article',{
         }
 
         
-        // ✅ Restrict access if special_users are defined
-       const allowedUsersData = article.data.attributes.allowed_users?.data || [];
-        // console.log('Allowed Users:', allowedUsersData);
-        // console.log('Current User ID:', user.id);
+       // =========================
+    // Allowed Users Check
+    // =========================
+    const allowedUsers = article.data.attributes.allowed_users?.data || [];
 
-        if (allowedUsersData.length > 0) {
-        const isAllowed = allowedUsersData.some(u => u.id === user.id);
-        if (!isAllowed) {
-            return ctx.badRequest('You do not have permission to access this transcript. Please contact us for further assistance.');
-        }
-        }
-
-
-        const userDetails = await strapi.query('plugin::users-permissions.user').findOne({
-            where: {email: user.email},
-            populate:{
-                articlesOpenedToday:{
-                populate:{
-                    article:true,
-                }
-            },
-            weeklyOpenDetails:{
-                populate:{
-                    article:true,
-                }
-            }
-        
-        }
-            });
-
-        //    console.log(userDetails.articlesOpenedToday);
-
-       
-
-
-           // ✅ HANDLE BOTH TRIAL & SUBSCRIBER
-    if (userDetails.Type === 'Trial' || userDetails.Type === 'Subscriber') {
-
-        let DailyLimit = userDetails.DailyLimit;
-        let TotalLimit = userDetails.TotalLimit;
-        let OpensToday = userDetails.OpensToday;
-        let WeeklyLimit = userDetails.WeeklyLimit || 75;
-        let OpensThisWeek = userDetails.OpensThisWeek || 0;
-        const WeekStartDate = userDetails.WeekStartDate
-        ? moment.tz(userDetails.WeekStartDate, 'YYYY-MM-DD', 'Asia/Kolkata')
-        : null;
-
-    const now = moment().tz('Asia/Kolkata');
-    const currentWeekStart = now.clone().startOf('isoWeek'); // Monday
-    // Format as YYYY-MM-DD for Strapi Date field
-    const formattedWeekStart = currentWeekStart.format('YYYY-MM-DD');
-
-    let articlesOpenedThisWeek = userDetails?.weeklyOpenDetails||[];
-
-    if (!WeekStartDate || !WeekStartDate.isSame(currentWeekStart, 'isoWeek')) {
-        OpensThisWeek = 0;
-        articlesOpenedThisWeek=[];
+    if (allowedUsers.length > 0) {
+      const isAllowed = allowedUsers.some(u => u.id === user.id);
+      if (!isAllowed) {
+        return ctx.badRequest('You do not have permission to access this transcript.');
+      }
     }
 
-        // ✅ Default limits
-        if (userDetails.Type === 'Trial') {
-            if (DailyLimit == null) DailyLimit = 30;
-            if (TotalLimit == null) TotalLimit = 100;
-        } else if (userDetails.Type === 'Subscriber') {
-            if (DailyLimit == null || DailyLimit == 30 ) DailyLimit = 50;
-            TotalLimit = null; // No total limit
-        }
+    // =========================
+    // Fetch User
+    // =========================
+    const userDetails = await strapi.entityService.findOne(
+      'plugin::users-permissions.user',
+      user.id
+    );
 
-        if (OpensToday == null) OpensToday = 0;
+    // =========================
+    // Limits Setup
+    // =========================
+    let DailyLimit = userDetails.DailyLimit;
+    let WeeklyLimit = userDetails.WeeklyLimit || 75;
+    let TotalLimit = userDetails.TotalLimit;
 
-        const currentDate = moment().tz('Asia/Kolkata').startOf('day');
-        
+    if (userDetails.Type === 'Trial') {
+      if (DailyLimit == null) DailyLimit = 30;
+      if (TotalLimit == null) TotalLimit = 100;
+    }
 
-        let hasOpenedAnyToday = userDetails.articlesOpenedToday?.filter((entry) => {
-            const entryDate = moment(entry.time).tz('Asia/Kolkata').startOf('day');
-            return entryDate.isSame(currentDate);
-        }) || [];
+    if (userDetails.Type === 'Subscriber') {
+      if (DailyLimit == null || DailyLimit === 30) DailyLimit = 50;
+    }
 
-        if (hasOpenedAnyToday.length == 0) {
-            OpensToday = 0;
+    // =========================
+    // Dates
+    // =========================
+    const today = moment().tz('Asia/Kolkata').format('YYYY-MM-DD');
+    const weekStart = moment().tz('Asia/Kolkata').startOf('isoWeek').format('YYYY-MM-DD');
 
-            // ✅previous entries ONLY for Subscriber
-            if (userDetails.Type === 'Subscriber') {
-                userDetails.articlesOpenedToday = [];
-            }
-        }
+    const articleId = Number(ctx.params.id);
 
-        const isArticleAlreadyOpened = userDetails.articlesOpenedToday?.some(
-            entry => entry.article?.id == Number(ctx.params.id)
-        );
+  
 
-        
+    // =========================
+    // Check if already opened today
+    // =========================
 
-        const isArticleOpenedThisWeek = articlesOpenedThisWeek?.some(
-            entry => entry?.article?.id == Number(ctx.params.id)
-        );
+    let alreadyOpened = false;
 
-
-        let baseEntries = userDetails.articlesOpenedToday || [];
-        
-
-        let existingEntries = baseEntries.map(entry => ({
-            article:{
-                id:entry.article.id,
-            } ,
-            time: entry.time
-        }));
-
-
-        let weeklyEntries = articlesOpenedThisWeek.map(entry => ({
-            article: {
-                id:entry.article.id,
-            } ,
-            time: entry.time
-        }));
-
-
-        let updatedEntries;
-        
-
-        if (isArticleAlreadyOpened || isArticleOpenedThisWeek) {
-            updatedEntries = existingEntries;
-            if(!isArticleOpenedThisWeek){
-                    const alreadyInWeekly = weeklyEntries?.some(
-                        entry => entry.article?.id == Number(ctx.params.id)
-                    );
-
-                    if (!alreadyInWeekly) {
-                    weeklyEntries.push({
-                        article: {
-                    id:Number(ctx.params.id),
-                },
-                        time: moment().tz('Asia/Kolkata').format(),
-                    });
-                    OpensThisWeek += 1;
-                }
-            }
-        } else {
-
-            // ✅ Daily limit (for both)
-            if (OpensToday >= DailyLimit) {
-                console.log('Daily limit exceeded');
-                return ctx.badRequest('Daily access limit exceeded.');
-            }
-
-            // ✅ Weekly limit check
-            if (OpensThisWeek >= WeeklyLimit) {
-                return ctx.badRequest('Weekly access limit exceeded.');
-            }
-
-
-            // ✅ Total limit (ONLY Trial)
-            if (userDetails.Type === 'Trial' && TotalLimit <= 0) {
-                console.log('Trial limit exceeded');
-                return ctx.badRequest('Trial access limit exceeded.');
-            }
-
-           
-
-            if(!isArticleOpenedThisWeek){
-                    const alreadyInWeekly = weeklyEntries?.some(
-                        entry => entry.article?.id == ctx.params.id
-                    );
-
-                    if (!alreadyInWeekly) {
-                    weeklyEntries.push({
-                        article: {
-                            id:Number(ctx.params.id),
-                        },
-                        time: moment().tz('Asia/Kolkata').format(),
-                    });
-
-                    OpensThisWeek += 1;
-                }
-            }
-
-            const newEntry = {
-                article:{
-                    id:Number(ctx.params.id),
-                },
-                time: moment().tz('Asia/Kolkata').format(),
-            };
-
-            updatedEntries = [...existingEntries, newEntry];
-
-        
-
-            OpensToday += 1;
-           
-
-            // ✅ Decrement ONLY for Trial
-            if (userDetails.Type === 'Trial') {
-                TotalLimit -= 1;
-            }
-            
-        }
-
-        await strapi.entityService.update('plugin::users-permissions.user', userDetails.id, {
-            data: {
-                articlesOpenedToday: updatedEntries,
-                weeklyOpenDetails:weeklyEntries,
-                OpensToday,
-                OpensThisWeek,
-                WeekStartDate:formattedWeekStart,
-                TotalLimit,
-                DailyLimit,
-                WeeklyLimit,
+    if(userDetails.Type === 'Trial')
+    {
+          const existingEver = await strapi.entityService.findMany(
+            'api::article-open.article-open',
+            {
+            filters: {
+                user: user.id,
+                article: articleId,
             },
+            limit: 1
+            }
+        );
+
+        alreadyOpened = existingEver.length > 0;
+    }
+
+    if(userDetails.Type === 'Subscriber')
+    {
+           const existingThisWeek = await strapi.entityService.findMany(
+            'api::article-open.article-open',
+            {
+                filters: {
+                user: user.id,
+                article: articleId,
+                weekStart: weekStart,
+                },
+                limit: 1
+            }
+            );
+
+            alreadyOpened = existingThisWeek.length > 0;
+    }
+ 
+
+    // =========================
+    // LIMIT CHECK (only if new open)
+    // =========================
+    if (!alreadyOpened) {
+
+          // =========================
+            // Count BEFORE insert (for limits)
+            // =========================
+            const [OpensTodayBefore, OpensThisWeekBefore, TotalOpens] = await Promise.all([
+            strapi.entityService.count('api::article-open.article-open', {
+                filters: { user: user.id, date: today }
+            }),
+            strapi.entityService.count('api::article-open.article-open', {
+                filters: { user: user.id, weekStart: weekStart }
+            }),
+            strapi.entityService.count('api::article-open.article-open', {
+                filters: { user: user.id }
+            })
+            ]);
+
+            console.log(OpensTodayBefore, OpensThisWeekBefore, TotalOpens);
+
+      if (OpensTodayBefore >= DailyLimit) {
+        return ctx.badRequest('You’ve reached the daily limit for opening transcripts. Please try again tomorrow.');
+      }
+
+      if (OpensThisWeekBefore >= WeeklyLimit) {
+        return ctx.badRequest('You’ve reached the weekly limit for opening transcripts. You can access more starting Monday.');
+      }
+
+      if (userDetails.Type === 'Trial' && TotalOpens >= TotalLimit) {
+        return ctx.badRequest('Trial limit reached. Upgrade to continue.');
+      }
+
+      // =========================
+      // Insert (race-safe)
+      // =========================
+      const uniqueKey = `${user.id}_${articleId}_${today}`;
+      const uniqueWeekKey = `${user.id}_${articleId}_${weekStart}`;
+
+      try {
+        await strapi.entityService.create('api::article-open.article-open', {
+          data: {
+            user: user.id,
+            article: articleId,
+            date: today,
+            weekStart: weekStart,
+            uniqueKey,
+	    uniqueWeekKey,
+            publishedAt: new Date(),
+          }
         });
+      } catch (err) {
+        // Duplicate insert → ignore
+      }
     }
+
+    // =========================
+    // Final Counts (after insert)
+    // =========================
+// can comment it down
+    // const [OpensToday, OpensThisWeek] = await Promise.all([
+    //   strapi.entityService.count('api::article-open.article-open', {
+    //     filters: { user: user.id, date: today }
+    //   }),
+    //   strapi.entityService.count('api::article-open.article-open', {
+    //     filters: { user: user.id, weekStart: weekStart }
+    //   })
+    // ]);
+
+      
+    
 
     
     
@@ -1101,7 +883,6 @@ module.exports = createCoreController('api::article.article',{
     
         return article;
     },
-
 
         
     });

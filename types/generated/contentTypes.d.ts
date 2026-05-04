@@ -362,6 +362,50 @@ export interface AdminUser extends Schema.CollectionType {
   };
 }
 
+export interface ApiArticleOpenArticleOpen extends Schema.CollectionType {
+  collectionName: 'article_opens';
+  info: {
+    description: '';
+    displayName: 'article-open';
+    pluralName: 'article-opens';
+    singularName: 'article-open';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    article: Attribute.Relation<
+      'api::article-open.article-open',
+      'oneToOne',
+      'api::article.article'
+    >;
+    createdAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::article-open.article-open',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    date: Attribute.Date;
+    publishedAt: Attribute.DateTime;
+    uniqueKey: Attribute.String & Attribute.Unique;
+    uniqueWeekKey: Attribute.String & Attribute.Unique;
+    updatedAt: Attribute.DateTime;
+    updatedBy: Attribute.Relation<
+      'api::article-open.article-open',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    user: Attribute.Relation<
+      'api::article-open.article-open',
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    weekStart: Attribute.Date;
+  };
+}
+
 export interface ApiArticleArticle extends Schema.CollectionType {
   collectionName: 'articles';
   info: {
@@ -1524,6 +1568,7 @@ declare module '@strapi/types' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::article-open.article-open': ApiArticleOpenArticleOpen;
       'api::article.article': ApiArticleArticle;
       'api::bookmark.bookmark': ApiBookmarkBookmark;
       'api::company.company': ApiCompanyCompany;
