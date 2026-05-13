@@ -106,6 +106,50 @@
       "relation": "manyToMany",
       "target": "plugin::users-permissions.user",
       "mappedBy": "special_articles"
+    },
+    "expert_title": {
+      "type": "string",
+      "private": true
+    },
+    "expert_details": {
+      "type": "text",
+      "private": true
+    },
+    "tenure": {
+      "type": "decimal",
+      "private": true
+    },
+    "industry_exp": {
+      "type": "decimal",
+      "private": true
+    },
+    "seniority": {
+      "type": "enumeration",
+      "enum": [
+        "CXO",
+        "CXO-1",
+        "Mid-Level"
+      ],
+      "private": true
+    },
+    "transcript_quality": {
+      "type": "enumeration",
+      "enum": [
+        "Great - 1",
+        "Good - 2",
+        "Above Average - 3",
+        "Average - 4",
+        "Below Average - 5"
+      ],
+      "private": true
+    },
+    "exit_date": {
+      "type": "date",
+      "private": true
+    },
+    "linkedin": {
+      "type": "string",
+      "private": true
     }
   }
 }

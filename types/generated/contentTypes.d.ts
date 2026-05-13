@@ -448,6 +448,9 @@ export interface ApiArticleArticle extends Schema.CollectionType {
       'api::disliked-article.disliked-article'
     >;
     est_read: Attribute.Integer & Attribute.Required;
+    exit_date: Attribute.Date & Attribute.Private;
+    expert_details: Attribute.Text & Attribute.Private;
+    expert_title: Attribute.String & Attribute.Private;
     expert_type: Attribute.Enumeration<
       [
         'Competitor',
@@ -465,11 +468,13 @@ export interface ApiArticleArticle extends Schema.CollectionType {
       'manyToOne',
       'api::industry.industry'
     >;
+    industry_exp: Attribute.Decimal & Attribute.Private;
     like_details: Attribute.Relation<
       'api::article.article',
       'oneToMany',
       'api::liked-article.liked-article'
     >;
+    linkedin: Attribute.String & Attribute.Private;
     primary_companies: Attribute.Relation<
       'api::article.article',
       'manyToMany',
@@ -482,6 +487,8 @@ export interface ApiArticleArticle extends Schema.CollectionType {
       'manyToMany',
       'api::company.company'
     >;
+    seniority: Attribute.Enumeration<['CXO', 'CXO-1', 'Mid-Level']> &
+      Attribute.Private;
     sub_industries: Attribute.Relation<
       'api::article.article',
       'manyToMany',
@@ -493,7 +500,18 @@ export interface ApiArticleArticle extends Schema.CollectionType {
       'manyToMany',
       'api::tag.tag'
     >;
+    tenure: Attribute.Decimal & Attribute.Private;
     title: Attribute.String;
+    transcript_quality: Attribute.Enumeration<
+      [
+        'Great - 1',
+        'Good - 2',
+        'Above Average - 3',
+        'Average - 4',
+        'Below Average - 5'
+      ]
+    > &
+      Attribute.Private;
     updatedAt: Attribute.DateTime;
     updatedBy: Attribute.Relation<
       'api::article.article',

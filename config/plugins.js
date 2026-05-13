@@ -13,6 +13,7 @@ module.exports = ({ env }) => ({
       contentTypes: [
         {
            name: 'api::article.article',
+           hideFields: ['expert_title','tenure','seniority','expert_details','transcript_quality','industry_exp','exit_date','linkedin'],
            populate:{
             primary_companies:{
               name:true,
