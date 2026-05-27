@@ -81,6 +81,13 @@ const queryFilters = {
 // 2. Fetch articles for the current page
 const paginatedArticles = await strapi.entityService.findMany('api::article.article', {
   filters: queryFilters,
+          fields: [
+                    'title',
+                    'published_date',
+                    'publishedAt',
+                    'est_read',
+                    'expert_type',
+                    ],
   populate: {
     industry: true,
     allowed_users:{fields:['id']},

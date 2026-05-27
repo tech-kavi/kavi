@@ -82,7 +82,13 @@ module.exports = {
                   },
             industry:true,
       },
-
+      fields: [
+         'title',
+                    'published_date',
+                    'publishedAt',
+                    'est_read',
+                    'expert_type',
+                    ],   
       filters:{
         publishedAt:{
           $notNull:true,
@@ -103,6 +109,13 @@ module.exports = {
           {
               populate: {
                   articles: {
+                    fields: [
+                    'title',
+                    'published_date',
+                    'publishedAt',
+                    'est_read',
+                    'expert_type',
+                    ],   
                       populate: {
                           primary_companies: {
                               fields: ['name'],
@@ -132,6 +145,13 @@ module.exports = {
 
                   },
                   secondary_articles: {
+                    fields: [
+                       'title',
+                    'published_date',
+                    'publishedAt',
+                    'est_read',
+                    'expert_type',
+                    ],   
                       populate: {
                           primary_companies: {
                               fields: ['name'],

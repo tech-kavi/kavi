@@ -54,6 +54,13 @@ module.exports = createCoreService('api::shared-highlight.shared-highlight',{
                                 $notNull:true,
                               }
                         },
+                         fields: [
+                        'title',
+                        'published_date',
+                        'publishedAt',
+                        'est_read',
+                        'expert_type',
+                        ],
                         populate:{
                             primary_companies:{
                                 fields:['name'],
@@ -145,7 +152,11 @@ module.exports = createCoreService('api::shared-highlight.shared-highlight',{
                             $notNull: true,  // Only include entries where sender is defined
                           },
                     },
-                    populate:['sender'],
+                    populate:{
+                        sender:{
+                            fields:['username','id','email','first_name','last_name'],
+                        },
+                    },
                     limit: -1,
                     sort: 'answerId:asc',
                 }

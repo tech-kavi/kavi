@@ -70,6 +70,13 @@ module.exports = {
         // Build query parameters
 
     const query = {
+      fields: [
+         'title',
+                    'published_date',
+                    'publishedAt',
+                    'est_read',
+                    'expert_type',
+                    ],           
       filters:{
         ...ctx.request.query.filters,
         secondary_companies:{

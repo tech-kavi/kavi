@@ -44,6 +44,13 @@ module.exports = {
           $notNull:true,
         }
       },
+      fields: [
+         'title',
+                    'published_date',
+                    'publishedAt',
+                    'est_read',
+                    'expert_type',
+                    ],   
       populate:{
         sub_industries:{
           fields:['name'],

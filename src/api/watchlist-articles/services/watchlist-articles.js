@@ -60,6 +60,13 @@ module.exports = {
                             $gte: dateThreeMonthsAgoIST,
                           }
                     },
+                     fields: [
+                    'title',
+                    'published_date',
+                    'publishedAt',
+                    'est_read',
+                    'expert_type',
+                    ],
                     populate:{
                         primary_companies:{
                             fields:['name'],

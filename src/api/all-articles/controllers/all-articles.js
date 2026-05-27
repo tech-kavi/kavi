@@ -28,7 +28,8 @@ module.exports = {
     'title',
     'published_date',
     'publishedAt',
-    'est_read'
+    'est_read',
+    'expert_type',
     ],
         populate: {
             industry: {

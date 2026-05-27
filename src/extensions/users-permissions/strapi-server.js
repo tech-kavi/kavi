@@ -605,6 +605,7 @@ module.exports = (plugin) => {
 
         await validateQuery(ctx.query, ctx);
         const sanitizedQuery = await sanitizeQuery(ctx.query, ctx);
+        sanitizedQuery.fields=['id','username','email','orgID','first_name','last_name',]
         const requestingUser = ctx.state.user;
 
         //only admins can fetch all users
