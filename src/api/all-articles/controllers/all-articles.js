@@ -137,7 +137,7 @@ const total = articles.length;
 
   exportArticles: async(ctx)=>{
      const startId = Number(ctx.query.startId || 0);
-    const limit = Number(ctx.query.limit || 100);
+    const endId = Number(ctx.query.endId || 50);
 
     const articles = await strapi.entityService.findMany(
       "api::article.article",
@@ -145,6 +145,7 @@ const total = articles.length;
         filters: {
           id: {
             $gt: startId,
+            $lte:endId,
           },
           publishedAt: {
             $notNull: true,
@@ -189,7 +190,6 @@ const total = articles.length;
 
         locale: "en",
 
-        limit,
       }
     );
 
