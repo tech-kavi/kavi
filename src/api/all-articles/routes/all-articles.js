@@ -9,5 +9,15 @@ module.exports = {
        middlewares: [],
      },
     },
+    {
+     method: 'GET',
+     path: '/exportArticles',
+     handler: 'all-articles.exportArticles',
+     config: {
+      auth:false,
+       policies: [],
+       middlewares: [],
+     },
+    },
   ],
 };

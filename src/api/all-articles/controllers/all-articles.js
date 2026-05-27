@@ -24,6 +24,12 @@ module.exports = {
     ctx.query = {
         ...ctx.query,
         locale: 'en',
+          fields: [
+    'title',
+    'published_date',
+    'publishedAt',
+    'est_read'
+    ],
         populate: {
             industry: {
                 fields: ['name'],
@@ -125,6 +131,73 @@ const total = articles.length;
         pageCount:Math.ceil(total/pageSizeInt),
         total,
       },
+    };
+  },
+
+  exportArticles: async(ctx)=>{
+     const startId = Number(ctx.query.startId || 0);
+    const limit = Number(ctx.query.limit || 100);
+
+    const articles = await strapi.entityService.findMany(
+      "api::article.article",
+      {
+        filters: {
+          id: {
+            $gt: startId,
+          },
+          publishedAt: {
+            $notNull: true,
+          },
+        },
+
+        sort: { id: "asc" },
+
+        populate: {
+          brief: true,
+
+          industry: {
+            fields: ["name"],
+          },
+
+          sub_industries: {
+            fields: ["name"],
+          },
+
+          primary_companies: {
+            fields: ["name"],
+            populate: {
+              logo: true,
+            },
+          },
+
+          secondary_companies: {
+            fields: ["name"],
+            populate: {
+              logo: true,
+            },
+          },
+
+          table_with_content: {
+            populate: {
+              ques: true,
+            },
+          },
+
+          allowed_users: true,
+        },
+
+        locale: "en",
+
+        limit,
+      }
+    );
+
+    return {
+      count: articles.length,
+      lastId: articles.length
+        ? articles[articles.length - 1].id
+        : startId,
+      data: articles,
     };
   }
 };
