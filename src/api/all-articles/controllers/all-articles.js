@@ -296,6 +296,7 @@ const total = articles.length;
         id: hit.objectID,
         title: hit.title,
         primary_companies: hit.primary_companies,
+        published_date:hit.published_date,
         mentionCount: mentionCount,
       };
     });
