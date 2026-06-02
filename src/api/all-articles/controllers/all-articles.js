@@ -4,7 +4,72 @@
  * A set of functions called "actions" for `all-articles`
  */
 
+function countMentions(hit, searchTerm) {
+  const tableContent = hit?._highlightResult?.table_with_content;
+  const title = hit?.['title'];
 
+  // Validate that searchTerm is a string and tableContent is an array
+  if (typeof searchTerm !== 'string' || !Array.isArray(tableContent)) {
+    return ''; // Invalid data, return an empty string
+  }
+
+  // Prepare the search terms: lowercased
+  const searchTerms = searchTerm.trim().toLowerCase().split(/\s+/);
+
+  // Initialize a counter for the word mentions
+  let mentionCount = 0;
+
+  // Normalize title and search for mentions
+  const titleText = title?.toLowerCase() || '';
+  searchTerms.forEach(term => {
+    // Use a regex that allows for term followed by punctuation or inside other words
+    const regex = new RegExp(`\\b${term}\\b|'s`, 'gi');
+    const matches = titleText.match(regex);
+    if (matches) {
+      mentionCount += matches.length;
+    }
+  });
+
+  // Iterate over each entry in the tableContent array
+  tableContent.forEach(entry => {
+    if (Array.isArray(entry.ques)) {
+      entry.ques.forEach(q => {
+        // Extract, normalize, and combine question and answer text
+        const questionText = q.question.value?.toLowerCase() || '';
+        const answerText = q.answer.value?.toLowerCase() || '';
+        const combinedText = ` ${questionText} ${answerText} `;  // Pad combined text with spaces
+
+        // Check for each search term's appearance in the combined text
+        searchTerms.forEach(term => {
+          const regex = new RegExp(`\\b${term}\\b|'s`, 'gi');
+          const matches = combinedText.match(regex);
+          if (matches) {
+            mentionCount += matches.length;
+          }
+        });
+      });
+    }
+  });
+
+  // Return the appropriate message based on the mention count
+  if (mentionCount === 0) {
+    return '';
+  } else if (mentionCount === 1) {
+    return mentionCount + " mention";
+  } else if (mentionCount < 10) {
+    return mentionCount + " mentions";
+  } else if (mentionCount >= 50) {
+    return '50+ mentions';
+  } else if (mentionCount >= 40) {
+    return '40+ mentions';
+  } else if (mentionCount >= 30) {
+    return '30+ mentions';
+  } else if (mentionCount >= 20) {
+    return '20+ mentions';
+  } else {
+    return '10+ mentions';
+  }
+}
 
 
 module.exports = {
@@ -222,12 +287,30 @@ const total = articles.length;
 
       const result = await strapi.service('api::all-articles.all-articles').search(query, user, page);
 
+      console.log(result.hits[0]);
+
+       const cleanedHits = result.hits.map(hit => {
+      const mentionCount = countMentions(hit, query);
+
       return {
-        hits: result.hits,
-        nbHits: result.nbHits,
-        page: result.page,
-        nbPages: result.nbPages,
+        id: hit.objectID,
+        title: hit.title,
+        primary_companies: hit.primary_companies,
+        mentionCount: mentionCount,
       };
+    });
+
+    return {
+      hits: cleanedHits,
+      nbHits: result.nbHits,
+    };
+
+      // return {
+      //   hits: result.hits,
+      //   nbHits: result.nbHits,
+      //   page: result.page,
+      //   nbPages: result.nbPages,
+      // };
     } catch (err) {
       console.error(err);
       return ctx.internalServerError(err.message);
