@@ -287,7 +287,7 @@ const total = articles.length;
 
       const result = await strapi.service('api::all-articles.all-articles').search(query, user, page);
 
-      console.log(result.hits[0]);
+     // console.log(result.hits[0]);
 
        const cleanedHits = result.hits.map(hit => {
       const mentionCount = countMentions(hit, query);
