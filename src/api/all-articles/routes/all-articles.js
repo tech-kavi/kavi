@@ -19,5 +19,14 @@ module.exports = {
        middlewares: [],
      },
     },
+    {
+     method: 'GET',
+     path: '/search',
+     handler: 'all-articles.search',
+     config: {
+       policies: [],
+       middlewares: [],
+     },
+    },
   ],
 };

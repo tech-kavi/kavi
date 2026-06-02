@@ -4,6 +4,9 @@
  * A set of functions called "actions" for `all-articles`
  */
 
+
+
+
 module.exports = {
   find: async (ctx, next) => {
     const {user}=ctx.state;
@@ -200,5 +203,34 @@ const total = articles.length;
         : startId,
       data: articles,
     };
-  }
+  },
+
+   async search(ctx) {
+    try {
+      const user = ctx.state.user;
+
+      if (!user) {
+        return ctx.unauthorized("Login required");
+      }
+
+      const query = ctx.query.q || "";
+      const page = Number(ctx.query.page || 0);
+
+      if (!query.trim()) {
+        return ctx.badRequest("Query required");
+      }
+
+      const result = await strapi.service('api::all-articles.all-articles').search(query, user, page);
+
+      return {
+        hits: result.hits,
+        nbHits: result.nbHits,
+        page: result.page,
+        nbPages: result.nbPages,
+      };
+    } catch (err) {
+      console.error(err);
+      return ctx.internalServerError(err.message);
+    }
+  },
 };
